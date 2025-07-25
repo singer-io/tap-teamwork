@@ -1,0 +1,493 @@
+{
+  "tap_name": "teamwork",
+  "required_config_keys": [
+    "access_token",
+    "start_date",
+    "base_url"
+  ],
+  "auth_header_key": "Authorization",
+  "auth_config_key": "access_token",
+  "headers": {
+    "Accept": "application/json"
+  },
+  "base_url": "https://api.teamwork.com/",
+  "streams": [
+    {
+      "name": "projects",
+      "path": "projects",
+      "data_key": "projects",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "updatedAt"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/projects"
+    },
+    {
+      "name": "tasks",
+      "path": "projects/{projectId}/tasks.json",
+      "data_key": "tasks",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "updatedAt"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "parent": "projects",
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/tasks"
+    },
+    {
+      "name": "taskcomments",
+      "path": "tasks/{taskId}/comments",
+      "data_key": "comments",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "updatedAt"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "parent": "tasks",
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/comments"
+    },
+    {
+      "name": "taskdependencies",
+      "path": "tasks/{taskId}/dependencies",
+      "data_key": "dependencies",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "parent": "tasks",
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/dependencies"
+    },
+    {
+      "name": "tasktags",
+      "path": "tasks/{taskId}/tags",
+      "data_key": "tags",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "parent": "tasks",
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/tags"
+    },
+    {
+      "name": "taskboardcolumns",
+      "path": "tasks/{taskId}/boardcolumns",
+      "data_key": "columns",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "parent": "tasks",
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/board-columns"
+    },
+    {
+      "name": "timesheets",
+      "path": "timesheets",
+      "data_key": "timesheets",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "date"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/timesheets"
+    },
+    {
+      "name": "timesheettotals",
+      "path": "timesheets/totals",
+      "data_key": "totals",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "userId"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/timesheets"
+    },
+    {
+      "name": "workloadplanners",
+      "path": "workload/planners",
+      "data_key": "planners",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/workload"
+    },
+    {
+      "name": "milestones",
+      "path": "milestones",
+      "data_key": "milestones",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "updatedAt"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/milestones"
+    },
+    {
+      "name": "milestones_deadlines",
+      "path": "milestones/deadlines",
+      "data_key": "deadlines",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/milestones"
+    },
+    {
+      "name": "tasklists",
+      "path": "tasklists",
+      "data_key": "tasklists",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "updatedAt"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/tasklists"
+    },
+    {
+      "name": "notebooks",
+      "path": "notebooks",
+      "data_key": "notebooks",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "updatedAt"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/notebooks"
+    },
+    {
+      "name": "notebooks_comments",
+      "path": "notebooks/{notebookId}/comments",
+      "data_key": "comments",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "updatedAt"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "parent": "notebooks",
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/notebooks"
+    },
+    {
+      "name": "dashboards",
+      "path": "dashboards",
+      "data_key": "dashboards",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "updatedAt"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/dashboards"
+    },
+    {
+      "name": "forms",
+      "path": "forms",
+      "data_key": "forms",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "updatedAt"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/forms"
+    },
+    {
+      "name": "me_timers",
+      "path": "me/timers",
+      "data_key": "timers",
+      "replication_method": "INCREMENTAL",
+      "replication_keys": [
+        "updatedAt"
+      ],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/timers"
+    },
+    {
+      "name": "projectcategories",
+      "path": "projects/categories",
+      "data_key": "categories",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/projects/api-v3/categories"
+    },
+    {
+      "name": "spaces",
+      "path": "spaces",
+      "data_key": "spaces",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "pages",
+      "path": "pages",
+      "data_key": "pages",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "users",
+      "path": "users",
+      "data_key": "users",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "tags",
+      "path": "tags",
+      "data_key": "tags",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "collaborators",
+      "path": "collaborators",
+      "data_key": "collaborators",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "activities",
+      "path": "activities",
+      "data_key": "activities",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "tickets",
+      "path": "tickets",
+      "data_key": "tickets",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "ticket_details",
+      "path": "ticket_details",
+      "data_key": "ticket_details",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "customers",
+      "path": "customers",
+      "data_key": "customers",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "customer_details",
+      "path": "customer_details",
+      "data_key": "customer_details",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "inboxes",
+      "path": "inboxes",
+      "data_key": "inboxes",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "inbox_details",
+      "path": "inbox_details",
+      "data_key": "inbox_details",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "search_tickets",
+      "path": "search_tickets",
+      "data_key": "search_tickets",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "threads",
+      "path": "threads",
+      "data_key": "threads",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "tickets_by_customer",
+      "path": "tickets_by_customer",
+      "data_key": "tickets_by_customer",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "ticket_notes",
+      "path": "ticket_notes",
+      "data_key": "ticket_notes",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "audit_trail",
+      "path": "audit_trail",
+      "data_key": "audit_trail",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "company_details",
+      "path": "company_details",
+      "data_key": "company_details",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "company_tickets",
+      "path": "company_tickets",
+      "data_key": "company_tickets",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "company_customers",
+      "path": "company_customers",
+      "data_key": "company_customers",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "ticket_types",
+      "path": "ticket_types",
+      "data_key": "ticket_types",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    },
+    {
+      "name": "ticket_priorities",
+      "path": "ticket_priorities",
+      "data_key": "ticket_priorities",
+      "replication_method": "FULL_TABLE",
+      "replication_keys": [],
+      "key_properties": [
+        "id"
+      ],
+      "doc_link": "https://developer.teamwork.com/"
+    }
+  ],
+  "tap_tester_creds": {
+    "access_token": "TEAMWORK_ACCESS_TOKEN",
+    "project_id": "12345678"
+  },
+  "author": "Stitch",
+  "third_party_dependencies": [
+    "singer-python==5.12.1",
+    "requests==2.31.0"
+  ]
+}
