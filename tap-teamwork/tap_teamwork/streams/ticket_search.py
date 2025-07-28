@@ -9,5 +9,6 @@ class TicketSearch(FullTableStream):
     tap_stream_id = "ticket_search"
     key_properties = ["id"]
     replication_method = "FULL_TABLE"
+    replication_keys: List[str] = []
     data_key = "tickets"
     path = "desk/api/v2/search/tickets.json"
