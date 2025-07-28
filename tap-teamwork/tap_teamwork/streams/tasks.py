@@ -9,5 +9,6 @@ class Tasks(FullTableStream):
     tap_stream_id = "tasks"
     key_properties = ["id"]
     replication_method = "FULL_TABLE"
+    replication_keys: List[str] = []
     data_key = "tasks"
     path = "projects/api/v3/tasks.json"

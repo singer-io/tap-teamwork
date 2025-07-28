@@ -9,5 +9,6 @@ class Tickets(FullTableStream):
     tap_stream_id = "tickets"
     key_properties = ["id"]
     replication_method = "FULL_TABLE"
+    replication_keys: List[str] = []
     data_key = "tickets"
     path = "desk/v2/tickets.json"

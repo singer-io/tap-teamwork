@@ -9,6 +9,6 @@ class Tags(FullTableStream):
     tap_stream_id = "tags"
     key_properties = ["id"]
     replication_method = "FULL_TABLE"
+    replication_keys: List[str] = []
     data_key = "tags"
     path = "spaces/api/v1/spaces/{spaceId}/tags.json"
-    path = "spaces"

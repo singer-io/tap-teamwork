@@ -4,10 +4,10 @@ from tap_teamwork.streams.abstracts import FullTableStream
 
 LOGGER = get_logger()
 
-
 class Customers(FullTableStream):
     tap_stream_id = "customers"
     key_properties = ["id"]
     replication_method = "FULL_TABLE"
+    replication_keys: List[str] = []
     data_key = "customers"
-    path = "desk/v2/customers.json"
+    path = "desk/v2/customers.json" 

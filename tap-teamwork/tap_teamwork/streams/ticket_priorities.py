@@ -9,5 +9,6 @@ class TicketPriorities(FullTableStream):
     tap_stream_id = "ticket_priorities"
     key_properties = ["id"]
     replication_method = "FULL_TABLE"
+    replication_keys: List[str] = []
     data_key = "priorities"
     path = "desk/api/v2/ticketpriorities.json"
