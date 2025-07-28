@@ -1,0 +1,181 @@
+{
+  "tap_name": "teamwork",
+  "required_config_keys": [
+    "access_token",
+    "start_date"
+  ],
+  "auth_header_key": "Authorization",
+  "auth_config_key": "access_token",
+  "headers": {
+    "Accept": "application/json"
+  },
+  "base_url": "https://api.teamwork.com/",
+  "streams": [
+    {
+      "name": "projects",
+      "path": "projects/api/v3/projects.json",
+      "data_key": "projects",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/projects/list-projects"
+    },
+    {
+      "name": "tasks",
+      "path": "projects/api/v3/tasks.json",
+      "data_key": "tasks",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/tasks/list-tasks"
+    },
+    {
+      "name": "milestones",
+      "path": "projects/api/v3/milestones.json",
+      "data_key": "milestones",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/milestones/list-milestones"
+    },
+    {
+      "name": "notebooks",
+      "path": "projects/api/v3/notebooks.json",
+      "data_key": "notebooks",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/notebooks/list-notebooks"
+    },
+    {
+      "name": "spaces",
+      "path": "spaces/api/v3/spaces.json",
+      "data_key": "spaces",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-all-spaces"
+    },
+    {
+      "name": "tickets",
+      "path": "desk/v2/tickets.json",
+      "data_key": "tickets",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v1/tickets/list-all-tickets"
+    },
+    {
+      "name": "ticket_details",
+      "path": "desk/v1/tickets/{ticketId}.json",
+      "data_key": "ticket",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v1/tickets/get-a-ticket"
+    },
+    {
+      "name": "users",
+      "path": "desk/v1/users.json",
+      "data_key": "users",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v1/users/list-all-users"
+    },
+    {
+      "name": "inboxes",
+      "path": "desk/v1/inboxes.json",
+      "data_key": "inboxes",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v1/inboxes/list-all-inboxes"
+    },
+    {
+      "name": "ticket_types",
+      "path": "desk/api/v2/search/tickets.json",
+      "data_key": "types",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v1/tickets/list-ticket-types"
+    },
+    {
+      "name": "customers",
+      "path": "desk/v2/customers.json",
+      "data_key": "customers",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-json"
+    },
+    {
+      "name": "companies",
+      "path": "desk/api/v2/companies.json",
+      "data_key": "companies",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json"
+    },
+    {
+      "name": "pages",
+      "path": "spaces/api/v1/spaces/{spaceId}/pages.json",
+      "data_key": "pages",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "parent": "spaces",
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-pages-in-space"
+    },
+    {
+      "name": "tags",
+      "path": "spaces/api/v1/spaces/{spaceId}/tags.json",
+      "data_key": "tags",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "parent": "spaces",
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-tags-in-space"
+    },
+    {
+      "name": "collaborators",
+      "path": "spaces/api/v1/spaces/{spaceId}/collaborators.json",
+      "data_key": "collaborators",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "parent": "spaces",
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-collaborators-in-space"
+    },
+    {
+      "name": "company_details",
+      "path": "desk/api/v2/companies/{id}.json",
+      "data_key": "company",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "parent": "companies",
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-id-json"
+    },
+    {
+      "name": "customer_details",
+      "path": "desk/api/v2/customers/{id}.json",
+      "data_key": "customer",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "parent": "customers",
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-id-json"
+    },
+    {
+      "name": "ticket_search",
+      "path": "desk/api/v2/search/tickets.json",
+      "data_key": "tickets",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json"
+    },
+    {
+      "name": "ticket_priorities",
+      "path": "desk/api/v2/ticketpriorities.json",
+      "data_key": "priorities",
+      "replication_method": "FULL_TABLE",
+      "key_properties": ["id"],
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/ticket-priorities/get-v2-ticketpriorities-json"
+    }
+  ],
+  "tap_tester_creds": {
+    "access_token": "TEAMWORK_ACCESS_TOKEN",
+    "project_id": "12345678"
+  },
+  "author": "Stitch",
+  "third_party_dependencies": [
+    "singer-python==5.12.1",
+    "requests==2.31.0"
+  ]
+}
