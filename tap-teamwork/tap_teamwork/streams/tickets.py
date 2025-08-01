@@ -4,7 +4,6 @@ from tap_teamwork.streams.abstracts import FullTableStream
 
 LOGGER = get_logger()
 
-
 class Tickets(FullTableStream):
     tap_stream_id = "tickets"
     key_properties = ["id"]
@@ -12,3 +11,6 @@ class Tickets(FullTableStream):
     replication_keys: List[str] = []
     data_key = "tickets"
     path = "desk/v2/tickets.json"
+
+    #This line is added to register child streams
+    children = ["ticket_details"]

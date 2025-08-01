@@ -17,25 +17,45 @@ from tap_teamwork.streams.company_details import CompanyDetails
 from tap_teamwork.streams.customer_details import CustomerDetails
 from tap_teamwork.streams.ticket_search import TicketSearch
 from tap_teamwork.streams.ticket_priorities import TicketPriorities
+from singer import get_logger
+LOGGER = get_logger()
 
-STREAMS = {
-    "projects": Projects,
-    "tasks": Tasks,
-    "milestones": Milestones,
-    "notebooks": Notebooks,
-    "spaces": Spaces,
-    "tickets": Tickets,
-    "ticket_details": TicketDetails,
-    "users": Users,
-    "inboxes": Inboxes,
-    "ticket_types": TicketTypes,
-    "customers": Customers,
-    "companies": Companies,
-    "pages": Pages,
-    "tags": Tags,
-    "collaborators": Collaborators,
-    "company_details": CompanyDetails,
-    "customer_details": CustomerDetails,
-    "ticket_search": TicketSearch,
-    "ticket_priorities": TicketPriorities,
-}
+
+# Define streams
+STREAMS = [
+    Tickets,
+    TicketDetails,
+    Projects,
+    Tasks,
+    Milestones,
+    Notebooks,
+    Spaces,
+    Users,
+    Inboxes,
+    TicketTypes,
+    Customers,
+    Companies,
+    Pages,
+    Tags,
+    Collaborators,
+    CompanyDetails,
+    CustomerDetails,
+    TicketSearch,
+    TicketPriorities
+]
+
+# Parent-child binding logic
+for child_cls in STREAMS:
+    if hasattr(child_cls, "parent_stream_type"):
+        for parent_cls in STREAMS:
+            if (
+                isinstance(child_cls.parent_stream_type, str) and
+                parent_cls.__name__ == child_cls.parent_stream_type
+            ) or (
+                isinstance(child_cls.parent_stream_type, type) and
+                issubclass(parent_cls, child_cls.parent_stream_type)
+            ):
+                if not hasattr(parent_cls, "child_to_sync"):
+                    parent_cls.child_to_sync = []
+                parent_cls.child_to_sync.append(child_cls)
+                LOGGER.info(f"Bound child stream {child_cls.tap_stream_id} to parent {parent_cls.tap_stream_id}")
