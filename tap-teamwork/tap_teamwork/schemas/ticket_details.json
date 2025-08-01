@@ -45,14 +45,14 @@
             "items": {
                 "type": [
                     "null",
-                    "string"
+                    "object"
                 ]
             }
         },
         "createdByUser": {
             "type": [
                 "null",
-                "string"
+                "object"
             ]
         },
         "customer": {
@@ -85,13 +85,61 @@
                         "string"
                     ]
                 },
-                "firstName": {
+                "contacts": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": [
+                                    "null",
+                                    "integer"
+                                ]
+                            },
+                            "value": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "type": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "isMain": {
+                                "type": [
+                                    "null",
+                                    "boolean"
+                                ]
+                            },
+                            "createdAt": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "format": "date-time"
+                            }
+                        }
+                    }
+                },
+                "externalId": {
                     "type": [
                         "null",
                         "string"
                     ]
                 },
-                "lastName": {
+                "extraData": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "firstName": {
                     "type": [
                         "null",
                         "string"
@@ -109,19 +157,41 @@
                         "string"
                     ]
                 },
-                "createdAt": {
+                "lastName": {
                     "type": [
                         "null",
                         "string"
-                    ],
-                    "format": "date-time"
+                    ]
                 },
-                "updatedAt": {
+                "address": {
                     "type": [
                         "null",
                         "string"
-                    ],
-                    "format": "date-time"
+                    ]
+                },
+                "mobile": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "notes": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "organization": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "phone": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "trusted": {
                     "type": [
@@ -135,6 +205,69 @@
                         "boolean"
                     ]
                 },
+                "facebookURL": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "googlePlusURL": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "linkedinURL": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "twitterHandle": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "createdAt": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "createdBy_users_id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "updatedAt": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "updatedBy_users_id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "company": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "lastTicketDate": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
                 "numTickets": {
                     "type": [
                         "null",
@@ -146,7 +279,7 @@
         "customerContact": {
             "type": [
                 "null",
-                "string"
+                "object"
             ]
         },
         "fields": {
@@ -157,7 +290,7 @@
             "items": {
                 "type": [
                     "null",
-                    "string"
+                    "object"
                 ]
             }
         },
@@ -306,7 +439,7 @@
         "spamScore": {
             "type": [
                 "null",
-                "integer"
+                "number"
             ]
         },
         "state": {
@@ -371,10 +504,231 @@
                 "array"
             ],
             "items": {
-                "type": [
-                    "null",
-                    "string"
-                ]
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    },
+                    "type": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "body": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "editMethod": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "happinessRatingName": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "helpdocsarticleId": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "likes": {
+                        "type": [
+                            "null",
+                            "array"
+                        ],
+                        "items": {
+                            "type": [
+                                "null",
+                                "object"
+                            ]
+                        }
+                    },
+                    "newTicketAssignment": {
+                        "type": [
+                            "null",
+                            "object"
+                        ]
+                    },
+                    "newTicketStatus": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "isPinned": {
+                        "type": [
+                            "null",
+                            "boolean"
+                        ]
+                    },
+                    "reviewComments": {
+                        "type": [
+                            "null",
+                            "array"
+                        ],
+                        "items": {
+                            "type": [
+                                "null",
+                                "object"
+                            ]
+                        }
+                    },
+                    "s3link": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "taskId": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    },
+                    "textBody": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "to": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "deliveryStatus": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "deliveryReason": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "deliveryMethod": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "isDraft": {
+                        "type": [
+                            "null",
+                            "boolean"
+                        ]
+                    },
+                    "reviewStatus": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": [
+                            "null",
+                            "string"
+                        ],
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": [
+                            "null",
+                            "string"
+                        ],
+                        "format": "date-time"
+                    },
+                    "viewedByCustomerAt": {
+                        "type": [
+                            "null",
+                            "string"
+                        ],
+                        "format": "date-time"
+                    },
+                    "mergedAt": {
+                        "type": [
+                            "null",
+                            "string"
+                        ],
+                        "format": "date-time"
+                    },
+                    "state": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "createdBy": {
+                        "type": [
+                            "null",
+                            "object"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": [
+                                    "null",
+                                    "integer"
+                                ]
+                            },
+                            "email": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "firstName": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "lastName": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "avatarURL": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "type": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "notes": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "gender": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            }
+                        }
+                    }
+                }
             }
         }
     }

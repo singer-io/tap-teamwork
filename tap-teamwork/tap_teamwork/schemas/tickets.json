@@ -19,52 +19,10 @@
                 "string"
             ]
         },
-        "status": {
+        "spamScore": {
             "type": [
                 "null",
-                "string"
-            ]
-        },
-        "type": {
-            "type": [
-                "null",
-                "string"
-            ]
-        },
-        "source": {
-            "type": [
-                "null",
-                "string"
-            ]
-        },
-        "priority": {
-            "type": [
-                "null",
-                "string"
-            ]
-        },
-        "priorityId": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "priorityColor": {
-            "type": [
-                "null",
-                "string"
-            ]
-        },
-        "assignedTo": {
-            "type": [
-                "null",
-                "string"
-            ]
-        },
-        "inboxId": {
-            "type": [
-                "null",
-                "integer"
+                "number"
             ]
         },
         "mergedToId": {
@@ -73,65 +31,245 @@
                 "integer"
             ]
         },
-        "businesshoursId": {
+        "inbox": {
             "type": [
                 "null",
-                "integer"
-            ]
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
         },
-        "reviewStatus": {
+        "assignedTo": {
             "type": [
                 "null",
-                "string"
-            ]
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "customer": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "priority": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "source": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "status": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "type": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "happinessRating": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "threads": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ]
+            }
         },
         "tags": {
             "type": [
                 "null",
-                "string"
-            ]
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ]
+            }
         },
-        "hasAttachments": {
+        "customFields": {
             "type": [
                 "null",
-                "boolean"
-            ]
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ]
+            }
         },
-        "readonly": {
+        "tasks": {
             "type": [
                 "null",
-                "boolean"
-            ]
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ]
+            }
         },
-        "isRead": {
+        "attachments": {
             "type": [
                 "null",
-                "boolean"
-            ]
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ]
+            }
         },
-        "numThreads": {
+        "businesshoursId": {
             "type": [
                 "null",
-                "integer"
-            ]
-        },
-        "numActiveTasks": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "numCompletedTasks": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "spam_score": {
-            "type": [
-                "null",
-                "number"
-            ]
+                "object"
+            ],
+            "properties": {
+                "Int64": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "Valid": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                }
+            }
         },
         "createdAt": {
             "type": [
@@ -168,105 +306,11 @@
                 }
             }
         },
-        "deletedByUserId": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "customer": {
-            "type": [
-                "null",
-                "object"
-            ],
-            "properties": {
-                "id": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ]
-                },
-                "email": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                },
-                "firstName": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                },
-                "lastName": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                },
-                "avatarURL": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                },
-                "type": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                }
-            }
-        },
-        "company": {
+        "state": {
             "type": [
                 "null",
                 "string"
             ]
-        },
-        "happinessRating": {
-            "type": [
-                "null",
-                "string"
-            ]
-        },
-        "customFields": {
-            "type": [
-                "null",
-                "string"
-            ]
-        },
-        "responseTimes": {
-            "type": [
-                "null",
-                "object"
-            ],
-            "properties": {
-                "averageResponseTime": {
-                    "type": [
-                        "null",
-                        "number"
-                    ]
-                },
-                "firstResponseTime": {
-                    "type": [
-                        "null",
-                        "number"
-                    ]
-                },
-                "responseCount": {
-                    "type": [
-                        "null",
-                        "number"
-                    ]
-                },
-                "resolutionTime": {
-                    "type": [
-                        "null",
-                        "number"
-                    ]
-                }
-            }
         }
     }
 }

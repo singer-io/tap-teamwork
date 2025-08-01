@@ -13,28 +13,22 @@
                 "string"
             ]
         },
-        "default": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "displayOrder": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "enabledForFutureInboxes": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "state": {
+        "description": {
             "type": [
                 "null",
                 "string"
+            ]
+        },
+        "color": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "archived": {
+            "type": [
+                "null",
+                "boolean"
             ]
         },
         "createdAt": {
@@ -50,73 +44,7 @@
                 "string"
             ],
             "format": "date-time"
-        },
-        "createdBy": {
-            "type": [
-                "null",
-                "object"
-            ],
-            "properties": {
-                "delete": {
-                    "type": [
-                        "null",
-                        "boolean"
-                    ]
-                },
-                "id": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ]
-                },
-                "meta": {
-                    "type": [
-                        "null",
-                        "object"
-                    ]
-                },
-                "type": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ]
-                }
-            }
-        },
-        "updatedBy": {
-            "type": [
-                "null",
-                "object"
-            ],
-            "properties": {
-                "delete": {
-                    "type": [
-                        "null",
-                        "boolean"
-                    ]
-                },
-                "id": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ]
-                },
-                "meta": {
-                    "type": [
-                        "null",
-                        "object"
-                    ]
-                },
-                "type": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ]
-                }
-            }
         }
     },
-    "required": [
-        "id"
-    ]
+    "additionalProperties": true
 }

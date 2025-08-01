@@ -43,13 +43,38 @@
                 "boolean"
             ]
         },
+        "lockedBy": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "lockedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
         "lockdownId": {
             "type": [
                 "null",
                 "integer"
             ]
         },
+        "lockdown": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
         "secureContent": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isFullWidth": {
             "type": [
                 "null",
                 "boolean"
@@ -61,7 +86,33 @@
                 "integer"
             ]
         },
+        "project": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
         "createdByUserID": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "createdBy": {
             "type": [
                 "null",
                 "integer"
@@ -73,13 +124,20 @@
                 "integer"
             ]
         },
-        "deletedByUserID": {
+        "updatedBy": {
             "type": [
                 "null",
                 "integer"
             ]
         },
         "dateUpdated": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updatedAt": {
             "type": [
                 "null",
                 "string"
@@ -93,7 +151,7 @@
             ],
             "format": "date-time"
         },
-        "dateDeleted": {
+        "createdAt": {
             "type": [
                 "null",
                 "string"
@@ -112,11 +170,37 @@
                 "integer"
             ]
         },
+        "category": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
         "notebookVersionID": {
             "type": [
                 "null",
                 "integer"
             ]
+        },
+        "notebookVersion": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
         },
         "notebookVersionCreatedDateTime": {
             "type": [
@@ -135,7 +219,13 @@
         "latestVersionNo": {
             "type": [
                 "null",
-                "string"
+                "integer"
+            ]
+        },
+        "versionCount": {
+            "type": [
+                "null",
+                "integer"
             ]
         },
         "commentsCount": {
@@ -165,28 +255,192 @@
         "commentFollowers": {
             "type": [
                 "null",
-                "array"
+                "object"
             ],
-            "items": {
-                "type": [
-                    "null",
-                    "integer"
-                ]
+            "properties": {
+                "userIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "users": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": [
+                                    "null",
+                                    "integer"
+                                ]
+                            },
+                            "type": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "companyIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "companies": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "object"
+                        ]
+                    }
+                },
+                "teamIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "teams": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "object"
+                        ]
+                    }
+                }
             }
         },
         "changeFollowers": {
             "type": [
                 "null",
-                "array"
+                "object"
             ],
-            "items": {
-                "type": [
-                    "null",
-                    "integer"
-                ]
+            "properties": {
+                "userIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "users": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": [
+                                    "null",
+                                    "integer"
+                                ]
+                            },
+                            "type": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "companyIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "companies": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "object"
+                        ]
+                    }
+                },
+                "teamIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "teams": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "object"
+                        ]
+                    }
+                }
             }
         },
-        "projectNotifyCommentIncludeCreator": {
+        "userFollowingChanges": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "userFollowingComments": {
             "type": [
                 "null",
                 "boolean"
@@ -203,9 +457,18 @@
                     "integer"
                 ]
             }
+        },
+        "tags": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ]
+            }
         }
-    },
-    "required": [
-        "id"
-    ]
+    }
 }

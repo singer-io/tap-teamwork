@@ -1,20 +1,20 @@
 {
-    "type": "object",
-    "properties": {
-        "id": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "type": {
-            "type": [
-                "null",
-                "string"
-            ]
-        }
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "null",
+        "integer"
+      ]
     },
-    "required": [
-        "id"
-    ]
+    "type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ]
 }

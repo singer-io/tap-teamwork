@@ -13,88 +13,199 @@
                 "string"
             ]
         },
-        "body": {
+        "readonly": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "messageCount": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "previewText": {
             "type": [
                 "null",
                 "string"
             ]
         },
-        "state": {
+        "originalRecipient": {
             "type": [
                 "null",
                 "string"
             ]
         },
-        "statusId": {
+        "responseTimeMins": {
             "type": [
                 "null",
                 "integer"
             ]
         },
-        "priorityId": {
+        "resolutionTimeMins": {
             "type": [
                 "null",
                 "integer"
             ]
         },
-        "sourceId": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "customerId": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "inboxId": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "typeId": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "createdAt": {
+        "happinessSurveySentAt": {
             "type": [
                 "null",
                 "string"
             ],
             "format": "date-time"
         },
-        "updatedAt": {
+        "imagesHidden": {
             "type": [
                 "null",
-                "string"
-            ],
-            "format": "date-time"
+                "boolean"
+            ]
         },
-        "closedAt": {
+        "isRead": {
             "type": [
                 "null",
-                "string"
-            ],
-            "format": "date-time"
+                "boolean"
+            ]
         },
-        "dueAt": {
+        "spam_score": {
             "type": [
                 "null",
-                "string"
-            ],
-            "format": "date-time"
+                "integer"
+            ]
         },
-        "deletedAt": {
+        "spam_rules": {
             "type": [
                 "null",
-                "string"
+                "object"
             ],
-            "format": "date-time"
+            "additionalProperties": true
+        },
+        "customer": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "contact": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "inbox": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "status": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "source": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "type": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            },
+            "additionalProperties": true
         },
         "createdBy": {
             "type": [
@@ -113,14 +224,78 @@
                         "null",
                         "string"
                     ]
-                },
-                "meta": {
-                    "type": [
-                        "null",
-                        "object"
-                    ]
                 }
+            },
+            "additionalProperties": true
+        },
+        "messages": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    },
+                    "type": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    }
+                },
+                "additionalProperties": true
             }
+        },
+        "activities": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    },
+                    "type": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    }
+                },
+                "additionalProperties": true
+            }
+        },
+        "suggestions": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": true
+        },
+        "createdAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updatedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
         },
         "updatedBy": {
             "type": [
@@ -139,144 +314,16 @@
                         "null",
                         "string"
                     ]
-                },
-                "meta": {
-                    "type": [
-                        "null",
-                        "object"
-                    ]
                 }
-            }
+            },
+            "additionalProperties": true
         },
-        "deletedBy": {
+        "state": {
             "type": [
                 "null",
-                "object"
-            ],
-            "properties": {
-                "id": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ]
-                },
-                "type": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                },
-                "meta": {
-                    "type": [
-                        "null",
-                        "object"
-                    ]
-                }
-            }
-        },
-        "tags": {
-            "type": [
-                "null",
-                "array"
-            ],
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": [
-                            "null",
-                            "integer"
-                        ]
-                    },
-                    "name": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
-                    },
-                    "color": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
-                    }
-                }
-            }
-        },
-        "reactions": {
-            "type": [
-                "null",
-                "object"
-            ],
-            "properties": {
-                "counts": {
-                    "type": [
-                        "null",
-                        "object"
-                    ]
-                },
-                "userReactionId": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ]
-                }
-            }
-        },
-        "files": {
-            "type": [
-                "null",
-                "array"
-            ],
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": [
-                            "null",
-                            "integer"
-                        ]
-                    },
-                    "name": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
-                    },
-                    "url": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
-                    }
-                }
-            }
-        },
-        "customFields": {
-            "type": [
-                "null",
-                "array"
-            ],
-            "items": {
-                "type": "object",
-                "properties": {
-                    "fieldId": {
-                        "type": [
-                            "null",
-                            "integer"
-                        ]
-                    },
-                    "value": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
-                    }
-                }
-            }
+                "string"
+            ]
         }
     },
-    "required": [
-        "id"
-    ]
+    "additionalProperties": true
 }

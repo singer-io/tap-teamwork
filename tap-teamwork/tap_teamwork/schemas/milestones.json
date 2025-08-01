@@ -1,11 +1,156 @@
 {
     "type": "object",
     "properties": {
-        "canComplete": {
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "name": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "description": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "descriptionHTML": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "deadline": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "originalDueDate": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "completed": {
             "type": [
                 "null",
                 "boolean"
             ]
+        },
+        "projectId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "project": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "createdOn": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "lastChangedOn": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updatedBy": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "creatorUserId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "reminder": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "private": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "status": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "userFollowingComments": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "userFollowingChanges": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "userFollowingComplete": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isDeleted": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "deletedOn": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
         },
         "canEdit": {
             "type": [
@@ -13,7 +158,13 @@
                 "boolean"
             ]
         },
-        "changeFollowerIds": {
+        "canComplete": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "responsiblePartyIds": {
             "type": [
                 "null",
                 "array"
@@ -21,12 +172,11 @@
             "items": {
                 "type": [
                     "null",
-                    "string",
                     "integer"
                 ]
             }
         },
-        "changeFollowers": {
+        "responsibleParties": {
             "type": [
                 "null",
                 "array"
@@ -39,56 +189,6 @@
                             "null",
                             "integer"
                         ]
-                    },
-                    "meta": {
-                        "type": [
-                            "null",
-                            "object"
-                        ],
-                        "properties": {}
-                    },
-                    "type": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
-                    }
-                }
-            }
-        },
-        "commentFollowerIds": {
-            "type": [
-                "null",
-                "array"
-            ],
-            "items": {
-                "type": [
-                    "null",
-                    "string",
-                    "integer"
-                ]
-            }
-        },
-        "commentFollowers": {
-            "type": [
-                "null",
-                "array"
-            ],
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": [
-                            "null",
-                            "integer"
-                        ]
-                    },
-                    "meta": {
-                        "type": [
-                            "null",
-                            "object"
-                        ],
-                        "properties": {}
                     },
                     "type": {
                         "type": [
@@ -105,315 +205,6 @@
                 "integer"
             ]
         },
-        "completed": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "completedBy": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "completedOn": {
-            "type": [
-                "null",
-                "string"
-            ],
-            "format": "date-time"
-        },
-        "completerId": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "createdBy": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "createdOn": {
-            "type": [
-                "null",
-                "string"
-            ],
-            "format": "date-time"
-        },
-        "creatorUserId": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "deadline": {
-            "type": [
-                "null",
-                "string"
-            ]
-        },
-        "deletedOn": {
-            "type": [
-                "null",
-                "string"
-            ],
-            "format": "date-time"
-        },
-        "description": {
-            "type": [
-                "null",
-                "string"
-            ],
-            "format": "date-time"
-        },
-        "descriptionHTML": {
-            "type": [
-                "null",
-                "string"
-            ],
-            "format": "date-time"
-        },
-        "id": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "isDeleted": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "lastChangedOn": {
-            "type": [
-                "null",
-                "string"
-            ],
-            "format": "date-time"
-        },
-        "latestUpdates": {
-            "type": [
-                "null",
-                "array"
-            ],
-            "items": {
-                "type": "object",
-                "properties": {
-                    "field": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
-                    }
-                }
-            }
-        },
-        "lockdown": {
-            "type": [
-                "null",
-                "object"
-            ],
-            "properties": {
-                "id": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ]
-                },
-                "meta": {
-                    "type": [
-                        "null",
-                        "object"
-                    ],
-                    "properties": {}
-                },
-                "type": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                }
-            }
-        },
-        "lockdownId": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "name": {
-            "type": [
-                "null",
-                "string"
-            ]
-        },
-        "numCommentsRead": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "originalDueDate": {
-            "type": [
-                "null",
-                "string"
-            ],
-            "format": "date-time"
-        },
-        "percentageComplete": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "percentageTasksCompleted": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "private": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "project": {
-            "type": [
-                "null",
-                "object"
-            ],
-            "properties": {
-                "id": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ]
-                },
-                "meta": {
-                    "type": [
-                        "null",
-                        "object"
-                    ],
-                    "properties": {}
-                },
-                "type": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                }
-            }
-        },
-        "projectId": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "reminder": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "responsibleParties": {
-            "type": [
-                "null",
-                "array"
-            ],
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": [
-                            "null",
-                            "integer"
-                        ]
-                    },
-                    "meta": {
-                        "type": [
-                            "null",
-                            "object"
-                        ],
-                        "properties": {}
-                    },
-                    "type": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
-                    }
-                }
-            }
-        },
-        "responsiblePartyIds": {
-            "type": [
-                "null",
-                "array"
-            ],
-            "items": {
-                "type": [
-                    "null",
-                    "string",
-                    "integer"
-                ]
-            }
-        },
-        "status": {
-            "type": [
-                "null",
-                "string"
-            ],
-            "format": "date-time"
-        },
-        "tagIds": {
-            "type": [
-                "null",
-                "array"
-            ],
-            "items": {
-                "type": [
-                    "null",
-                    "string",
-                    "integer"
-                ]
-            }
-        },
-        "tags": {
-            "type": [
-                "null",
-                "array"
-            ],
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": [
-                            "null",
-                            "integer"
-                        ]
-                    },
-                    "meta": {
-                        "type": [
-                            "null",
-                            "object"
-                        ],
-                        "properties": {}
-                    },
-                    "type": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
-                    }
-                }
-            }
-        },
         "tasklistIds": {
             "type": [
                 "null",
@@ -422,7 +213,6 @@
             "items": {
                 "type": [
                     "null",
-                    "string",
                     "integer"
                 ]
             }
@@ -441,13 +231,6 @@
                             "integer"
                         ]
                     },
-                    "meta": {
-                        "type": [
-                            "null",
-                            "object"
-                        ],
-                        "properties": {}
-                    },
                     "type": {
                         "type": [
                             "null",
@@ -456,30 +239,7 @@
                     }
                 }
             }
-        },
-        "updatedBy": {
-            "type": [
-                "null",
-                "integer"
-            ]
-        },
-        "userFollowingChanges": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "userFollowingComments": {
-            "type": [
-                "null",
-                "boolean"
-            ]
-        },
-        "userFollowingComplete": {
-            "type": [
-                "null",
-                "boolean"
-            ]
         }
-    }
+    },
+    "additionalProperties": true
 }
