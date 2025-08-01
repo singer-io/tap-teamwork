@@ -19,16 +19,22 @@ def update_currently_syncing(state: Dict, stream_name: str) -> None:
 
 def write_schema(stream, client, streams_to_sync, catalog) -> None:
     """
-    Write schema for stream and its children
+    Write schema for stream and its children (works with STREAMS as a list).
     """
     if stream.is_selected():
         stream.write_schema()
 
     for child in stream.children:
-        child_obj = STREAMS[child](client, catalog.get_stream(child))
-        write_schema(child_obj, client, streams_to_sync, catalog)
-        if child in streams_to_sync:
+        # Find child class from STREAMS list
+        child_cls = next((s for s in STREAMS if s().tap_stream_id == child), None)
+        if not child_cls:
+            LOGGER.warning(f"Child stream class not found for: {child}")
+            continue
 
+        child_obj = child_cls(client, catalog.get_stream(child))
+        write_schema(child_obj, client, streams_to_sync, catalog)
+
+        if child in streams_to_sync:
             stream.child_to_sync.append(child_obj)
 
 
@@ -47,23 +53,24 @@ def sync(client: Client, config: Dict, catalog: singer.Catalog, state) -> None:
 
     with singer.Transformer() as transformer:
         for stream_name in streams_to_sync:
+            # Find stream class by tap_stream_id
+            stream_cls = next((s for s in STREAMS if s().tap_stream_id == stream_name), None)
+            if not stream_cls:
+                raise ValueError(f"Stream class not found for: {stream_name}")
 
-            stream = STREAMS[stream_name](client, catalog.get_stream(stream_name))
-            if stream.parent:
+            stream = stream_cls(client, catalog.get_stream(stream_name))
 
-                if stream.parent not in streams_to_sync:
-
-                    streams_to_sync.append(stream.parent)
+            # Skip syncing child streams directly — they will be synced via parents
+            if hasattr(stream, "parent_stream_type"):
                 continue
-
 
             write_schema(stream, client, streams_to_sync, catalog)
 
             LOGGER.info("START Syncing: {}".format(stream_name))
             update_currently_syncing(state, stream_name)
             total_records = stream.sync(state=state, transformer=transformer)
-
             update_currently_syncing(state, None)
+
             LOGGER.info(
                 "FINISHED Syncing: {}, total_records: {}".format(
                     stream_name, total_records
