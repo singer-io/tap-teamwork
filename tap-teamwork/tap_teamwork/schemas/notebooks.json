@@ -1,1 +1,474 @@
-{}
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "name": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "description": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "contents": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "type": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "isPrivate": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "locked": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "lockedBy": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "lockedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "lockdownId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "lockdown": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "secureContent": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isFullWidth": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "projectId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "project": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "createdByUserID": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "updatedByUserID": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "updatedBy": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "dateUpdated": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updatedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "dateCreated": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "createdAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "deleted": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "categoryId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "category": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "notebookVersionID": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "notebookVersion": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "notebookVersionCreatedDateTime": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "notebookVersionUpdatedDateTime": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "latestVersionNo": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "versionCount": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "commentsCount": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "readCommentsCount": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "contentHTML": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "privacy": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "commentFollowers": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "userIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "users": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": [
+                                    "null",
+                                    "integer"
+                                ]
+                            },
+                            "type": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "companyIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "companies": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "object"
+                        ]
+                    }
+                },
+                "teamIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "teams": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "object"
+                        ]
+                    }
+                }
+            }
+        },
+        "changeFollowers": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "userIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "users": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": [
+                                    "null",
+                                    "integer"
+                                ]
+                            },
+                            "type": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "companyIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "companies": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "object"
+                        ]
+                    }
+                },
+                "teamIds": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "teams": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": [
+                            "null",
+                            "object"
+                        ]
+                    }
+                }
+            }
+        },
+        "userFollowingChanges": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "userFollowingComments": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "tagIds": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "integer"
+                ]
+            }
+        },
+        "tags": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": [
+                    "null",
+                    "object"
+                ]
+            }
+        }
+    }
+}

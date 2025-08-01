@@ -1,1 +1,435 @@
-{}
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "name": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "description": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "descriptionContentType": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "priority": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "hasDeskTickets": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "progress": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "displayOrder": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "decimalDisplayOrder": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "crmDealIds": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "tagIds": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "tags": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "updatedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updatedBy": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "deletedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "deletedBy": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "parentTask": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": true
+        },
+        "card": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": true
+        },
+        "isPrivate": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "lockdown": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "status": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "tasklist": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "startDate": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "dueDate": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "startDateOffset": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "dueDateOffset": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "estimateMinutes": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "accumulatedEstimatedMinutes": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "assignees": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object"
+            },
+            "additionalProperties": true
+        },
+        "commentFollowers": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object"
+            },
+            "additionalProperties": true
+        },
+        "changeFollowers": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object"
+            },
+            "additionalProperties": true
+        },
+        "completeFollowers": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object"
+            },
+            "additionalProperties": true
+        },
+        "attachments": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object"
+            },
+            "additionalProperties": true
+        },
+        "notify": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isArchived": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "capacities": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": true
+        },
+        "proofs": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": true
+        },
+        "userPermissions": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "canEdit": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "canComplete": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "canLogTime": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "canViewEstTime": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "canAddSubtasks": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "createdAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "sequence": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "workflowStages": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "workflowId": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    },
+                    "stageId": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    },
+                    "stageTaskDisplayOrder": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    }
+                },
+                "additionalProperties": true
+            }
+        },
+        "dateUpdated": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "parentTaskId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "tasklistId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "assigneeUserIds": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "assigneeUsers": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object"
+            }
+        },
+        "assigneeCompanyIds": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "assigneeCompanies": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object"
+            }
+        },
+        "assigneeTeamIds": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "assigneeTeams": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object"
+            }
+        },
+        "createdByUserId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "sequenceId": {
+            "type": [
+                "null",
+                "string"
+            ]
+        }
+    },
+    "additionalProperties": true
+}
