@@ -15,49 +15,49 @@
       "name": "projects",
       "path": "projects/api/v3/projects.json",
       "data_key": "projects",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/projects/list-projects"
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/projects/get-projects-api-v3-projects-json"
     },
     {
       "name": "tasks",
       "path": "projects/api/v3/tasks.json",
       "data_key": "tasks",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/tasks/list-tasks"
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/tasks/get-projects-api-v3-projects-project-id-tasks-json"
     },
     {
       "name": "milestones",
       "path": "projects/api/v3/milestones.json",
       "data_key": "milestones",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/milestones/list-milestones"
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/milestones/get-projects-api-v3-milestones-json"
     },
     {
       "name": "notebooks",
       "path": "projects/api/v3/notebooks.json",
       "data_key": "notebooks",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/notebooks/list-notebooks"
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/notebooks/get-projects-api-v3-notebooks-json"
     },
     {
       "name": "spaces",
       "path": "spaces/api/v3/spaces.json",
       "data_key": "spaces",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-all-spaces"
+      "doc_link": "https://apidocs.teamwork.com/docs/spaces/v1/spaces/get-v1-spaces-json"
     },
     {
       "name": "tickets",
       "path": "desk/v2/tickets.json",
       "data_key": "tickets",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/desk/v1/tickets/list-all-tickets"
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/tickets/post-v2-installations-installation-id-tickets-id-recover-json"
     },
     {
       "name": "ticket_details",
@@ -65,31 +65,31 @@
       "data_key": "ticket",
       "replication_method": "FULL_TABLE",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/desk/v1/tickets/get-a-ticket"
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json"
     },
     {
       "name": "users",
       "path": "desk/v1/users.json",
       "data_key": "users",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/desk/v1/users/list-all-users"
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/users/get-v2-me-json"
     },
     {
       "name": "inboxes",
       "path": "desk/v1/inboxes.json",
       "data_key": "inboxes",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/desk/v1/inboxes/list-all-inboxes"
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/inboxes/get-v2-inboxes-json"
     },
     {
       "name": "ticket_types",
       "path": "desk/api/v2/search/tickets.json",
       "data_key": "types",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/desk/v1/tickets/list-ticket-types"
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/ticket-types/get-v2-tickettypes-json"
     },
     {
       "name": "customers",
@@ -114,7 +114,7 @@
       "replication_method": "FULL_TABLE",
       "key_properties": ["id"],
       "parent": "spaces",
-      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-pages-in-space"
+      "doc_link": "https://apidocs.teamwork.com/docs/spaces/v1/pages/head-v1-pages-page-id-json"
     },
     {
       "name": "tags",
@@ -123,7 +123,7 @@
       "replication_method": "FULL_TABLE",
       "key_properties": ["id"],
       "parent": "spaces",
-      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-tags-in-space"
+      "doc_link": "https://apidocs.teamwork.com/docs/spaces/v1/tags/get-v1-tags-json"
     },
     {
       "name": "collaborators",
@@ -132,7 +132,7 @@
       "replication_method": "FULL_TABLE",
       "key_properties": ["id"],
       "parent": "spaces",
-      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-collaborators-in-space"
+      "doc_link": "https://apidocs.teamwork.com/docs/spaces/v1/collaborators/get-v1-spaces-space-id-pages-page-id-collaborators-json"
     },
     {
       "name": "company_details",
@@ -141,7 +141,7 @@
       "replication_method": "FULL_TABLE",
       "key_properties": ["id"],
       "parent": "companies",
-      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-id-json"
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json"
     },
     {
       "name": "customer_details",
@@ -150,13 +150,13 @@
       "replication_method": "FULL_TABLE",
       "key_properties": ["id"],
       "parent": "customers",
-      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-id-json"
+      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-search-customers-json"
     },
     {
       "name": "ticket_search",
       "path": "desk/api/v2/search/tickets.json",
       "data_key": "tickets",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
       "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json"
     },
@@ -164,7 +164,7 @@
       "name": "ticket_priorities",
       "path": "desk/api/v2/ticketpriorities.json",
       "data_key": "priorities",
-      "replication_method": "FULL_TABLE",
+      "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
       "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/ticket-priorities/get-v2-ticketpriorities-json"
     }

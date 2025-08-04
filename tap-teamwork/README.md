@@ -8,43 +8,43 @@ This tap:
 
 - Pulls raw data from the [teamwork API].
 - Extracts the following resources:
-    - [Projects](https://apidocs.teamwork.com/docs/teamwork/v3/projects/list-projects)
+    Collaborators[https://apidocs.teamwork.com/docs/spaces/v1/collaborators/get-v1-spaces-space-id-pages-page-id-collaborators-json]
 
-    - [Tasks](https://apidocs.teamwork.com/docs/teamwork/v3/tasks/list-tasks)
+Companies[https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json]
 
-    - [Milestones](https://apidocs.teamwork.com/docs/teamwork/v3/milestones/list-milestones)
+CompanyDetails[https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json]
 
-    - [Notebooks](https://apidocs.teamwork.com/docs/teamwork/v3/notebooks/list-notebooks)
+Customers[https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-json]
 
-    - [Spaces](https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-all-spaces)
+CustomerDetails[https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-search-customers-json]
 
-    - [Tickets](https://apidocs.teamwork.com/docs/desk/v1/tickets/list-all-tickets)
+Inboxes[https://apidocs.teamwork.com/docs/desk/v2/inboxes/get-v2-inboxes-json]
 
-    - [TicketDetails](https://apidocs.teamwork.com/docs/desk/v1/tickets/get-a-ticket)
+Milestones[https://apidocs.teamwork.com/docs/teamwork/v3/milestones/get-projects-api-v3-milestones-json]
 
-    - [Users](https://apidocs.teamwork.com/docs/desk/v1/users/list-all-users)
+Notebooks[https://apidocs.teamwork.com/docs/teamwork/v3/notebooks/get-projects-api-v3-notebooks-json]
 
-    - [Inboxes](https://apidocs.teamwork.com/docs/desk/v1/inboxes/list-all-inboxes)
+Pages[https://apidocs.teamwork.com/docs/spaces/v1/pages/head-v1-pages-page-id-json]
 
-    - [TicketTypes](https://apidocs.teamwork.com/docs/desk/v1/tickets/list-ticket-types)
+Projects[https://apidocs.teamwork.com/docs/teamwork/v3/projects/get-projects-api-v3-projects-json]
 
-    - [Customers](https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-json)
+Spaces[https://apidocs.teamwork.com/docs/spaces/v1/spaces/get-v1-spaces-json]
 
-    - [Companies](https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json)
+Tags[https://apidocs.teamwork.com/docs/spaces/v1/tags/get-v1-tags-json]
 
-    - [Pages](https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-pages-in-space)
+Tasks[https://apidocs.teamwork.com/docs/teamwork/v3/tasks/get-projects-api-v3-projects-project-id-tasks-json]
 
-    - [Tags](https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-tags-in-space)
+TicketDetails[https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json]
 
-    - [Collaborators](https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-collaborators-in-space)
+TicketPriorities[https://apidocs.teamwork.com/docs/desk/v2/ticket-priorities/get-v2-ticketpriorities-json]
 
-    - [CompanyDetails](https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-id-json)
+Tickets[https://apidocs.teamwork.com/docs/desk/v2/tickets/post-v2-installations-installation-id-tickets-id-recover-json]
 
-    - [CustomerDetails](https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-id-json)
+TicketSearch[https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json]
 
-    - [TicketSearch](https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json)
+TicketTypes[https://apidocs.teamwork.com/docs/desk/v2/ticket-types/get-v2-tickettypes-json]
 
-    - [TicketPriorities](https://apidocs.teamwork.com/docs/desk/v2/ticket-priorities/get-v2-ticketpriorities-json)
+Users[https://apidocs.teamwork.com/docs/desk/v2/users/get-v2-me-json]
 
 - Outputs the schema for each resource
 - Incrementally pulls data based on the input state
@@ -53,100 +53,157 @@ This tap:
 ## Streams
 
 
-** [projects](https://apidocs.teamwork.com/docs/teamwork/v3/projects/list-projects)**
-- Data Key = projects
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+**collaborators** [https://apidocs.teamwork.com/docs/spaces/v1/collaborators/get-v1-spaces-space-id-pages-page-id-collaborators-json]
 
-** [tasks](https://apidocs.teamwork.com/docs/teamwork/v3/tasks/list-tasks)**
-- Data Key = tasks
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Data Key = collaborators
 
-** [milestones](https://apidocs.teamwork.com/docs/teamwork/v3/milestones/list-milestones)**
-- Data Key = milestones
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Primary keys: ['id']
 
-** [notebooks](https://apidocs.teamwork.com/docs/teamwork/v3/notebooks/list-notebooks)**
-- Data Key = notebooks
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Replication strategy: FULL_TABLE
 
-** [spaces](https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-all-spaces)**
-- Data Key = spaces
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+**companies** [https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json]
 
-** [tickets](https://apidocs.teamwork.com/docs/desk/v1/tickets/list-all-tickets)**
-- Data Key = tickets
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Data Key = companies
 
-** [ticket_details](https://apidocs.teamwork.com/docs/desk/v1/tickets/get-a-ticket)**
-- Data Key = ticket
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Primary keys: ['id']
 
-** [users](https://apidocs.teamwork.com/docs/desk/v1/users/list-all-users)**
-- Data Key = users
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Replication strategy: INCREMENTAL
 
-** [inboxes](https://apidocs.teamwork.com/docs/desk/v1/inboxes/list-all-inboxes)**
-- Data Key = inboxes
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+**company_details**[https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json]
 
-** [ticket_types](https://apidocs.teamwork.com/docs/desk/v1/tickets/list-ticket-types)**
-- Data Key = types
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Data Key = company
 
-** [customers](https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-json)**
-- Data Key = customers
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Primary keys: ['id']
 
-** [companies](https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json)**
-- Data Key = companies
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Replication strategy: FULL_TABLE
 
-** [pages](https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-pages-in-space)**
-- Data Key = pages
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+**customers**[https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-json]
 
-** [tags](https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-tags-in-space)**
-- Data Key = tags
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Data Key = customers
 
-** [collaborators](https://apidocs.teamwork.com/docs/teamwork/v3/spaces/get-collaborators-in-space)**
-- Data Key = collaborators
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Primary keys: ['id']
 
-** [company_details](https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-id-json)**
-- Data Key = company
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Replication strategy: FULL_TABLE
 
-** [customer_details](https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-id-json)**
-- Data Key = customer
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+**customer_details**[https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-search-customers-json]
 
-** [ticket_search](https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json)**
-- Data Key = tickets
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Data Key = customer
 
-** [ticket_priorities](https://apidocs.teamwork.com/docs/desk/v2/ticket-priorities/get-v2-ticketpriorities-json)**
-- Data Key = priorities
-- Primary keys: ['id']
-- Replication strategy: FULL_TABLE
+Primary keys: ['id']
+
+Replication strategy: FULL_TABLE
+
+**inboxes**[https://apidocs.teamwork.com/docs/desk/v2/inboxes/get-v2-inboxes-json]
+
+Data Key = inboxes
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
+
+**milestones**[https://apidocs.teamwork.com/docs/teamwork/v3/milestones/get-projects-api-v3-milestones-json]
+
+Data Key = milestones
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
+
+**notebooks**[https://apidocs.teamwork.com/docs/teamwork/v3/notebooks/get-projects-api-v3-notebooks-json]
+
+Data Key = notebooks
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
+
+**pages**[https://apidocs.teamwork.com/docs/spaces/v1/pages/head-v1-pages-page-id-json]
+
+Data Key = pages
+
+Primary keys: ['id']
+
+Replication strategy: FULL_TABLE
+
+**projects**[https://apidocs.teamwork.com/docs/teamwork/v3/projects/get-projects-api-v3-projects-json]
+
+Data Key = projects
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
+
+**spaces**[https://apidocs.teamwork.com/docs/spaces/v1/spaces/get-v1-spaces-json]
+
+Data Key = spaces
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
+
+**tags**[https://apidocs.teamwork.com/docs/spaces/v1/tags/get-v1-tags-json]
+
+Data Key = tags
+
+Primary keys: ['id']
+
+Replication strategy: FULL_TABLE
+
+**tasks**[https://apidocs.teamwork.com/docs/teamwork/v3/tasks/get-projects-api-v3-projects-project-id-tasks-json]
+
+Data Key = tasks
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
+
+**ticket_details**[https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json]
+
+Data Key = ticket
+
+Primary keys: ['id']
+
+Replication strategy: FULL_TABLE
+
+**ticket_priorities**[https://apidocs.teamwork.com/docs/desk/v2/ticket-priorities/get-v2-ticketpriorities-json]
+
+Data Key = priorities
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
+
+**ticket_search**[https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json]
+
+Data Key = tickets
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
+
+**ticket_types**[https://apidocs.teamwork.com/docs/desk/v2/ticket-types/get-v2-tickettypes-json]
+
+Data Key = types
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
+
+**tickets**[https://apidocs.teamwork.com/docs/desk/v2/tickets/post-v2-installations-installation-id-tickets-id-recover-json]
+
+Data Key = tickets
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
+
+**users**[https://apidocs.teamwork.com/docs/desk/v2/users/get-v2-me-json]
+
+Data Key = users
+
+Primary keys: ['id']
+
+Replication strategy: INCREMENTAL
 
 
 
