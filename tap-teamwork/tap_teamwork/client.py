@@ -73,9 +73,14 @@ class Client:
 
     def post(self, endpoint: str, params: Dict, headers: Dict, body: Dict, path: str = None) -> Any:
         """Calls the make_request method with a prefixed method type `POST`"""
-
-        headers, params = self.authenticate(headers, params)
-        self.__make_request("POST", endpoint, headers=headers, params=params, data=body, timeout=self.request_timeout)
+        try:
+            endpoint = endpoint or f"{self.base_url}/{path}"
+            headers, params = self.authenticate(headers, params)
+            #Return the dict directly t ovoid the error in unit test
+            return self.__make_request("POST", endpoint, headers=headers, params=params, data=body, timeout=self.request_timeout)
+        except Exception as e:
+            LOGGER.exception(f"[post] Failed POST request to {endpoint}: {e}")
+            raise
 
 
     @backoff.on_exception(
