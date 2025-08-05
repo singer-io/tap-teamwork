@@ -9,43 +9,43 @@ This tap:
 - Pulls raw data from the [teamwork API].
 - Extracts the following resources:
 
-**Collaborators** [https://apidocs.teamwork.com/docs/spaces/v1/collaborators/get-v1-spaces-space-id-pages-page-id-collaborators-json]
+[Collaborators](https://apidocs.teamwork.com/docs/spaces/v1/collaborators/get-v1-spaces-space-id-pages-page-id-collaborators-json)
 
-Companies [https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json]
+[Companies](https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json)
 
-CompanyDetails [https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json]
+[CompanyDetails](https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json)
 
-Customers [https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-json]
+[Customers](https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-json)
 
-CustomerDetails [https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-search-customers-json]
+[CustomerDetails](https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-search-customers-json)
 
-Inboxes [https://apidocs.teamwork.com/docs/desk/v2/inboxes/get-v2-inboxes-json]
+[Inboxes](https://apidocs.teamwork.com/docs/desk/v2/inboxes/get-v2-inboxes-json)
 
-Milestones [https://apidocs.teamwork.com/docs/teamwork/v3/milestones/get-projects-api-v3-milestones-json]
+[Milestones](https://apidocs.teamwork.com/docs/teamwork/v3/milestones/get-projects-api-v3-milestones-json)
 
-Notebooks [https://apidocs.teamwork.com/docs/teamwork/v3/notebooks/get-projects-api-v3-notebooks-json]
+[Notebooks](https://apidocs.teamwork.com/docs/teamwork/v3/notebooks/get-projects-api-v3-notebooks-json)
 
-Pages [https://apidocs.teamwork.com/docs/spaces/v1/pages/head-v1-pages-page-id-json]
+[Pages](https://apidocs.teamwork.com/docs/spaces/v1/pages/head-v1-pages-page-id-json)
 
-Projects [https://apidocs.teamwork.com/docs/teamwork/v3/projects/get-projects-api-v3-projects-json]
+[Projects](https://apidocs.teamwork.com/docs/teamwork/v3/projects/get-projects-api-v3-projects-json)
 
-Spaces [https://apidocs.teamwork.com/docs/spaces/v1/spaces/get-v1-spaces-json]
+[Spaces](https://apidocs.teamwork.com/docs/spaces/v1/spaces/get-v1-spaces-json)
 
-Tags [https://apidocs.teamwork.com/docs/spaces/v1/tags/get-v1-tags-json]
+[Tags](https://apidocs.teamwork.com/docs/spaces/v1/tags/get-v1-tags-json)
 
-Tasks [https://apidocs.teamwork.com/docs/teamwork/v3/tasks/get-projects-api-v3-projects-project-id-tasks-json]
+[Tasks](https://apidocs.teamwork.com/docs/teamwork/v3/tasks/get-projects-api-v3-projects-project-id-tasks-json)
 
-TicketDetails [https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json]
+[TicketDetails](https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json)
 
-TicketPriorities [https://apidocs.teamwork.com/docs/desk/v2/ticket-priorities/get-v2-ticketpriorities-json]
+[TicketPriorities](https://apidocs.teamwork.com/docs/desk/v2/ticket-priorities/get-v2-ticketpriorities-json)
 
-Tickets [https://apidocs.teamwork.com/docs/desk/v2/tickets/post-v2-installations-installation-id-tickets-id-recover-json]
+[Tickets](https://apidocs.teamwork.com/docs/desk/v2/tickets/post-v2-installations-installation-id-tickets-id-recover-json)
 
-TicketSearch [https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json]
+[TicketSearch](https://apidocs.teamwork.com/docs/desk/v2/tickets/get-v2-search-tickets-json)
 
-TicketTypes [https://apidocs.teamwork.com/docs/desk/v2/ticket-types/get-v2-tickettypes-json]
+[TicketTypes](https://apidocs.teamwork.com/docs/desk/v2/ticket-types/get-v2-tickettypes-json)
 
-Users [https://apidocs.teamwork.com/docs/desk/v2/users/get-v2-me-json]
+[Users](https://apidocs.teamwork.com/docs/desk/v2/users/get-v2-me-json)
 
 - Outputs the schema for each resource
 - Incrementally pulls data based on the input state
