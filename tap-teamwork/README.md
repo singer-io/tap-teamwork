@@ -9,7 +9,7 @@ This tap:
 - Pulls raw data from the [teamwork API].
 - Extracts the following resources:
 
-Collaborators [https://apidocs.teamwork.com/docs/spaces/v1/collaborators/get-v1-spaces-space-id-pages-page-id-collaborators-json]
+**Collaborators** [https://apidocs.teamwork.com/docs/spaces/v1/collaborators/get-v1-spaces-space-id-pages-page-id-collaborators-json]
 
 Companies [https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json]
 
