@@ -1,14 +1,26 @@
-from typing import Dict, Iterator, List
+from typing import List, Optional, Dict
+from tap_teamwork.streams.abstracts import IncrementalStream
 from singer import get_logger
-from tap_teamwork.streams.abstracts import FullTableStream
 
 LOGGER = get_logger()
 
-
-class Tasks(FullTableStream):
+class Tasks(IncrementalStream):
     tap_stream_id = "tasks"
-    key_properties = ["id"]
-    replication_method = "FULL_TABLE"
-    replication_keys: List[str] = []
+    path = "tasks.json"
     data_key = "tasks"
-    path = "projects/api/v3/tasks.json"
+    replication_method = "INCREMENTAL"
+    replication_keys: List[str] = ["updatedAt"]
+    key_properties = ["id"]
+
+    def get_url_params(self, context: Optional[Dict]) -> Dict:
+        """Attach 'updatedAfter' for incremental sync."""
+        params = {}
+        bookmark = self.get_starting_timestamp(context)
+
+        if bookmark:
+            params["updatedAfter"] = bookmark
+            LOGGER.info(f"[{self.tap_stream_id}] Using incremental param: updatedAfter={bookmark}")
+        else:
+            LOGGER.info(f"[{self.tap_stream_id}] No bookmark found — full sync.")
+
+        return params
