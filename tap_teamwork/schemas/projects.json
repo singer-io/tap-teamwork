@@ -1,1 +1,535 @@
-{}
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "description": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "status": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "subStatus": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "company": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "id": {
+          "type": [
+            "null",
+            "integer"
+          ]
+        },
+        "meta": {
+          "type": [
+            "null",
+            "object"
+          ]
+        },
+        "type": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "tags": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "meta": {
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    "startAt": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "endAt": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "completedAt": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "updatedBy": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "completedBy": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "ownedBy": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "defaultPrivacy": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "isOnBoardingProject": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "isSampleProject": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "logo": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "logoIcon": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "logoColor": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "notifyEveryone": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "allowNotifyAnyone": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "notifyCommentIncludeCreator": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "notifyTaskAssignee": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "overviewStartPage": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "privacyEnabled": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "replyByEmailEnabled": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "showAnnouncement": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "announcement": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "skipWeekends": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "startPage": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "tasksStartPage": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "customFieldValueIds": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "customFieldValues": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "meta": {
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    "customfieldValues": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "meta": {
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    "isBillable": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "timelogRequiresTask": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "companyId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "tagIds": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "startDate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "endDate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "categoryId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "ownerId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "updateId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "timeBudgetId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "financialBudgetId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "projectOwnerId": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "activePages": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "billing": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "forms": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "comments": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "files": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "links": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "messages": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "milestones": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "notebooks": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "riskRegister": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "tasks": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "list": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "board": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "gantt": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "table": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "time": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "finance": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "proofs": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "tickets": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        }
+      }
+    }
+  }
+}
