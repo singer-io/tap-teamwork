@@ -66,13 +66,13 @@ class Client:
         return headers, params
 
     def get(self, endpoint: str, params: Dict, headers: Dict, path: str = None) -> Any:
-        """Calls the make_request method with a prefixed method type `GET`"""
+        """Calls the make_request method with a prefixed method type GET"""
         endpoint = endpoint or f"{self.base_url}/{path}"
         headers, params = self.authenticate(headers, params)
         return self.__make_request("GET", endpoint, headers=headers, params=params, timeout=self.request_timeout)
 
     def post(self, endpoint: str, params: Dict, headers: Dict, body: Dict, path: str = None) -> Any:
-        """Calls the make_request method with a prefixed method type `POST`"""
+        """Calls the make_request method with a prefixed method type POST"""
         try:
             endpoint = endpoint or f"{self.base_url}/{path}"
             headers, params = self.authenticate(headers, params)
@@ -107,7 +107,7 @@ class Client:
             body (dict): only applicable to post request, body of the request
 
         Returns:
-            Dict,List,None: Returns a `Json Parsed` HTTP Response or None if exception
+            Dict,List,None: Returns a Json Parsed HTTP Response or None if exception
         """
         with metrics.http_request_timer(endpoint) as timer:
             response = self._session.request(method, endpoint, **kwargs)
