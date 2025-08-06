@@ -29,13 +29,8 @@ jobs:
           command: |
             source /usr/local/share/virtualenvs/tap-teamwork/bin/activate
             pip install pytest pytest-cov
-<<<<<<< HEAD
             pytest tests/unittests --cov=tap_teamwork --cov-report=html --cov-report=term --junitxml=test_output/report.xml
             coverage html
-=======
-            pytest tap_teamwork/tests/unittests --cov=tap_teamwork --cov-report=html --cov-report=term --junitxml=test_output/report.xml
-
->>>>>>> SAC-28380-Add-Exception-Handling-and-Logging-new
       - store_test_results:
           path: test_output/report.xml
       - store_artifacts:
