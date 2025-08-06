@@ -1,4 +1,4 @@
-from typing import Dict, Iterator, List
+from typing import Dict, Iterator, List, Optional
 from singer import get_logger
 from tap_teamwork.streams.abstracts import IncrementalStream
 
@@ -14,11 +14,12 @@ class Tickets(IncrementalStream):
     children = ["ticket_details"]
 
     def get_url_params(
-        self, context: Dict | None, next_page_token: str | None
+        self, context: Optional[Dict] = None, next_page_token: Optional[str] = None
     ) -> Dict:
         params = super().get_url_params(context, next_page_token)
-        # Included updatedAtFrom parameter if available
-        start_date = self.get_starting_timestamp(context)
+
+        # Include updatedAtFrom parameter if available
+        start_date = self.get_starting_timestamp(context or {})
         if start_date:
-            params["updatedAtFrom"] = start_date.isoformat()
+            params["updatedAtFrom"] = start_date
         return params

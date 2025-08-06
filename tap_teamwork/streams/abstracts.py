@@ -114,6 +114,25 @@ class BaseStream(ABC):
         LOGGER.info(f"[{self.tap_stream_id}] Final URL: {full_url}")
         return full_url
 
+    def get_url_params(self, context: Optional[Dict] = None, next_page_token: Optional[str] = None) -> Dict:
+        """
+        Default URL params logic for pagination or context-based filtering.
+        Override in child classes as needed.
+        """
+        return {}
+
+    def append_times_to_dates(self, record: Dict) -> Dict:
+        """
+        Ensure that replication key date fields include a time component.
+        Adds 'T00:00:00Z' to any date-only strings.
+        """
+        for key in self.replication_keys:
+            if key in record:
+                val = record[key]
+                if isinstance(val, str) and "T" not in val:
+                    record[key] = f"{val}T00:00:00Z"
+        return record
+
 
 class IncrementalStream(BaseStream):
     replication_method = "INCREMENTAL"
@@ -150,22 +169,21 @@ class IncrementalStream(BaseStream):
                     LOGGER.warning(f"[{self.tap_stream_id}] Transformed record is empty. Skipping.")
                     continue
 
+                self.append_times_to_dates(transformed_record)
+
                 if self.is_selected(record):
                     write_record(self.tap_stream_id, transformed_record)
                     counter.increment()
 
-                # Track latest bookmark value
-                updated_at = record.get(self.replication_keys[0])
+                updated_at = transformed_record.get(self.replication_keys[0])
                 if updated_at and (latest_value is None or updated_at > latest_value):
                     latest_value = updated_at
 
-                # Trigger children
                 for child in self.child_to_sync:
                     context = child.get_child_context(record, parent_obj)
                     if context:
                         child.sync(state=state, transformer=transformer, parent_obj=context)
 
-        # Update bookmark
         if latest_value:
             write_bookmark(state, self.tap_stream_id, self.replication_keys[0], latest_value)
 
