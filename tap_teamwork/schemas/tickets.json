@@ -1,1 +1,272 @@
-{}
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "subject": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "preview": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "status": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "type": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "source": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "priority": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "priorityId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "priorityColor": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "assignedTo": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "inboxId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "mergedToId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "businesshoursId": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "reviewStatus": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "tags": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "hasAttachments": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "readonly": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isRead": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "numThreads": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "numActiveTasks": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "numCompletedTasks": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "spam_score": {
+            "type": [
+                "null",
+                "number"
+            ]
+        },
+        "createdAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updatedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "deletedAt": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "Time": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "format": "date-time"
+                },
+                "Valid": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                }
+            }
+        },
+        "deletedByUserId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "customer": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "email": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "firstName": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "lastName": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "avatarURL": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "company": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "happinessRating": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "customFields": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "responseTimes": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "averageResponseTime": {
+                    "type": [
+                        "null",
+                        "number"
+                    ]
+                },
+                "firstResponseTime": {
+                    "type": [
+                        "null",
+                        "number"
+                    ]
+                },
+                "responseCount": {
+                    "type": [
+                        "null",
+                        "number"
+                    ]
+                },
+                "resolutionTime": {
+                    "type": [
+                        "null",
+                        "number"
+                    ]
+                }
+            }
+        }
+    }
+}
