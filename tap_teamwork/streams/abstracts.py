@@ -1,5 +1,6 @@
+"""Abstract stream classes for Singer Tap."""
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Tuple, List
+from typing import Dict, List, Optional
 from singer import (
     Transformer,
     get_bookmark,
@@ -15,16 +16,7 @@ LOGGER = get_logger()
 
 
 class BaseStream(ABC):
-    """
-    A Base Class providing structure and boilerplate for generic streams
-    and required attributes for any kind of stream
-    ~~~
-    Provides:
-     - Basic Attributes (stream_name,replication_method,key_properties)
-     - Helper methods for catalog generation
-     - `sync` and `get_records` method for performing sync
-    """
-
+    """Base abstract class for all streams."""
     url_endpoint = ""
     path = ""
     page_size = 0
@@ -46,29 +38,25 @@ class BaseStream(ABC):
     @property
     @abstractmethod
     def tap_stream_id(self) -> str:
-        """Unique identifier for the stream.
-
-        This is allowed to be different from the name of the stream, in
-        order to allow for sources that have duplicate stream names.
-        """
+        """Unique stream ID."""
 
     @property
     @abstractmethod
     def replication_method(self) -> str:
-        """Defines the sync mode of a stream."""
+        """Stream replication method."""
 
     @property
     @abstractmethod
-    def replication_keys(self) -> str:
-        """Defines the replication key for incremental sync mode of a
-        stream."""
+    def replication_keys(self) -> List[str]:
+        """Fields used for replication."""
 
     @property
     @abstractmethod
-    def key_properties(self) -> Tuple[str, str]:
-        """List of key properties for stream."""
+    def key_properties(self) -> List[str]:
+        """Primary key fields."""
 
-    def is_selected(self):
+    def is_selected(self, _record: Optional[dict] = None) -> bool:
+        """Check if stream is selected in catalog."""
         return metadata.get(self.metadata, (), "selected")
 
     @abstractmethod
@@ -78,93 +66,94 @@ class BaseStream(ABC):
         transformer: Transformer,
         parent_obj: Dict = None,
     ) -> Dict:
-        """
-        Performs a replication sync for the stream.
-        ~~~
-        Args:
-         - state (dict): represents the state file for the tap.
-         - transformer (object): A Object of the singer.transformer class.
-         - parent_obj (dict): The parent object for the stream.
-
-        Returns:
-         - bool: The return value. True for success, False otherwise.
-
-        Docs:
-         - https://github.com/singer-io/getting-started/blob/master/docs/SYNC_MODE.md
-        """
-
+        """Abstract method to sync stream."""
 
     def get_records(self) -> List:
-        """Interacts with api client interaction and pagination."""
-        self.params[""] = self.page_size
+        """Yield paginated API records."""
         next_page = 1
         while next_page:
             response = self.client.get(
                 self.url_endpoint, self.params, self.headers, self.path
             )
-            raw_records = response.get(self.data_key, [])
-            next_page = response.get(self.next_page_key)
+            raw = response.get(self.data_key, [])
+            if isinstance(raw, dict):
+                raw_records = [raw]
+            elif isinstance(raw, list):
+                raw_records = raw
+            else:
+                raw_records = []
 
-            self.params[self.next_page_key] = next_page
+            next_page = response.get(self.next_page_key)
+            if next_page:
+                self.params[self.next_page_key] = next_page
+            else:
+                self.params.pop(self.next_page_key, None)
+
             yield from raw_records
 
     def write_schema(self) -> None:
-        """
-        Write a schema message.
-        """
+        """Write stream schema to stdout."""
         try:
             write_schema(self.tap_stream_id, self.schema, self.key_properties)
         except OSError as err:
-            LOGGER.error(
-                "OS Error while writing schema for: {}".format(self.tap_stream_id)
-            )
+            LOGGER.error("OS Error while writing schema for: %s", self.tap_stream_id)
             raise err
 
     def update_params(self, **kwargs) -> None:
-        """
-        Update params for the stream
-        """
+        """Update request params for API call."""
         self.params.update(kwargs)
 
-    def modify_object(self, record: Dict, parent_record: Dict = None) -> Dict:
-        """
-        Modify the record before writing to the stream
-        """
+    def modify_object(self, record: Dict, _parent_record: Dict = None) -> Dict:
+        """Override in child to modify object before writing."""
         return record
 
     def get_url_endpoint(self, parent_obj: Dict = None) -> str:
-        """
-        Get the URL endpoint for the stream
-        """
-        return self.url_endpoint or f"{self.client.base_url}/{self.path}"
+        """Return final API URL after formatting with parent object."""
+        if parent_obj:
+            try:
+                formatted_path = self.path.format(**parent_obj)
+            except KeyError as e:
+                LOGGER.error(
+                    "[%s] Missing key in parent_obj for path formatting: %s",
+                    self.tap_stream_id,
+                    e,
+                )
+                raise
+        else:
+            formatted_path = self.path
+
+        full_url = f"{self.client.base_url}/{formatted_path}"
+        LOGGER.info("[%s] Final URL: %s", self.tap_stream_id, full_url)
+        return full_url
+
+    def get_url_params(
+        self,
+        _context: Optional[Dict] = None,
+        _next_page_token: Optional[str] = None,
+    ) -> Dict:
+        """Return default URL params. Override in child if needed."""
+        return {}
+
+    def append_times_to_dates(self, record: Dict) -> Dict:
+        """Ensure that replication key date fields include time component."""
+        for key in self.replication_keys:
+            if key in record:
+                val = record[key]
+                if isinstance(val, str) and "T" not in val:
+                    record[key] = f"{val}T00:00:00Z"
+        return record
 
 
 class IncrementalStream(BaseStream):
-    """Base Class for Incremental Stream."""
+    """Base class for incremental sync streams."""
+    replication_method = "INCREMENTAL"
 
-
-    def get_bookmark(self, state: dict, stream: str, key: Any = None) -> int:
-        """A wrapper for singer.get_bookmark to deal with compatibility for
-        bookmark values or start values."""
-        return get_bookmark(
-            state,
-            stream,
-            key or self.replication_keys[0],
-            self.client.config["start_date"],
-        )
-
-    def write_bookmark(self, state: dict, stream: str, key: Any = None, value: Any = None) -> Dict:
-        """A wrapper for singer.get_bookmark to deal with compatibility for
-        bookmark values or start values."""
-        if not (key or self.replication_keys):
-            return state
-
-        current_bookmark = get_bookmark(state, stream, key or self.replication_keys[0], self.client.config["start_date"])
-        value = max(current_bookmark, value)
-        return write_bookmark(
-            state, stream, key or self.replication_keys[0], value
-        )
-
+    def get_starting_timestamp(self, state: dict) -> Optional[str]:
+        """Get ISO8601 bookmark or fallback to start_date."""
+        bookmark = get_bookmark(state, self.tap_stream_id, self.replication_keys[0])
+        if not bookmark:
+            bookmark = self.client.config.get("start_date")
+        return bookmark
 
     def sync(
         self,
@@ -172,39 +161,51 @@ class IncrementalStream(BaseStream):
         transformer: Transformer,
         parent_obj: Dict = None,
     ) -> Dict:
-        """Implementation for `type: Incremental` stream."""
-        bookmark_date = self.get_bookmark(state, self.tap_stream_id)
-        current_max_bookmark_date = bookmark_date
-        self.update_params(updated_since=bookmark_date)
+        """Sync incremental records using updatedAfter param."""
         self.url_endpoint = self.get_url_endpoint(parent_obj)
+        start_value = self.get_starting_timestamp(state)
+        if start_value:
+            self.params["updatedAfter"] = start_value
+
+        latest_value = start_value
 
         with metrics.record_counter(self.tap_stream_id) as counter:
             for record in self.get_records():
-                record = self.modify_object(record, parent_obj)
                 transformed_record = transformer.transform(
                     record, self.schema, self.metadata
                 )
+
+                if not transformed_record:
+                    LOGGER.warning("[%s] Transformed record is empty. Skipping.",
+                                   self.tap_stream_id)
+                    continue
+
                 self.append_times_to_dates(transformed_record)
 
-                record_timestamp = transformed_record[self.replication_keys[0]]
-                if record_timestamp >= bookmark_date:
-                    if self.is_selected():
-                        write_record(self.tap_stream_id, transformed_record)
-                        counter.increment()
+                if self.is_selected(record):
+                    write_record(self.tap_stream_id, transformed_record)
+                    counter.increment()
 
-                    current_max_bookmark_date = max(
-                        current_max_bookmark_date, record_timestamp
-                    )
+                updated_at = transformed_record.get(self.replication_keys[0])
+                if updated_at and (latest_value is None or updated_at > latest_value):
+                    latest_value = updated_at
 
-                    for child in self.child_to_sync:
-                        child.sync(state=state, transformer=transformer, parent_obj=record)
+                for child in self.child_to_sync:
+                    context = child.get_child_context(record, parent_obj)
+                    if context:
+                        child.sync(state=state, transformer=transformer,
+                                   parent_obj=context)
 
-            state = self.write_bookmark(state, self.tap_stream_id, value=current_max_bookmark_date)
-            return counter.value
+        if latest_value:
+            write_bookmark(state, self.tap_stream_id, self.replication_keys[0],
+                           latest_value)
+
+        return counter.value
 
 
 class FullTableStream(BaseStream):
-    """Base Class for Incremental Stream."""
+    """Base class for full-table sync streams."""
+    replication_method = "FULL_TABLE"
 
     def sync(
         self,
@@ -212,19 +213,28 @@ class FullTableStream(BaseStream):
         transformer: Transformer,
         parent_obj: Dict = None,
     ) -> Dict:
-        """Abstract implementation for `type: Fulltable` stream."""
+        """Sync all records in full-table mode."""
         self.url_endpoint = self.get_url_endpoint(parent_obj)
+
         with metrics.record_counter(self.tap_stream_id) as counter:
             for record in self.get_records():
                 transformed_record = transformer.transform(
                     record, self.schema, self.metadata
                 )
-                if self.is_selected:
+
+                if not transformed_record:
+                    LOGGER.warning("[%s] Transformed record is empty. Skipping.",
+                                   self.tap_stream_id)
+                    continue
+
+                if self.is_selected(record):
                     write_record(self.tap_stream_id, transformed_record)
                     counter.increment()
 
                 for child in self.child_to_sync:
-                    child.sync(state=state, transformer=transformer, parent_obj=record)
+                    context = child.get_child_context(record, parent_obj)
+                    if context:
+                        child.sync(state=state, transformer=transformer,
+                                   parent_obj=context)
 
-            return counter.value
-
+        return counter.value
