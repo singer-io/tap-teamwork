@@ -39,14 +39,22 @@ def load_schema_references() -> Dict:
 
 def get_schemas() -> Tuple[Dict, Dict]:
     """
-    Load the schema references, prepare metadata for each streams and return schema and metadata for the catalog.
+    Load the schema references, prepare metadata for each stream,
+    and return schema and metadata for the catalog.
     """
     schemas = {}
     field_metadata = {}
-
     refs = load_schema_references()
-    for stream_name, stream_obj in STREAMS.items():
+
+    for stream_cls in STREAMS:
+        stream_obj = stream_cls()  # Uninitialized class
+        stream_name = stream_obj.tap_stream_id
+
         schema_path = get_abs_path("schemas/{}.json".format(stream_name))
+        if not os.path.exists(schema_path):
+            LOGGER.warning(f"Schema file not found: {schema_path}")
+            continue
+
         with open(schema_path) as file:
             schema = json.load(file)
 
@@ -63,7 +71,7 @@ def get_schemas() -> Tuple[Dict, Dict]:
         mdata = metadata.to_map(mdata)
 
         automatic_keys = getattr(stream_obj, "replication_keys") or []
-        for field_name in schema["properties"].keys():
+        for field_name in schema.get("properties", {}).keys():
             if field_name in automatic_keys:
                 mdata = metadata.write(
                     mdata, ("properties", field_name), "inclusion", "automatic"
