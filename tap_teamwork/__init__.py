@@ -1,3 +1,8 @@
+"""
+Tap entrypoint for tap-teamwork.
+Handles argument parsing and triggers discover or sync modes.
+"""
+
 import sys
 import json
 import singer
@@ -9,9 +14,10 @@ LOGGER = singer.get_logger()
 
 REQUIRED_CONFIG_KEYS = ['access_token', 'start_date']
 
+
 def do_discover():
     """
-    Discover and emit the catalog to stdout
+    Discover and emit the catalog to stdout.
     """
     LOGGER.info("Starting discover")
     catalog = discover()
@@ -22,12 +28,10 @@ def do_discover():
 @singer.utils.handle_top_exception(LOGGER)
 def main():
     """
-    Run the tap
+    Main tap runner. Handles sync and discovery modes.
     """
     parsed_args = singer.utils.parse_args(REQUIRED_CONFIG_KEYS)
-    state = {}
-    if parsed_args.state:
-        state = parsed_args.state
+    state = parsed_args.state or {}
 
     with Client(parsed_args.config) as client:
         if parsed_args.discover:
@@ -35,9 +39,10 @@ def main():
         elif parsed_args.catalog:
             sync(
                 client=client,
-                config=parsed_args.config,
+                _config=parsed_args.config,  # 🔧 Fix: match function param
                 catalog=parsed_args.catalog,
-                state=state)
+                state=state
+            )
 
 
 if __name__ == "__main__":
