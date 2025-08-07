@@ -1,1 +1,20 @@
-{}
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "type": {
+            "type": [
+                "null",
+                "string"
+            ]
+        }
+    },
+    "required": [
+        "id"
+    ]
+}

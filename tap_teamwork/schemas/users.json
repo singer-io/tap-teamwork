@@ -1,1 +1,101 @@
-{}
+{
+    "type": "object",
+    "properties": {
+        "included": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "inboxes": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "autoReplyEnabled": {
+                                "type": [
+                                    "null",
+                                    "boolean"
+                                ]
+                            },
+                            "autoReplyFromUserId": {
+                                "type": [
+                                    "null",
+                                    "integer"
+                                ]
+                            },
+                            "autoReplyMessage": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "autoReplySubject": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "clientOnly": {
+                                "type": [
+                                    "null",
+                                    "boolean"
+                                ]
+                            },
+                            "createdAt": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "format": "date-time"
+                            },
+                            "createdBy": {
+                                "type": [
+                                    "null",
+                                    "object"
+                                ],
+                                "properties": {
+                                    "delete": {
+                                        "type": [
+                                            "null",
+                                            "boolean"
+                                        ]
+                                    },
+                                    "id": {
+                                        "type": [
+                                            "null",
+                                            "integer"
+                                        ]
+                                    },
+                                    "meta": {
+                                        "type": [
+                                            "null",
+                                            "object"
+                                        ],
+                                        "properties": {
+                                            "additionalProp": {
+                                                "type": [
+                                                    "null",
+                                                    "string"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": {
+                                        "type": [
+                                            "null",
+                                            "integer"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
