@@ -25,7 +25,7 @@ This tap:
 
 [Notebooks](https://apidocs.teamwork.com/docs/teamwork/v3/notebooks/get-projects-api-v3-notebooks-json)
 
-[Pages](https://apidocs.teamwork.com/docs/spaces/v1/pages/head-v1-pages-page-id-json)
+[Pages](https://apidocs.teamwork.com/docs/spaces/v1/pages/get-v1-spaces-space-id-homepage-json)
 
 [Projects](https://apidocs.teamwork.com/docs/teamwork/v3/projects/get-projects-api-v3-projects-json)
 
@@ -45,7 +45,7 @@ This tap:
 
 [TicketTypes](https://apidocs.teamwork.com/docs/desk/v2/ticket-types/get-v2-tickettypes-json)
 
-[Users](https://apidocs.teamwork.com/docs/desk/v2/users/get-v2-me-json)
+[Users](https://apidocs.teamwork.com/docs/spaces/v1/users/get-v1-users-json)
 
 - Outputs the schema for each resource
 - Incrementally pulls data based on the input state

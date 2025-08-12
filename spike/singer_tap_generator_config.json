@@ -73,7 +73,7 @@
       "data_key": "users",
       "replication_method": "INCREMENTAL",
       "key_properties": ["id"],
-      "doc_link": "https://apidocs.teamwork.com/docs/desk/v2/users/get-v2-me-json"
+      "doc_link": "https://apidocs.teamwork.com/docs/spaces/v1/users/get-v1-users-json"
     },
     {
       "name": "inboxes",
@@ -114,7 +114,7 @@
       "replication_method": "FULL_TABLE",
       "key_properties": ["id"],
       "parent": "spaces",
-      "doc_link": "https://apidocs.teamwork.com/docs/spaces/v1/pages/head-v1-pages-page-id-json"
+      "doc_link": "https://apidocs.teamwork.com/docs/spaces/v1/pages/get-v1-spaces-space-id-homepage-json"
     },
     {
       "name": "tags",
