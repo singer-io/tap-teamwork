@@ -1,101 +1,269 @@
 {
     "type": "object",
+    "additionalProperties": true,
     "properties": {
-        "included": {
+        "LinkedCompany": {
             "type": [
                 "null",
                 "object"
             ],
+            "additionalProperties": true,
             "properties": {
-                "inboxes": {
+                "company": {
                     "type": [
                         "null",
-                        "array"
+                        "object"
                     ],
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "autoReplyEnabled": {
-                                "type": [
-                                    "null",
-                                    "boolean"
-                                ]
-                            },
-                            "autoReplyFromUserId": {
-                                "type": [
-                                    "null",
-                                    "integer"
-                                ]
-                            },
-                            "autoReplyMessage": {
-                                "type": [
-                                    "null",
-                                    "string"
-                                ]
-                            },
-                            "autoReplySubject": {
-                                "type": [
-                                    "null",
-                                    "string"
-                                ]
-                            },
-                            "clientOnly": {
-                                "type": [
-                                    "null",
-                                    "boolean"
-                                ]
-                            },
-                            "createdAt": {
-                                "type": [
-                                    "null",
-                                    "string"
-                                ],
-                                "format": "date-time"
-                            },
-                            "createdBy": {
-                                "type": [
-                                    "null",
-                                    "object"
-                                ],
-                                "properties": {
-                                    "delete": {
-                                        "type": [
-                                            "null",
-                                            "boolean"
-                                        ]
-                                    },
-                                    "id": {
-                                        "type": [
-                                            "null",
-                                            "integer"
-                                        ]
-                                    },
-                                    "meta": {
-                                        "type": [
-                                            "null",
-                                            "object"
-                                        ],
-                                        "properties": {
-                                            "additionalProp": {
-                                                "type": [
-                                                    "null",
-                                                    "string"
-                                                ]
-                                            }
-                                        }
-                                    },
-                                    "type": {
-                                        "type": [
-                                            "null",
-                                            "integer"
-                                        ]
-                                    }
-                                }
-                            }
+                    "additionalProperties": true,
+                    "properties": {
+                        "id": {
+                            "type": [
+                                "null",
+                                "integer"
+                            ]
+                        },
+                        "meta": {
+                            "type": [
+                                "null",
+                                "object"
+                            ],
+                            "additionalProperties": true
+                        },
+                        "type": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
                         }
                     }
                 }
             }
+        },
+        "LinkedInstallation": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": true,
+            "properties": {
+                "installation": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "additionalProperties": true,
+                    "properties": {
+                        "id": {
+                            "type": [
+                                "null",
+                                "integer"
+                            ]
+                        },
+                        "meta": {
+                            "type": [
+                                "null",
+                                "object"
+                            ],
+                            "additionalProperties": true
+                        },
+                        "type": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "avatar": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "createdAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": true,
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "additionalProperties": true
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "deletedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "deletedBy": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": true,
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "additionalProperties": true
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "email": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "firstname": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "isAdmin": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isOnboarded": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "lastname": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "preferences": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": true,
+            "properties": {
+                "emailEnabled": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "showOnboardingHelp": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "welcomeTextEnabled": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                }
+            }
+        },
+        "state": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "updatedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updatedBy": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": true,
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "additionalProperties": true
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "userType": {
+            "type": [
+                "null",
+                "string"
+            ]
         }
-    }
+    },
+    "required": [
+        "id"
+    ]
 }
