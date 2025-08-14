@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional, Any
 from singer import get_logger
 from tap_teamwork.streams.abstracts import FullTableStream
-from tap_teamwork.streams.tickets import Tickets  # Parent class
+from tap_teamwork.streams.tickets import Tickets
 
 LOGGER = get_logger()
 
@@ -12,7 +12,7 @@ class TicketDetails(FullTableStream):
     replication_keys: List[str] = []
     data_key = "ticket"
     path = "desk/v1/tickets/{ticketId}.json"
-
+    parent = "tickets"
     parent_stream_type = Tickets
     ignore_parent_replication_keys = True
 

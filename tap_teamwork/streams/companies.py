@@ -9,18 +9,20 @@ class Companies(IncrementalStream):
     path = "desk/v2/companies.json"
     data_key = "companies"
     replication_method = "INCREMENTAL"
-    replication_keys: List[str] = ["updatedAt"]  # field used for bookmarking
+    replication_keys: List[str] = ["updatedAt"]
     key_properties = ["id"]
+    children: List[str] = ["company_details"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.child_to_sync: List[IncrementalStream] = []
 
     def get_url_params(self, context: Optional[Dict]) -> Dict:
-        """Pass 'updatedAfter' param to API if bookmark exists."""
         params = {}
         bookmark = self.get_starting_timestamp(context)
-
         if bookmark:
             params["updatedAfter"] = bookmark.isoformat()
             LOGGER.info(f"[{self.tap_stream_id}] Using incremental param: updatedAfter={params['updatedAfter']}")
         else:
             LOGGER.info(f"[{self.tap_stream_id}] No bookmark found — full sync.")
-
         return params

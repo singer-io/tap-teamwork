@@ -12,6 +12,13 @@ class Spaces(IncrementalStream):
     replication_keys: List[str] = ["updatedAt"]
     key_properties = ["id"]
 
+    # including children that needs spaceId (safe): collaborators, tags
+    children: List[str] = ["collaborators", "tags"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.child_to_sync: List[IncrementalStream] = []
+
     def get_url_params(self, context: Optional[Dict]) -> Dict:
         params = {}
         bookmark = self.get_starting_timestamp(context)

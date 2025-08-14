@@ -9,7 +9,7 @@ class Projects(IncrementalStream):
     path = "projects/api/v3/projects.json"
     data_key = "projects"
     replication_method = "INCREMENTAL"
-    replication_keys: List[str] = ["updatedAt"]  # field used for bookmarking
+    replication_keys: List[str] = ["updatedAt"]
     key_properties = ["id"]
 
     def get_url_params(self, context: Optional[Dict]) -> Dict:

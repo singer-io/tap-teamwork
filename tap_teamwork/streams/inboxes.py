@@ -8,6 +8,6 @@ class Inboxes(IncrementalStream):
     tap_stream_id = "inboxes"
     key_properties = ["id"]
     replication_method = "INCREMENTAL"
-    replication_keys: List[str] = ["updatedAt"]  # If different in future then replace with actual
+    replication_keys: List[str] = ["updatedAt"]
     data_key = "inboxes"
     path = "desk/v1/inboxes.json"

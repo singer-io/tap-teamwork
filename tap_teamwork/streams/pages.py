@@ -27,5 +27,5 @@ class Pages(FullTableStream):
         return f"{BASE_URL}/spaces/api/v1/spaces/{space_id}/pages/{page_id}.json"
 
     def get_child_context(self, record: Dict, context: Optional[Dict]) -> Optional[Dict]:
-        # No child of pages — return None
+        # No child of pages return None
         return None
