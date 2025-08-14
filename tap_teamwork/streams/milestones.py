@@ -1,13 +1,13 @@
 from typing import Dict, Iterator, List
 from singer import get_logger
-from tap_teamwork.streams.abstracts import FullTableStream
+from tap_teamwork.streams.abstracts import IncrementalStream
 
 LOGGER = get_logger()
 
-class Milestones(FullTableStream):
+class Milestones(IncrementalStream):
     tap_stream_id = "milestones"
     key_properties = ["id"]
-    replication_method = "FULL_TABLE"
-    replication_keys: List[str] = []
+    replication_method = "INCREMENTAL"
+    replication_keys: List[str] = ["updatedAt"]
     data_key = "milestones"
     path = "projects/api/v3/milestones.json"

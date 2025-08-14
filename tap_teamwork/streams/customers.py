@@ -1,13 +1,25 @@
-from typing import Dict, Iterator, List
-from singer import get_logger
+from typing import List, Optional, Dict
 from tap_teamwork.streams.abstracts import FullTableStream
+from singer import get_logger
 
 LOGGER = get_logger()
 
 class Customers(FullTableStream):
     tap_stream_id = "customers"
-    key_properties = ["id"]
-    replication_method = "FULL_TABLE"
-    replication_keys: List[str] = []
+    path = "desk/v1/customers.json"
     data_key = "customers"
-    path = "desk/v2/customers.json" 
+    replication_method = "FULL_TABLE"
+    replication_keys = []
+    key_properties = ["id"]
+    children: List[str] = ["customer_details"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.child_to_sync: List[FullTableStream] = []
+
+    def get_child_context(self, record: Dict, context: Optional[Dict] = None) -> Optional[Dict]:
+        customer_id = record.get("id")
+        if not customer_id:
+            LOGGER.warning(f"[{self.tap_stream_id}] Skipping child sync: missing 'id' in customer record.")
+            return None
+        return {"customerId": customer_id}
