@@ -9,45 +9,6 @@ from tap_teamwork.streams import STREAMS
 LOGGER = singer.get_logger()
 
 
-def _build_stream_map() -> Dict[str, Type[Any]]:
-    """
-    Build a robust tap_stream_id -> class map from STREAMS.
-    Supports dict, list of classes, or list of (id, class) tuples.
-    """
-    mapping: Dict[str, Type[Any]] = {}
-
-    if isinstance(STREAMS, dict):
-        for k, v in STREAMS.items():
-            if isinstance(k, str) and isinstance(v, type):
-                mapping[k] = v
-        return mapping
-
-    for item in STREAMS:
-        if (
-            isinstance(item, tuple)
-            and len(item) == 2
-            and isinstance(item[0], str)
-            and isinstance(item[1], type)
-        ):
-            mapping[item[0]] = item[1]
-            continue
-
-        if isinstance(item, type):
-            tsid = getattr(item, "tap_stream_id", None)
-            if isinstance(tsid, str) and tsid:
-                mapping[tsid] = item
-                continue
-            try:
-                inst = item()
-                tsid = getattr(inst, "tap_stream_id", None)
-                if isinstance(tsid, str) and tsid:
-                    mapping[tsid] = item
-            except Exception:  # pylint: disable=broad-except
-                pass
-
-    return mapping
-
-
 def _instantiate_stream(cls: Type[Any], client: Client, cat_stream: Any) -> Any:
     """
     Prefer signature (client, catalog_stream); fallback to no-arg + attach attrs.
@@ -92,14 +53,14 @@ def write_schema(
     client: Client,
     streams_to_sync: List[str],
     catalog: singer.Catalog,
-    stream_map: Dict[str, Type[Any]],
 ) -> None:
     """Write schema for stream and its declared children."""
     if getattr(stream, "is_selected", lambda: False)():
         stream.write_schema()
 
     for child_id in getattr(stream, "children", []):
-        child_cls = stream_map.get(child_id)
+        # Reviewer feedback: STREAMS is a dict; avoid over-defensiveness.
+        child_cls = STREAMS.get(child_id)
         if not child_cls:
             LOGGER.warning("Child stream class not found for: %s", child_id)
             continue
@@ -110,13 +71,7 @@ def write_schema(
                 client,
                 catalog.get_stream(child_id),
             )
-            write_schema(
-                child_obj,
-                client,
-                streams_to_sync,
-                catalog,
-                stream_map,
-            )
+            write_schema(child_obj, client, streams_to_sync, catalog)
 
             if child_id in streams_to_sync and hasattr(stream, "child_to_sync"):
                 stream.child_to_sync.append(child_obj)
@@ -131,14 +86,12 @@ def write_schema(
 
 def sync(
     client: Client,
-    _config: Dict[str, Any],
+    config: Dict[str, Any], # pylint: disable=unused-argument
     catalog: singer.Catalog,
     state: MutableMapping[str, Any],
 ) -> None:
     """Sync selected streams from catalog."""
     try:
-        stream_map = _build_stream_map()
-
         streams_to_sync = [s.stream for s in catalog.get_selected_streams(state)]
         LOGGER.info("Selected streams: %s", streams_to_sync)
 
@@ -147,11 +100,10 @@ def sync(
 
         with singer.Transformer() as transformer:
             for stream_name in streams_to_sync:
-                stream_cls = stream_map.get(stream_name)
-                if not stream_cls:
-                    raise ValueError(
-                        f"Stream class not found for: {stream_name}"
-                    )
+                # STREAMS is a dict; use it directly with a type check.
+                stream_cls = STREAMS.get(stream_name)
+                if not isinstance(stream_cls, type):
+                    raise ValueError(f"Stream class not found for: {stream_name}")
 
                 stream = _instantiate_stream(
                     stream_cls,
@@ -163,13 +115,7 @@ def sync(
                     LOGGER.info("Skipping child stream: %s", stream_name)
                     continue
 
-                write_schema(
-                    stream,
-                    client,
-                    streams_to_sync,
-                    catalog,
-                    stream_map,
-                )
+                write_schema(stream, client, streams_to_sync, catalog)
 
                 LOGGER.info("START Syncing: %s", stream_name)
                 update_currently_syncing(state, stream_name)

@@ -33,7 +33,7 @@ def raise_for_error(response: requests.Response) -> None:
         response_json = response.json()
     except (ValueError, json.JSONDecodeError) as exc:
         # Endpoints sometimes return non-JSON bodies (HTML, text, empty).
-        LOGGER.warning("[raise_for_error] Failed to parse response JSON: %s", exc)
+        LOGGER.warning("Failed to parse response JSON: %s", exc)
         response_json = {}
 
     if response.status_code in (200, 201, 204):
@@ -49,11 +49,7 @@ def raise_for_error(response: requests.Response) -> None:
     exc_class = ERROR_CODE_EXCEPTION_MAPPING.get(response.status_code, {}).get(
         "raise_exception", teamworkError
     )
-    LOGGER.error(
-        "[raise_for_error] Raising exception for status %s: %s",
-        response.status_code,
-        message,
-    )
+    LOGGER.error("Raising exception for status %s: %s", response.status_code, message)
     raise exc_class(message, response) from None
 
 
@@ -75,7 +71,6 @@ class Client:
         subdomain = self.config.get("subdomain")
         if not base_url:
             if not subdomain:
-                # Per review: subdomain is required for standard usage.
                 raise ValueError(
                     "Missing required config property: 'subdomain' "
                     "(or provide advanced override 'base_url')."
@@ -108,7 +103,7 @@ class Client:
             headers["Authorization"] = f"Bearer {self.config['access_token']}"
             headers["Content-Type"] = "application/json"
         except KeyError as exc:
-            LOGGER.exception("[authenticate] Missing access_token in config")
+            LOGGER.exception("Missing access_token in config")
             raise teamworkError("Missing required access_token in config") from exc
         return headers, params
 
@@ -126,12 +121,10 @@ class Client:
             )
         except Exception as exc:  # pylint: disable=broad-except
             # Intentionally broad so callers don’t need to wrap every request.
-            LOGGER.exception("[get] Failed GET request to %s: %s", endpoint, exc)
+            LOGGER.exception("Failed GET request to %s: %s", endpoint, exc)
             raise
 
-    # Keep signature for backward compatibility; silence arg-count warnings.
-    # pylint: disable=too-many-arguments,too-many-positional-arguments
-    def post(
+    def post(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         endpoint: str,
         params: Dict,
@@ -152,7 +145,7 @@ class Client:
                 timeout=self.request_timeout,
             )
         except Exception as exc:  # pylint: disable=broad-except
-            LOGGER.exception("[post] Failed POST request to %s: %s", endpoint, exc)
+            LOGGER.exception("Failed POST request to %s: %s", endpoint, exc)
             raise
 
     @backoff.on_exception(
@@ -168,7 +161,10 @@ class Client:
         factor=2,
     )
     def __make_request(
-        self, method: str, endpoint: str, **kwargs
+        self,
+        method: str,
+        endpoint: str,
+        **kwargs,
     ) -> Optional[Mapping[str, Any]]:
         """Low-level HTTP request/response handler with metrics + error raising."""
         try:
@@ -177,10 +173,5 @@ class Client:
                 raise_for_error(response)
                 return response.json()
         except Exception as exc:  # pylint: disable=broad-except
-            LOGGER.exception(
-                "[__make_request] %s request to %s failed: %s",
-                method,
-                endpoint,
-                exc,
-            )
+            LOGGER.exception("%s request to %s failed: %s", method, endpoint, exc)
             raise

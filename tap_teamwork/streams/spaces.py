@@ -12,7 +12,7 @@ class Spaces(IncrementalStream):
     replication_keys: List[str] = ["updatedAt"]
     key_properties = ["id"]
 
-    # including children that needs spaceId (safe): collaborators, tags
+    # including children that needs spaceId: collaborators, tags
     children: List[str] = ["collaborators", "tags"]
 
     def __init__(self, *args, **kwargs):

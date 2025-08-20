@@ -35,15 +35,18 @@ def main() -> None:
     parsed_args = singer.utils.parse_args(REQUIRED_CONFIG_KEYS)
     state: Dict[str, Any] = parsed_args.state or {}
 
-    # Build client (validates subdomain/base_url and normalizes base_url)
     with Client(parsed_args.config) as client:
         if parsed_args.discover:
             do_discover()
             return
 
         if parsed_args.catalog:
-            # Call sync POSITIONALLY to avoid name-mismatch (_config vs config)
-            sync(client, parsed_args.config, parsed_args.catalog, state)
+            sync(
+                client=client,
+                config=parsed_args.config,
+                catalog=parsed_args.catalog,
+                state=state,
+            )
             return
 
         raise SystemExit("No mode specified: use --discover or provide a catalog for sync.")
