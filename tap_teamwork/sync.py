@@ -59,7 +59,7 @@ def write_schema(
         stream.write_schema()
 
     for child_id in getattr(stream, "children", []):
-        # Reviewer feedback: STREAMS is a dict; avoid over-defensiveness.
+        # Feedback incoportated.
         child_cls = STREAMS.get(child_id)
         if not child_cls:
             LOGGER.warning("Child stream class not found for: %s", child_id)
