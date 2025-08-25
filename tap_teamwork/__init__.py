@@ -39,7 +39,7 @@ def main():
         elif parsed_args.catalog:
             sync(
                 client=client,
-                _config=parsed_args.config,  # 🔧 Fix: match function param
+                _config=parsed_args.config,
                 catalog=parsed_args.catalog,
                 state=state
             )
