@@ -42,7 +42,7 @@ def _instantiate_stream(cls, client: Client, cat_stream) -> object:
 
 def write_schema(stream, client, streams_to_sync, catalog) -> None:
     """Write schema for stream and its children."""
-    if getattr(stream, "is_selected", lambda: False)():
+    if stream.is_selected():
         stream.write_schema()
 
     for child in getattr(stream, "children", []) or []:

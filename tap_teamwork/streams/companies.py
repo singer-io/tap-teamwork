@@ -1,5 +1,5 @@
 from typing import List, Optional, Dict
-from tap_teamwork.streams.abstracts import IncrementalStream
+from tap_teamwork.streams.abstracts import IncrementalStream,BaseStream
 from singer import get_logger
 
 LOGGER = get_logger()
@@ -15,7 +15,7 @@ class Companies(IncrementalStream):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.child_to_sync: List[IncrementalStream] = []
+        self.child_to_sync: List[BaseStream] = []
 
     def get_url_params(self, context: Optional[Dict]) -> Dict:
         params = {}

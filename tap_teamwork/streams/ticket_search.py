@@ -21,7 +21,7 @@ class TicketSearch(IncrementalStream):
 
         # Add incremental sync filter using updatedAtFrom
         start_date: Optional[datetime] = self.get_starting_timestamp(context)
-        if start_date:
+        if start_date is not None:
             params["updatedAtFrom"] = start_date.strftime("%Y-%m-%dT%H:%M:%SZ")
             params["orderBy"] = "updatedAt"
             params["orderMode"] = "asc"

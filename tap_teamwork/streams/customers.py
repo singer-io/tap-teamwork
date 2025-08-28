@@ -1,5 +1,5 @@
 from typing import List, Optional, Dict
-from tap_teamwork.streams.abstracts import FullTableStream
+from tap_teamwork.streams.abstracts import FullTableStream,BaseStream
 from singer import get_logger
 
 LOGGER = get_logger()
@@ -15,7 +15,7 @@ class Customers(FullTableStream):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.child_to_sync: List[FullTableStream] = []
+        self.child_to_sync: List[BaseStream] = []
 
     def get_child_context(self, record: Dict, context: Optional[Dict] = None) -> Optional[Dict]:
         customer_id = record.get("id")
