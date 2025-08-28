@@ -20,6 +20,6 @@ class Customers(FullTableStream):
     def get_child_context(self, record: Dict, context: Optional[Dict] = None) -> Optional[Dict]:
         customer_id = record.get("id")
         if not customer_id:
-            LOGGER.warning(f"[{self.tap_stream_id}] Skipping child sync: missing 'id' in customer record.")
+            LOGGER.warning("[%s] Skipping child sync: missing 'id' in customer record.", self.tap_stream_id)
             return None
         return {"customerId": customer_id}

@@ -20,8 +20,8 @@ class Projects(IncrementalStream):
         if bookmark:
             # Teamwork expects ISO 8601 format
             params["updatedAfter"] = bookmark.isoformat()
-            LOGGER.info(f"[{self.tap_stream_id}] Using incremental param: updatedAfter={params['updatedAfter']}")
+            LOGGER.info("[%s] Using incremental param: updatedAfter=%s", self.tap_stream_id, params["updatedAfter"])
         else:
-            LOGGER.info(f"[{self.tap_stream_id}] No bookmark found — full sync.")
+            LOGGER.info("[%s] No bookmark found — full sync.", self.tap_stream_id)
 
         return params

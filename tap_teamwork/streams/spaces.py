@@ -24,7 +24,7 @@ class Spaces(IncrementalStream):
         bookmark = self.get_starting_timestamp(context)
         if bookmark:
             params["updatedAfter"] = bookmark.isoformat()
-            LOGGER.info(f"[{self.tap_stream_id}] Using incremental param: updatedAfter={params['updatedAfter']}")
+            LOGGER.info("[%s] Using incremental param: updatedAfter=%s", self.tap_stream_id, params["updatedAfter"])
         else:
-            LOGGER.info(f"[{self.tap_stream_id}] No bookmark found — full sync.")
+            LOGGER.info("[%s] No bookmark found — full sync.", self.tap_stream_id)
         return params
