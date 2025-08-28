@@ -19,7 +19,7 @@ class TicketSearch(IncrementalStream):
         """Construct URL parameters for the API call including incremental filters."""
         params = super().get_url_params(context, next_page_token)
 
-        # Added incremental sync filter using updatedAtFrom
+        # Add incremental sync filter using updatedAtFrom
         start_date: Optional[datetime] = self.get_starting_timestamp(context)
         if start_date:
             params["updatedAtFrom"] = start_date.strftime("%Y-%m-%dT%H:%M:%SZ")

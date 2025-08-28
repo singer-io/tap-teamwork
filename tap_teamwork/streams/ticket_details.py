@@ -1,24 +1,42 @@
 from typing import Dict, List, Optional, Any
 from singer import get_logger
 from tap_teamwork.streams.abstracts import FullTableStream
-from tap_teamwork.streams.tickets import Tickets  # Parent class
 
 LOGGER = get_logger()
 
+
 class TicketDetails(FullTableStream):
     tap_stream_id = "ticket_details"
+    parent = "tickets"
     key_properties = ["id"]
     replication_method = "FULL_TABLE"
     replication_keys: List[str] = []
     data_key = "ticket"
     path = "desk/v1/tickets/{ticketId}.json"
 
-    parent_stream_type = Tickets
+    # This child fetches by ticket id, irrespective of the parent's bookmark.
     ignore_parent_replication_keys = True
 
-    def get_child_context(self, record: Dict[str, Any], context: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-        ticket_id = record.get("id")
+    def get_url_endpoint(self, parent_obj: Optional[Dict[str, Any]] = None) -> str:
+        if not parent_obj:
+            raise ValueError("Missing parent_obj for ticket_details stream")
+
+        # Allow either explicit context key or raw parent record id
+        ticket_id = parent_obj.get("ticketId") or parent_obj.get("id")
         if not ticket_id:
-            LOGGER.warning(f"[ticket_details] Skipping due to missing ticket ID in record: {record}")
-            return None
-        return {"ticketId": ticket_id}
+            LOGGER.warning(
+                "Skipping ticket_details due to missing ticket id in parent_obj: %s",
+                parent_obj,
+            )
+            # Let caller decide to skip this one
+            raise ValueError("Missing 'ticketId' or 'id' in parent_obj")
+
+        return f"{self.client.base_url}{self.path.format(ticketId=ticket_id)}"
+
+    def get_child_context(
+        self,
+        record: Dict[str, Any],
+        context: Optional[Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        # No children of ticket_details
+        return None

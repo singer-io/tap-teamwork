@@ -19,8 +19,8 @@ class Tasks(IncrementalStream):
 
         if bookmark:
             params["updatedAfter"] = bookmark
-            LOGGER.info(f"[{self.tap_stream_id}] Using incremental param: updatedAfter={bookmark}")
+            LOGGER.info("[%s] Using incremental param: updatedAfter=%s", self.tap_stream_id, bookmark)
         else:
-            LOGGER.info(f"[{self.tap_stream_id}] No bookmark found — full sync.")
+            LOGGER.info("[%s] No bookmark found — full sync.", self.tap_stream_id)
 
         return params

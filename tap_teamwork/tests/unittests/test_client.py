@@ -15,7 +15,9 @@ from requests.exceptions import ConnectionError, Timeout, ChunkedEncodingError
 from tap_teamwork.client import Client, raise_for_error
 from tap_teamwork.exceptions import teamworkError
 
-# Tests for the raise_for_error() function
+# ------------------------------
+# Tests for raise_for_error()
+# ------------------------------
 
 @pytest.mark.parametrize("status_code, json_data, expected_message", [
     (401, {"message": "Unauthorized"}, "Unauthorized"),
@@ -24,7 +26,7 @@ from tap_teamwork.exceptions import teamworkError
 ])
 def test_raise_for_error_with_various_errors(status_code, json_data, expected_message):
     """
-    Test that raise_for_error raises teamworkError with the correct message.
+    Ensure raise_for_error raises teamworkError with correct message for various HTTP codes.
     """
     response = Mock()
     response.status_code = status_code
@@ -32,39 +34,43 @@ def test_raise_for_error_with_various_errors(status_code, json_data, expected_me
 
     with pytest.raises(teamworkError) as exc_info:
         raise_for_error(response)
+
     assert expected_message in str(exc_info.value)
 
 
 @pytest.mark.parametrize("status_code", [200, 201, 204])
 def test_raise_for_error_success_codes_do_not_raise(status_code):
     """
-    Test that raise_for_error does NOT raise for 2xx status codes.
+    Ensure raise_for_error does NOT raise exceptions for 2xx codes.
     """
     response = Mock()
     response.status_code = status_code
     response.json.return_value = {"message": "Success"}
+
     try:
         raise_for_error(response)
-    except Exception as e:
-        pytest.fail(f"raise_for_error should not raise for status {status_code}, but got: {e}")
+    except Exception as exc:
+        pytest.fail(f"Unexpected error raised for status {status_code}: {exc}")
 
-# Fixture for Client test setup
+# ------------------------------
+# Fixture for Client setup
+# ------------------------------
 
 @pytest.fixture
 def config():
-    """
-    Returns a sample config dict with dummy access token and base URL.
-    """
+    """Returns test config with dummy token."""
     return {
         "access_token": "dummy_token",
         "base_url": "https://example.com"
     }
 
+# ------------------------------
 # Tests for Client methods
+# ------------------------------
 
 def test_authenticate_adds_headers(config):
     """
-    Test that authenticate() sets Authorization and Content-Type headers correctly.
+    Test that authenticate adds Bearer token and content type.
     """
     client = Client(config)
     headers, params = client.authenticate({}, {})
@@ -76,7 +82,7 @@ def test_authenticate_adds_headers(config):
 @patch("requests.Session.request")
 def test_get_success_response(mock_request, config):
     """
-    Test that GET request returns parsed JSON response on success.
+    Ensure GET request returns valid response JSON.
     """
     mock_response = Mock()
     mock_response.status_code = 200
@@ -91,7 +97,7 @@ def test_get_success_response(mock_request, config):
 @patch("requests.Session.request")
 def test_post_success_response(mock_request, config):
     """
-    Test that POST request returns parsed JSON response on success.
+    Ensure POST request returns valid response JSON.
     """
     mock_response = Mock()
     mock_response.status_code = 200
@@ -102,16 +108,20 @@ def test_post_success_response(mock_request, config):
         response = client.post(endpoint="https://example.com/test", params={}, headers={}, body={"key": "value"})
     assert response == {"status": "created"}
 
-# Tests for retry behavior on exceptions
+# ------------------------------
+# Retry logic tests
+# ------------------------------
 
 @pytest.mark.parametrize("exception_type", [ConnectionError, Timeout, ChunkedEncodingError])
 @patch("requests.Session.request")
 def test_retry_on_network_exceptions(mock_request, exception_type, config):
     """
-    Test that Client retries up to 5 times on transient network exceptions.
+    Validate retry behavior on transient errors (max 5 tries).
     """
-    mock_request.side_effect = exception_type("simulated error")
+    mock_request.side_effect = exception_type("Simulated network issue")
+
     with pytest.raises(exception_type):
         with Client(config) as client:
             client.get("https://example.com/test", params={}, headers={})
+
     assert mock_request.call_count == 5

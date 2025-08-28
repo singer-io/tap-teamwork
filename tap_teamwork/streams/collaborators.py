@@ -1,19 +1,21 @@
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 from singer import get_logger
 from tap_teamwork.streams.abstracts import FullTableStream
 
 LOGGER = get_logger()
-BASE_URL = "https://qlik6.teamwork.com"
+
 
 class Collaborators(FullTableStream):
     tap_stream_id = "collaborators"
+    parent = "spaces"
     key_properties = ["id"]
     replication_method = "FULL_TABLE"
     replication_keys: List[str] = []
+    # If API nests collaborators under "space.collaborators", keep this key;
+    # otherwise change to "collaborators" to match the payload.
     data_key = "space.collaborators"
-    parent_stream_type = "Spaces"
 
-    def get_url_endpoint(self, parent_obj: Optional[dict] = None) -> str:
+    def get_url_endpoint(self, parent_obj: Optional[Dict[str, Any]] = None) -> str:
         if not parent_obj:
             raise ValueError("Missing parent_obj for collaborators stream")
 
@@ -21,9 +23,11 @@ class Collaborators(FullTableStream):
         if not space_id:
             raise ValueError("Missing 'spaceId' in parent_obj for collaborators stream")
 
-        LOGGER.info(f"[collaborators] Fetching collaborators for spaceId={space_id}")
-        return f"{BASE_URL}/spaces/api/v1/spaces/{space_id}/collaborators.json"
+        LOGGER.info("Fetching collaborators for spaceId=%s", space_id)
+        return f"{self.client.base_url}spaces/api/v1/spaces/{space_id}/collaborators.json"
 
-    def get_child_context(self, record: Dict, context: Optional[Dict]) -> Optional[Dict]:
-        # No child of collaborators — return None
+    def get_child_context(
+        self, record: Dict[str, Any], context: Optional[Dict[str, Any]]
+    ) -> Optional[Dict[str, Any]]:
+        # No children under collaborators
         return None
