@@ -60,7 +60,7 @@ def sync(  # pylint: disable=unused-argument
     client: Client,
     config: Dict,
     catalog: singer.Catalog,
-    state,
+    state: Dict,
 ) -> None:
     """Sync selected streams from catalog."""
     streams_to_sync = [s.stream for s in catalog.get_selected_streams(state)]

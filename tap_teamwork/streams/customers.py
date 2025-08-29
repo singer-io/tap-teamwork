@@ -6,7 +6,7 @@ LOGGER = get_logger()
 
 class Customers(FullTableStream):
     tap_stream_id = "customers"
-    path = "desk/v1/customers.json"
+    path = "/desk/api/v2/customers.json"
     data_key = "customers"
     replication_method = "FULL_TABLE"
     replication_keys = []

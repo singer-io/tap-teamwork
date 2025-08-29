@@ -6,7 +6,7 @@ LOGGER = get_logger()
 
 class Companies(IncrementalStream):
     tap_stream_id = "companies"
-    path = "desk/v2/companies.json"
+    path = "desk/api/v2/companies.json"
     data_key = "companies"
     replication_method = "INCREMENTAL"
     replication_keys: List[str] = ["updatedAt"]

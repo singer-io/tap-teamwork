@@ -110,7 +110,7 @@ class Client:
     def get(self, endpoint: str, params: Dict, headers: Dict, path: str = None) -> Any:
         """Perform a GET request."""
         try:
-            endpoint = endpoint or f"{self.base_url}{path}"
+            endpoint = endpoint or f"{self.base_url}{(path or '').lstrip('/')}"
             headers, params = self.authenticate(headers, params)
             return self.__make_request(
                 "GET",
@@ -134,7 +134,7 @@ class Client:
     ) -> Any:
         """Perform a POST request."""
         try:
-            endpoint = endpoint or f"{self.base_url}{path}"
+            endpoint = endpoint or f"{self.base_url}{(path or '').lstrip('/')}"
             headers, params = self.authenticate(headers, params)
             return self.__make_request(
                 "POST",
