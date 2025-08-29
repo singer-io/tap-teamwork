@@ -6,7 +6,7 @@ LOGGER = get_logger()
 
 class Tasks(IncrementalStream):
     tap_stream_id = "tasks"
-    path = "tasks.json"
+    path = "projects/api/v3/tasks.json"
     data_key = "tasks"
     replication_method = "INCREMENTAL"
     replication_keys: List[str] = ["updatedAt"]

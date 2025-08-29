@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from singer import get_logger
 from tap_teamwork.streams.abstracts import IncrementalStream
 
@@ -22,7 +22,10 @@ class TicketSearch(IncrementalStream):
         # Add incremental sync filter using updatedAtFrom
         start_date: Optional[datetime] = self.get_starting_timestamp(context)
         if start_date:
-            params["updatedAtFrom"] = start_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+            # Ensure proper UTC ISO-8601 format
+            params["updatedAtFrom"] = (
+                start_date.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+            )
             params["orderBy"] = "updatedAt"
             params["orderMode"] = "asc"
 
