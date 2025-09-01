@@ -6,7 +6,7 @@ LOGGER = get_logger()
 
 class Spaces(IncrementalStream):
     tap_stream_id = "spaces"
-    path = "spaces/api/v3/spaces.json"
+    path = "spaces/api/v1/spaces.json"
     data_key = "spaces"
     replication_method = "INCREMENTAL"
     replication_keys: List[str] = ["updatedAt"]

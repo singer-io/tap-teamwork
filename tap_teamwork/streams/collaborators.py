@@ -11,8 +11,6 @@ class Collaborators(FullTableStream):
     key_properties = ["id"]
     replication_method = "FULL_TABLE"
     replication_keys: List[str] = []
-    # If API nests collaborators under "space.collaborators", keep this key;
-    # otherwise change to "collaborators" to match the payload.
     data_key = "space.collaborators"
 
     def get_url_endpoint(self, parent_obj: Optional[Dict[str, Any]] = None) -> str:

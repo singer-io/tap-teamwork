@@ -10,8 +10,6 @@ class Users(IncrementalStream):
     replication_method = "INCREMENTAL"
     replication_keys: List[str] = ["updatedAt"]
     data_key = "users"
-    # Note: API migration from Desk v1 to Spaces V1
-    # "spaces/api/v1/users.json" is the correct and current endpoint.
     path = "spaces/api/v1/users.json" 
 
     def modify_object(self, obj: Dict, parent: Optional[Dict] = None) -> Dict:
