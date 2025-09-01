@@ -13,7 +13,7 @@ This tap:
 
 [Companies](https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json)
 
-[CompanyDetails](https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json)
+[CompanyDetails](https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-id-json)
 
 [Customers](https://apidocs.teamwork.com/docs/desk/v2/customers/get-v2-customers-json)
 
@@ -73,7 +73,7 @@ Primary keys: ['id']
 Replication strategy: INCREMENTAL
 
 **company_details**
-[https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-json]
+[https://apidocs.teamwork.com/docs/desk/v2/companies/get-v2-companies-id-json]
 
 Data Key = company
 
@@ -217,7 +217,7 @@ Primary keys: ['id']
 Replication strategy: INCREMENTAL
 
 **users**
-[https://apidocs.teamwork.com/docs/desk/v2/users/get-v2-me-json]
+[https://apidocs.teamwork.com/docs/spaces/v1/users/get-v1-users-json]
 
 Data Key = users
 
