@@ -1,5 +1,5 @@
 from typing import List, Optional, Dict
-from tap_teamwork.streams.abstracts import FullTableStream,BaseStream
+from tap_teamwork.streams.abstracts import FullTableStream, BaseStream
 from singer import get_logger
 
 LOGGER = get_logger()
