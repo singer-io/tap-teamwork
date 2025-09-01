@@ -5,6 +5,7 @@ from tap_teamwork.streams.abstracts import IncrementalStream
 
 LOGGER = get_logger()
 
+
 class TicketSearch(IncrementalStream):
     tap_stream_id = "ticket_search"
     key_properties = ["id"]
@@ -19,8 +20,8 @@ class TicketSearch(IncrementalStream):
         """Construct URL parameters for the API call including incremental filters."""
         params = super().get_url_params(context, next_page_token)
 
-        # add incremental sync filter using updatedAtFrom
-        start_date: Optional[datetime] = self.get_starting_timestamp(context)
+        # Add incremental sync filter using updatedAtFrom
+        start_date: datetime = self.get_starting_timestamp(context)
         if start_date:
             # ensure proper UTC ISO-8601 format
             params["updatedAtFrom"] = (
