@@ -18,7 +18,7 @@ class Projects(IncrementalStream):
         bookmark = self.get_starting_timestamp(context)
 
         if bookmark:
-            # Teamwork expects ISO 8601 format
+            # teamwork expects ISO 8601 format
             params["updatedAfter"] = bookmark.isoformat()
             LOGGER.info("[%s] Using incremental param: updatedAfter=%s", self.tap_stream_id, params["updatedAfter"])
         else:

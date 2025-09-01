@@ -1,5 +1,5 @@
 from typing import List, Optional, Dict
-from tap_teamwork.streams.abstracts import IncrementalStream,BaseStream
+from tap_teamwork.streams.abstracts import IncrementalStream, BaseStream
 from singer import get_logger
 
 LOGGER = get_logger()
@@ -12,7 +12,6 @@ class Spaces(IncrementalStream):
     replication_keys: List[str] = ["updatedAt"]
     key_properties = ["id"]
 
-    # including children that needs spaceId: collaborators, tags
     children: List[str] = ["collaborators", "tags"]
 
     def __init__(self, *args, **kwargs):

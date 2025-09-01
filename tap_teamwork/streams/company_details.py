@@ -19,7 +19,6 @@ class CompanyDetails(BaseStream):
     def get_child_context(
         self, record: Dict[str, Any], context: Optional[Dict[str, Any]]
     ) -> Optional[Dict[str, Any]]:
-        # no children
         return None
 
     def sync(self, state: Dict[str, Any], transformer: singer.Transformer, parent_obj: Dict[str, Any] = None) -> int:

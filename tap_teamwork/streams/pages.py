@@ -25,7 +25,7 @@ class Pages(FullTableStream):
         LOGGER.info("Fetching page for spaceId=%s, pageId=%s", space_id, page_id)
         return f"{self.client.base_url}spaces/api/v1/spaces/{space_id}/pages/{page_id}.json"
 
-    def get_child_context(  # required by Base/abstracts; pages has no children
+    def get_child_context(
         self,
         record: Dict[str, Any],
         context: Optional[Dict[str, Any]]

@@ -14,21 +14,21 @@ class TicketDetails(FullTableStream):
     data_key = "ticket"
     path = "desk/v1/tickets/{ticketId}.json"
 
-    # This child fetches by ticket id, irrespective of the parent's bookmark.
+    # this child fetches by ticket id, irrespective of the parent's bookmark.
     ignore_parent_replication_keys = True
 
     def get_url_endpoint(self, parent_obj: Optional[Dict[str, Any]] = None) -> str:
         if not parent_obj:
             raise ValueError("Missing parent_obj for ticket_details stream")
 
-        # Allow either explicit context key or raw parent record id
+        # allow either explicit context key or raw parent record id
         ticket_id = parent_obj.get("ticketId") or parent_obj.get("id")
         if not ticket_id:
             LOGGER.warning(
                 "Skipping ticket_details due to missing ticket id in parent_obj: %s",
                 parent_obj,
             )
-            # Let caller decide to skip this one
+            # let caller decide to skip this one
             raise ValueError("Missing 'ticketId' or 'id' in parent_obj")
 
         return f"{self.client.base_url}{self.path.format(ticketId=ticket_id)}"
@@ -38,5 +38,4 @@ class TicketDetails(FullTableStream):
         record: Dict[str, Any],
         context: Optional[Dict[str, Any]],
     ) -> Optional[Dict[str, Any]]:
-        # No children of ticket_details
         return None

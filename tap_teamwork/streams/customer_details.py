@@ -23,11 +23,10 @@ class CustomerDetails(FullTableStream):
                 f"[{self.tap_stream_id}] Missing customerId in context: {parent_obj}"
             )
 
-        # No leading slash after base_url to avoid double slashes
+        # no leading slash after base_url to avoid double slashes
         return f"{self.client.base_url}desk/v2/customers/{customer_id}.json"
 
     def get_child_context(
         self, record: Dict[str, Any], context: Optional[Dict[str, Any]]
     ) -> Optional[Dict[str, Any]]:
-        # No children for customer_details
         return None

@@ -27,5 +27,4 @@ class Collaborators(FullTableStream):
     def get_child_context(
         self, record: Dict[str, Any], context: Optional[Dict[str, Any]]
     ) -> Optional[Dict[str, Any]]:
-        # No children under collaborators
         return None

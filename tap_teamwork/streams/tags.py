@@ -29,5 +29,4 @@ class Tags(FullTableStream):
         record: Dict[str, Any],
         context: Optional[Dict[str, Any]],
     ) -> Optional[Dict[str, Any]]:
-        # Tags has no children
         return None
