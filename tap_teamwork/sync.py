@@ -88,13 +88,12 @@ def sync(  # pylint: disable=unused-argument
             LOGGER.info("START Syncing: %s", stream_name)
             update_currently_syncing(state, stream_name)
 
-            # Support both return shapes: count OR (count, state).
+            # # Accept both return shapes: count OR (count, state) without try/except.
             result = stream.sync(state=state, transformer=transformer)
-            try:
-                total_records, state = result  # some taps return (count, state)
-            except (TypeError, ValueError):
-                total_records = result  # others return just count
-
+            if isinstance(result, tuple) and len(result) == 2:
+                total_records, state = result  # (count, state)
+            else:
+                total_records = result  # count
             update_currently_syncing(state, None)
             LOGGER.info(
                 "FINISHED Syncing: %s, total_records: %s",
