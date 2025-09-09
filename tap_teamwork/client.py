@@ -107,10 +107,23 @@ class Client:
             raise teamworkError("Missing required access_token in config") from exc
         return headers, params
 
+    # ---------- New helper to unify endpoint construction ----------
+    def _resolve_endpoint(self, endpoint: Optional[str], path: Optional[str]) -> str:
+        """
+        Build the absolute request URL from an explicit endpoint or a relative path.
+
+        - If `endpoint` is provided, return it as-is.
+        - Else, join `base_url` with a left-stripped `path` (or empty string).
+        - If both are missing, this returns `base_url` (consistent with prior behavior).
+        """
+        if endpoint:
+            return endpoint
+        return f"{self.base_url}{(path or '').lstrip('/')}"
+
     def get(self, endpoint: str, params: Dict, headers: Dict, path: str = None) -> Any:
         """Perform a GET request."""
         try:
-            endpoint = endpoint or f"{self.base_url}{(path or '').lstrip('/')}"
+            endpoint = self._resolve_endpoint(endpoint, path)
             headers, params = self.authenticate(headers, params)
             return self.__make_request(
                 "GET",
@@ -134,7 +147,7 @@ class Client:
     ) -> Any:
         """Perform a POST request."""
         try:
-            endpoint = endpoint or f"{self.base_url}{(path or '').lstrip('/')}"
+            endpoint = self._resolve_endpoint(endpoint, path)
             headers, params = self.authenticate(headers, params)
             return self.__make_request(
                 "POST",

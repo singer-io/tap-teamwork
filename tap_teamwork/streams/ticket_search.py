@@ -21,12 +21,23 @@ class TicketSearch(IncrementalStream):
         params = super().get_url_params(context, next_page_token)
 
         # Add incremental sync filter using updatedAtFrom
-        start_date: datetime = self.get_starting_timestamp(context)
-        if start_date:
-            # ensure proper UTC ISO-8601 format
-            params["updatedAtFrom"] = (
-                start_date.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
-            )
+        start = self.get_starting_timestamp(context)  # may be datetime, str, or None
+        if start:
+            # Normalize to ISO-8601 UTC if datetime; pass through if already a string
+            if isinstance(start, datetime):
+                if start.tzinfo is None:
+                    start = start.replace(tzinfo=timezone.utc)
+                else:
+                    start = start.astimezone(timezone.utc)
+                start_iso = start.isoformat()
+            else:
+                start_iso = str(start)
+
+            # Normalize trailing timezone to 'Z' if explicitly UTC
+            if start_iso.endswith("+00:00"):
+                start_iso = start_iso[:-6] + "Z"
+
+            params["updatedAtFrom"] = start_iso
             params["orderBy"] = "updatedAt"
             params["orderMode"] = "asc"
 
