@@ -17,7 +17,6 @@ from tap_teamwork.streams.customer_details import CustomerDetails
 from tap_teamwork.streams.companies import Companies
 from tap_teamwork.streams.company_details import CompanyDetails
 from tap_teamwork.streams.pages import Pages
-from tap_teamwork.streams.tags import Tags
 from tap_teamwork.streams.collaborators import Collaborators
 from tap_teamwork.streams.ticket_search import TicketSearch
 from tap_teamwork.streams.ticket_priorities import TicketPriorities
@@ -39,7 +38,6 @@ STREAMS = {
     "companies": Companies,
     "company_details": CompanyDetails,
     "pages": Pages,
-    "tags": Tags,
     "collaborators": Collaborators,
     "ticket_search": TicketSearch,
     "ticket_priorities": TicketPriorities,

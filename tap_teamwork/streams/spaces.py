@@ -14,7 +14,7 @@ class Spaces(IncrementalStream):
     replication_keys: List[str] = ["updatedAt"]
     key_properties = ["id"]
 
-    children: List[str] = ["collaborators", "tags"]
+    children: List[str] = ["collaborators"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

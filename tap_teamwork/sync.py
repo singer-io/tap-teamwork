@@ -45,12 +45,8 @@ def write_schema(stream, client, streams_to_sync, catalog) -> None:
     if stream.is_selected():
         stream.write_schema()
 
-    for child in getattr(stream, "children", []) or []:
-        child_obj = _instantiate_stream(
-            STREAMS[child],
-            client,
-            catalog.get_stream(child),
-        )
+    for child in stream.children:
+        child_obj = STREAMS[child](client, catalog.get_stream(child))
         write_schema(child_obj, client, streams_to_sync, catalog)
         if child in streams_to_sync:
             stream.child_to_sync.append(child_obj)

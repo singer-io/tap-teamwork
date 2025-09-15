@@ -17,11 +17,11 @@ class Collaborators(FullTableStream):
         if not parent_obj:
             raise ValueError("Missing parent_obj for collaborators stream")
 
-        space_id = parent_obj.get("spaceId")
+        space_id = parent_obj.get("id")
         if not space_id:
-            raise ValueError("Missing 'spaceId' in parent_obj for collaborators stream")
+            raise ValueError("Missing 'id' in parent_obj for collaborators stream")
 
-        LOGGER.info("Fetching collaborators for spaceId=%s", space_id)
+        LOGGER.info("Fetching collaborators for id=%s", space_id)
         return f"{self.client.base_url}spaces/api/v1/spaces/{space_id}/collaborators.json"
 
     def get_child_context(

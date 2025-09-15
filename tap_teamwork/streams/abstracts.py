@@ -1,6 +1,6 @@
 """Abstract stream classes for Singer Tap."""
 from abc import ABC, abstractmethod
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any, Iterator
 from singer import (
     Transformer,
     get_bookmark,
@@ -68,14 +68,15 @@ class BaseStream(ABC):
     ) -> Dict:
         """Abstract method to sync stream."""
 
-    def get_records(self) -> List:
+    def get_records(self) -> Iterator:
         """Yield paginated API records."""
         next_page = 1
         while next_page:
             response = self.client.get(
                 self.url_endpoint, self.params, self.headers, self.path
             )
-            raw = response.get(self.data_key, [])
+            raw = self.get_dot_path_value(response, self.data_key)
+            
             if isinstance(raw, dict):
                 raw_records = [raw]
             elif isinstance(raw, list):
@@ -133,6 +134,19 @@ class BaseStream(ABC):
     ) -> Dict:
         """Return default URL params. Override in child if needed."""
         return {}
+    
+    def get_dot_path_value(self, record: dict, dotted_path: str, default=None):
+        """
+        Safely retrieve a nested value from a dictionary using a dotted key path.
+        """
+        keys = dotted_path.split(".")
+        value = record
+        for key in keys:
+            if isinstance(value, dict) and key in value:
+                value = value[key]
+            else:
+                return default
+        return value
 
     def append_times_to_dates(self, record: Dict) -> Dict:
         """Ensure that replication key date fields include time component."""
@@ -148,12 +162,27 @@ class IncrementalStream(BaseStream):
     """Base class for incremental sync streams."""
     replication_method = "INCREMENTAL"
 
-    def get_starting_timestamp(self, state: dict) -> Optional[str]:
-        """Get ISO8601 bookmark or fallback to start_date."""
-        bookmark = get_bookmark(state, self.tap_stream_id, self.replication_keys[0])
-        if not bookmark:
-            bookmark = self.client.config.get("start_date")
-        return bookmark
+    def get_bookmark(self, state: dict, stream: str, key: Any = None) -> int:
+        """A wrapper for singer.get_bookmark to deal with compatibility for
+        bookmark values or start values."""
+        return get_bookmark(
+            state,
+            stream,
+            key or self.replication_keys[0],
+            self.client.config["start_date"],
+        )
+
+    def write_bookmark(self, state: dict, stream: str, key: Any = None, value: Any = None) -> Dict:
+        """A wrapper for singer.get_bookmark to deal with compatibility for
+        bookmark values or start values."""
+        if not (key or self.replication_keys):
+            return state
+
+        current_bookmark = get_bookmark(state, stream, key or self.replication_keys[0], self.client.config["start_date"])
+        value = max(current_bookmark, value)
+        return write_bookmark(
+            state, stream, key or self.replication_keys[0], value
+        )
 
     def sync(
         self,
@@ -162,12 +191,11 @@ class IncrementalStream(BaseStream):
         parent_obj: Dict = None,
     ) -> Dict:
         """Sync incremental records using updatedAfter param."""
+        bookmark_date = self.get_bookmark(state, self.tap_stream_id)
+        current_max_bookmark_date = bookmark_date
+        self.update_params(updatedAfter=bookmark_date)
+        # self.update_data_payload(parent_obj=parent_obj)
         self.url_endpoint = self.get_url_endpoint(parent_obj)
-        start_value = self.get_starting_timestamp(state)
-        if start_value:
-            self.params["updatedAfter"] = start_value
-
-        latest_value = start_value
 
         with metrics.record_counter(self.tap_stream_id) as counter:
             for record in self.get_records():
@@ -179,28 +207,26 @@ class IncrementalStream(BaseStream):
                     LOGGER.warning("[%s] Transformed record is empty. Skipping.",
                                    self.tap_stream_id)
                     continue
+                
+                if self.replication_keys and transformed_record.get(self.replication_keys[0]):
+                    record_bookmark = transformed_record.get(self.replication_keys[0])
+                else:
+                    record_bookmark = bookmark_date
 
-                self.append_times_to_dates(transformed_record)
+                if record_bookmark >= bookmark_date:
+                    if self.is_selected():
+                        write_record(self.tap_stream_id, transformed_record)
+                        counter.increment()
 
-                if self.is_selected(record):
-                    write_record(self.tap_stream_id, transformed_record)
-                    counter.increment()
+                    current_max_bookmark_date = max(
+                        current_max_bookmark_date, record_bookmark
+                    )
 
-                updated_at = transformed_record.get(self.replication_keys[0])
-                if updated_at and (latest_value is None or updated_at > latest_value):
-                    latest_value = updated_at
+                    for child in self.child_to_sync:
+                        child.sync(state=state, transformer=transformer, parent_obj=record)
 
-                for child in self.child_to_sync:
-                    context = child.get_child_context(record, parent_obj)
-                    if context:
-                        child.sync(state=state, transformer=transformer,
-                                   parent_obj=context)
-
-        if latest_value:
-            write_bookmark(state, self.tap_stream_id, self.replication_keys[0],
-                           latest_value)
-
-        return counter.value
+            state = self.write_bookmark(state, self.tap_stream_id, value=current_max_bookmark_date)
+            return counter.value
 
 
 class FullTableStream(BaseStream):

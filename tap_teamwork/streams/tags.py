@@ -17,11 +17,11 @@ class Tags(FullTableStream):
         if not parent_obj:
             raise ValueError("Missing parent_obj for tags stream")
 
-        space_id = parent_obj.get("spaceId")
+        space_id = parent_obj.get("id")
         if not space_id:
-            raise ValueError("Missing 'spaceId' in parent_obj for tags stream")
+            raise ValueError("Missing 'id' in parent_obj for tags stream")
 
-        LOGGER.info("Fetching tags for spaceId=%s", space_id)
+        LOGGER.info("Fetching tags for id=%s", space_id)
         return f"{self.client.base_url}spaces/api/v1/spaces/{space_id}/tags.json"
 
     def get_child_context(
