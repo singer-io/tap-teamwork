@@ -158,6 +158,11 @@ class BaseStream(ABC):
                     record[key] = f"{val}T00:00:00Z"
         return record
 
+    def get_starting_timestamp(self) -> str:
+        """Return the starting timestamp from config, or fallback epoch."""
+        cfg = getattr(self.client, "config", {}) or {}
+        return cfg.get("start_date", "1970-01-01T00:00:00Z")
+
 
 class IncrementalStream(BaseStream):
     """Base class for incremental sync streams."""
