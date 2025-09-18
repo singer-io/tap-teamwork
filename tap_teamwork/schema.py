@@ -81,6 +81,10 @@ def get_schemas() -> Tuple[Dict, Dict]:
                     stream_metadata, ("properties", field_name), "inclusion", "automatic"
                 )
 
+        parent_tap_stream_id = getattr(stream_obj, "parent", None)
+        if parent_tap_stream_id:
+            stream_metadata = metadata.write(stream_metadata, (), 'parent-tap-stream-id', parent_tap_stream_id)
+
         field_metadata[stream_name] = metadata.to_list(stream_metadata)
 
     return schemas, field_metadata
