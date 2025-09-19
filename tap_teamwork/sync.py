@@ -1,4 +1,4 @@
-"""Sync logic for tap-teamwork: selection, schema writing, and record syncing."""
+"""Sync logic for tap-teamwork: selection, schema writing,record syncing."""
 
 from typing import Dict
 
