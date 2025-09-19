@@ -55,15 +55,16 @@ def dummy_client():
 # Tests for get_starting_timestamp
 
 def test_get_starting_timestamp_with_bookmark(dummy_catalog, dummy_client):
+    dummy_client.config["start_date"] = "2025-01-01T00:00:00Z"
     stream = DummyIncrementalStream(client=dummy_client, catalog=dummy_catalog)
-    state = {"bookmarks": {"dummy_incremental": {"updatedAt": "2025-01-01T00:00:00Z"}}}
+    state = {}
     result = stream.get_starting_timestamp(state)
     assert result == "2025-01-01T00:00:00Z"
 
 
 def test_get_starting_timestamp_without_bookmark(dummy_catalog, dummy_client):
-    stream = DummyIncrementalStream(client=dummy_client, catalog=dummy_catalog)
     dummy_client.config["start_date"] = "2023-01-01T00:00:00Z"
+    stream = DummyIncrementalStream(client=dummy_client, catalog=dummy_catalog)
     state = {}
     result = stream.get_starting_timestamp(state)
     assert result == "2023-01-01T00:00:00Z"
