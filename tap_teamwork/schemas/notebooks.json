@@ -246,7 +246,10 @@
       ]
     },
     "commentFollowers": {
-      "type": "object",
+      "type": [
+        "null",
+        "object"
+      ],
       "properties": {
         "userIds": {
           "type": [
@@ -279,6 +282,13 @@
                   "null",
                   "string"
                 ]
+              },
+              "meta": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {}
               }
             }
           }
@@ -286,31 +296,94 @@
         "companyIds": {
           "type": [
             "null",
-            "string"
-          ]
+            "array"
+          ],
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          }
         },
         "companies": {
           "type": [
             "null",
-            "string"
-          ]
+            "array"
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "null",
+                  "integer"
+                ]
+              },
+              "type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "meta": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {}
+              }
+            }
+          }
         },
         "teamIds": {
           "type": [
             "null",
-            "string"
-          ]
+            "array"
+          ],
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          }
         },
         "teams": {
           "type": [
             "null",
-            "string"
-          ]
+            "array"
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "null",
+                  "integer"
+                ]
+              },
+              "type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "meta": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {}
+              }
+            }
+          }
         }
       }
     },
     "changeFollowers": {
-      "type": "object",
+      "type": [
+        "null",
+        "object"
+      ],
       "properties": {
         "userIds": {
           "type": [
@@ -343,6 +416,13 @@
                   "null",
                   "string"
                 ]
+              },
+              "meta": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {}
               }
             }
           }
@@ -350,26 +430,86 @@
         "companyIds": {
           "type": [
             "null",
-            "string"
-          ]
+            "array"
+          ],
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          }
         },
         "companies": {
           "type": [
             "null",
-            "string"
-          ]
+            "array"
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "null",
+                  "integer"
+                ]
+              },
+              "type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "meta": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {}
+              }
+            }
+          }
         },
         "teamIds": {
           "type": [
             "null",
-            "string"
-          ]
+            "array"
+          ],
+          "items": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          }
         },
         "teams": {
           "type": [
             "null",
-            "string"
-          ]
+            "array"
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "null",
+                  "integer"
+                ]
+              },
+              "type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "meta": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {}
+              }
+            }
+          }
         }
       }
     },

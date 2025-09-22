@@ -40,18 +40,18 @@
                             "integer"
                         ]
                     },
+                    "type": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
                     "meta": {
                         "type": [
                             "null",
                             "object"
                         ],
                         "properties": {}
-                    },
-                    "type": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
                     }
                 }
             }
@@ -83,18 +83,18 @@
                             "integer"
                         ]
                     },
+                    "type": {
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
                     "meta": {
                         "type": [
                             "null",
                             "object"
                         ],
                         "properties": {}
-                    },
-                    "type": {
-                        "type": [
-                            "null",
-                            "string"
-                        ]
                     }
                 }
             }
