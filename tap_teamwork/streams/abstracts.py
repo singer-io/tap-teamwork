@@ -171,8 +171,7 @@ class IncrementalStream(BaseStream):
 
     @staticmethod
     def _minus_one_second_iso8601(ts: str) -> str:
-        """Return timestamp minus one second as ISO8601 Zulu.
-        """
+        """Return timestamp minus one second as ISO8601 Zulu."""
         fmt_candidates = ("%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ")
         last_exc = None
         for fmt in fmt_candidates:
@@ -186,7 +185,16 @@ class IncrementalStream(BaseStream):
             f"Bookmark '{ts}' is not a supported ISO8601 Zulu timestamp"
         ) from last_exc
 
-    def get_bookmark(self, state: dict, stream: str, key: Any = None) -> int:
+    def _parse_utc(self, ts: Optional[str]) -> Optional[datetime]:
+        if not ts:
+            return None
+        try:
+            dt = datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%fZ")
+        except ValueError:
+            dt = datetime.strptime(ts, "%Y-%m-%dT%H:%M:%SZ")
+        return dt.replace(tzinfo=timezone.utc)
+
+    def get_bookmark(self, state: dict, stream: str, key: Any = None) -> str:
         """Singer get_bookmark wrapper honoring start_date fallback."""
         return get_bookmark(
             state,
@@ -218,60 +226,54 @@ class IncrementalStream(BaseStream):
         transformer: Transformer,
         parent_obj: Dict = None,
     ) -> Dict:
-        """Sync incremental records using updatedAfter param (minus 1s)."""
+        """Incremental sync with strict bookmark filtering and real counting."""
 
-        bookmark_date = self.get_bookmark(state, self.tap_stream_id)
-        current_max_bookmark_date = bookmark_date
+        bookmark_str = self.get_bookmark(state, self.tap_stream_id)
+        bookmark_dt = self._parse_utc(bookmark_str)
+        max_seen_dt = bookmark_dt
 
         # Apply -1s shift for the request param, if we have a bookmark.
-        if bookmark_date:
+        if bookmark_str:
             try:
-                shifted = self._minus_one_second_iso8601(bookmark_date)
+                shifted = self._minus_one_second_iso8601(bookmark_str)
                 self.update_params(updatedAfter=shifted)
             except ValueError:
-                # If we cannot parse, fall back to original bookmark to avoid data loss.
                 LOGGER.warning(
                     "[%s] Could not parse bookmark '%s'; using it as-is",
                     self.tap_stream_id,
-                    bookmark_date,
+                    bookmark_str,
                 )
-                self.update_params(updatedAfter=bookmark_date)
-        else:
-            # No bookmark yet: don't set updatedAfter (API should default to start_date logic)
-            pass
+                self.update_params(updatedAfter=bookmark_str)
 
-        # self.update_data_payload(parent_obj=parent_obj)
         self.url_endpoint = self.get_url_endpoint(parent_obj)
 
+        written = 0
         with metrics.record_counter(self.tap_stream_id) as counter:
             for record in self.get_records():
                 transformed_record = transformer.transform(
                     record, self.schema, self.metadata
                 )
-                if not transformed_record:
+                if transformed_record is None:
                     LOGGER.warning(
-                        "[%s] Transformed record is empty. Skipping.",
+                        "[%s] Transformed record is None. Skipping.",
                         self.tap_stream_id,
                     )
                     continue
 
-                if (
-                    self.replication_keys
-                    and transformed_record.get(self.replication_keys[0])
-                ):
-                    record_bookmark = transformed_record.get(
-                        self.replication_keys[0]
-                    )
-                else:
-                    record_bookmark = bookmark_date
+                rk = self.replication_keys[0] if self.replication_keys else None
+                rec_dt = self._parse_utc(transformed_record.get(rk)) if rk else None
 
-                if record_bookmark >= bookmark_date:
-                    if self.is_selected():
-                        write_record(self.tap_stream_id, transformed_record)
-                        counter.increment()
-                    current_max_bookmark_date = max(
-                        current_max_bookmark_date, record_bookmark
-                    )
+                # STRICT filter: only accept strictly newer records
+                if bookmark_dt and rec_dt and rec_dt <= bookmark_dt:
+                    continue
+
+                if self.is_selected():
+                    write_record(self.tap_stream_id, transformed_record)
+                    written += 1
+                    counter.increment()
+
+                if rec_dt and (max_seen_dt is None or rec_dt > max_seen_dt):
+                    max_seen_dt = rec_dt
 
                 for child in self.child_to_sync:
                     child.sync(
@@ -280,13 +282,16 @@ class IncrementalStream(BaseStream):
                         parent_obj=record,
                     )
 
+        if max_seen_dt:
             state = self.write_bookmark(
                 state,
                 self.tap_stream_id,
-                value=current_max_bookmark_date,
+                value=max_seen_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
             )
 
-        return counter.value
+        LOGGER.info("FINISHED Syncing: %s, total_records: %d",
+                    self.tap_stream_id, written)
+        return written
 
 
 class FullTableStream(BaseStream):
@@ -303,18 +308,20 @@ class FullTableStream(BaseStream):
         """Sync all records in full-table mode."""
         self.url_endpoint = self.get_url_endpoint(parent_obj)
 
+        written = 0
         with metrics.record_counter(self.tap_stream_id) as counter:
             for record in self.get_records():
                 transformed_record = transformer.transform(
                     record, self.schema, self.metadata
                 )
-                if not transformed_record:
-                    LOGGER.warning("[%s] Transformed record is empty. Skipping.",
+                if transformed_record is None:
+                    LOGGER.warning("[%s] Transformed record is None. Skipping.",
                                    self.tap_stream_id)
                     continue
 
                 if self.is_selected(record):
                     write_record(self.tap_stream_id, transformed_record)
+                    written += 1
                     counter.increment()
 
                 for child in self.child_to_sync:
@@ -326,4 +333,6 @@ class FullTableStream(BaseStream):
                             parent_obj=context,
                         )
 
-        return counter.value
+        LOGGER.info("FINISHED Syncing: %s, total_records: %d",
+                    self.tap_stream_id, written)
+        return written

@@ -59,32 +59,32 @@ class Client:
       - Authentication (Bearer token)
       - Response parsing and metrics
       - HTTP error handling + retry
-      - Dynamic Teamwork base URL from config (subdomain or base_url)
+      - Dynamic Teamwork base URL from config (built from subdomain only)
     """
 
     def __init__(self, config: Mapping[str, Any]) -> None:
         self.config: Dict[str, Any] = dict(config)
         self._session = session()
 
-        # Prefer explicit base_url; else construct from required subdomain
-        base_url = self.config.get("base_url")
-        subdomain = self.config.get("subdomain")
-        if not base_url:
-            if not subdomain:
-                raise ValueError(
-                    "Missing required config property: 'subdomain' "
-                    "(or provide advanced override 'base_url')."
-                )
-            base_url = f"https://{subdomain}.teamwork.com/"
+        # Strictly build base URL from subdomain (no base_url support).
+        self.base_url = self._build_base_url_from_subdomain()
 
         # Normalize exactly one trailing slash
-        self.base_url = base_url.rstrip("/") + "/"
+        self.base_url = self.base_url.rstrip("/") + "/"
 
         # Request timeout
         config_request_timeout = self.config.get("request_timeout")
         self.request_timeout = (
             float(config_request_timeout) if config_request_timeout else REQUEST_TIMEOUT
         )
+
+    def _build_base_url_from_subdomain(self) -> str:
+        subdomain = self.config.get("subdomain")
+        if not subdomain:
+            raise ValueError(
+                "Missing required config property: 'subdomain'. "
+            )
+        return f"https://{subdomain}.teamwork.com/"
 
     def __enter__(self):
         self.check_api_credentials()
@@ -107,14 +107,14 @@ class Client:
             raise teamworkError("Missing required access_token in config") from exc
         return headers, params
 
-    # ---------- New helper to unify endpoint construction ----------
+    # ---------- Helper to unify endpoint construction ----------
     def _resolve_endpoint(self, endpoint: Optional[str], path: Optional[str]) -> str:
         """
         Build the absolute request URL from an explicit endpoint or a relative path.
 
         - If `endpoint` is provided, return it as-is.
         - Else, join `base_url` with a left-stripped `path` (or empty string).
-        - If both are missing, this returns `base_url` (consistent with prior behavior).
+        - If both are missing, this returns `base_url`.
         """
         if endpoint:
             return endpoint

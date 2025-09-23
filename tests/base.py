@@ -35,43 +35,43 @@ class teamworkBaseTest(BaseCase):
         return {
             "projects": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
             "tasks": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
             "milestones": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"lastChangedOn"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
             "notebooks": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
             "spaces": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
             "tickets": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
@@ -84,8 +84,8 @@ class teamworkBaseTest(BaseCase):
             },
             "users": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
@@ -98,8 +98,8 @@ class teamworkBaseTest(BaseCase):
             },
             "ticket_types": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
@@ -112,8 +112,8 @@ class teamworkBaseTest(BaseCase):
             },
             "companies": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
@@ -124,13 +124,7 @@ class teamworkBaseTest(BaseCase):
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
-            "tags": {
-                cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
-                cls.OBEYS_START_DATE: False,
-                cls.API_LIMIT: 100
-            },
+            
             "collaborators": {
                 cls.PRIMARY_KEYS: { "id" },
                 cls.REPLICATION_METHOD: cls.FULL_TABLE,
@@ -154,15 +148,15 @@ class teamworkBaseTest(BaseCase):
             },
             "ticket_search": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
             "ticket_priorities": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             }
@@ -172,7 +166,7 @@ class teamworkBaseTest(BaseCase):
     def get_credentials():
         """Authentication information for the test account."""
         credentials_dict = {}
-        creds = {'access_token': 'TEAMWORK_ACCESS_TOKEN', 'project_id': '12345678'}
+        creds = {'access_token': 'TEAMWORK_ACCESS_TOKEN', 'subdomain': 'TEAMWORK_SUB_DOMAIN'}
 
         for cred in creds:
             credentials_dict[cred] = os.getenv(creds[cred])
