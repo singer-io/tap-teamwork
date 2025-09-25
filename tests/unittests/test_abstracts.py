@@ -44,12 +44,20 @@ def dummy_catalog():
 
 @pytest.fixture
 def dummy_client():
-    """Creates a mocked API client object with sample response and base URL."""
+    """Mock client that returns real URLs from build_url."""
     client = MagicMock()
     client.base_url = "https://example.com"
     client.get.return_value = {"dummy_key": [{"id": "1"}, {"id": "2"}]}
     client.config = {"start_date": "2024-01-01T00:00:00Z"}
+
+    # Minimal real implementation so assertions compare strings, not MagicMocks
+    client.build_url.side_effect = lambda path: (
+        path if path.startswith(("http://", "https://"))
+        else f"{client.base_url.rstrip('/')}/{path.lstrip('/')}"
+    )
+
     return client
+
 
 
 # Tests for get_starting_timestamp
