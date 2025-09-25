@@ -1,7 +1,7 @@
 """Abstract stream classes for Singer Tap."""
 
 from abc import ABC, abstractmethod
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 from typing import Dict, List, Optional, Any, Iterator
 
 from singer import (
@@ -13,6 +13,7 @@ from singer import (
     write_record,
     write_schema,
     metadata,
+    utils,
 )
 
 LOGGER = get_logger()
@@ -26,18 +27,21 @@ class BaseStream(ABC):
     page_size = 0
     next_page_key = ""
     headers = {"Accept": "application/json"}
-    children = []
+    children: List[Any] = []
     parent = ""
     data_key = ""
     parent_bookmark_key = ""
+
+    # Default query param for incremental window; override in child if needed.
+    replication_key_param = "updatedAfter"
 
     def __init__(self, client=None, catalog=None) -> None:
         self.client = client
         self.catalog = catalog
         self.schema = catalog.schema.to_dict() if catalog else {}
         self.metadata = metadata.to_map(catalog.metadata) if catalog else {}
-        self.child_to_sync = []
-        self.params = {}
+        self.child_to_sync: List[Any] = []
+        self.params: Dict[str, Any] = {}
 
     @property
     @abstractmethod
@@ -93,21 +97,22 @@ class BaseStream(ABC):
             else:
                 self.params.pop(self.next_page_key, None)
 
-            yield from raw_records
+            for r in raw_records:
+                yield r
 
     def write_schema(self) -> None:
         """Write stream schema to stdout."""
         try:
             write_schema(self.tap_stream_id, self.schema, self.key_properties)
         except OSError as err:
-            LOGGER.error("OS Error while writing schema for: %s", self.tap_stream_id)
+            LOGGER.error("OS error while writing schema for: %s", self.tap_stream_id)
             raise err
 
     def update_params(self, **kwargs) -> None:
         """Update request params for API call."""
         self.params.update(kwargs)
 
-    def modify_object(self, record: Dict, _parent_record: Dict = None) -> Dict:
+    def modify_object(self, record: Dict, parent_record: Dict = None) -> Dict:
         """Override in child to modify object before writing."""
         return record
 
@@ -169,81 +174,83 @@ class IncrementalStream(BaseStream):
 
     replication_method = "INCREMENTAL"
 
-    @staticmethod
-    def _minus_one_second_iso8601(ts: str) -> str:
-        """Return timestamp minus one second as ISO8601 Zulu."""
-        fmt_candidates = ("%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ")
-        last_exc = None
-        for fmt in fmt_candidates:
-            try:
-                dt = datetime.strptime(ts, fmt)
-                dt = dt.replace(tzinfo=timezone.utc) - timedelta(seconds=1)
-                return dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-            except ValueError as exc:
-                last_exc = exc
-        raise ValueError(
-            f"Bookmark '{ts}' is not a supported ISO8601 Zulu timestamp"
-        ) from last_exc
-
-    def _parse_utc(self, ts: Optional[str]) -> Optional[datetime]:
-        if not ts:
+    def _parse_utc(self, ts: Optional[str]):
+        """Parse RFC3339/ISO8601 into aware UTC datetime, nil/invalid-safe."""
+        if ts is None:
+            return None
+        if isinstance(ts, str) and ts.strip().lower() in ("", "null", "none"):
             return None
         try:
-            dt = datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%fZ")
-        except ValueError:
-            dt = datetime.strptime(ts, "%Y-%m-%dT%H:%M:%SZ")
-        return dt.replace(tzinfo=timezone.utc)
+            return utils.strptime_to_utc(ts)
+        except Exception:
+            return None
 
+    def _fmt(self, dt) -> str:
+        """Format datetime into RFC3339 with Z."""
+        return utils.strftime(dt)
+
+    def _minus_one_second_str(self, ts: str) -> Optional[str]:
+        """Return (ts - 1s) as RFC3339 string; None if ts invalid."""
+        dt = self._parse_utc(ts)
+        if not dt:
+            return None
+        # Trim micros for safer server filtering (optional but common)
+        dt = (dt - timedelta(seconds=1)).replace(microsecond=0)
+        return self._fmt(dt)
+
+    # ---------- State helpers (compare datetimes, not strings) ----------
     def get_bookmark(self, state: dict, stream: str, key: Any = None) -> str:
-        """Singer get_bookmark wrapper honoring start_date fallback."""
+        """Bookmark with start_date fallback."""
         return get_bookmark(
             state,
             stream,
             key or self.replication_keys[0],
-            self.client.config["start_date"],
+            self.client.config.get("start_date", "1970-01-01T00:00:00Z"),
         )
 
     def write_bookmark(
         self, state: dict, stream: str, key: Any = None, value: Any = None
     ) -> Dict:
-        """Singer write_bookmark wrapper that advances monotonically."""
+        """Advance bookmark to the max(datetime(current, value))."""
         if not (key or self.replication_keys):
             return state
-        current_bookmark = get_bookmark(
-            state,
-            stream,
-            key or self.replication_keys[0],
-            self.client.config["start_date"],
-        )
-        value = max(current_bookmark, value)
-        return write_bookmark(
-            state, stream, key or self.replication_keys[0], value
+
+        rk = key or self.replication_keys[0]
+        current = get_bookmark(
+            state, stream, rk, self.client.config.get("start_date", "1970-01-01T00:00:00Z")
         )
 
+        cur_dt = self._parse_utc(current) if current else None
+        new_dt = self._parse_utc(value) if isinstance(value, str) else value
+
+        if cur_dt and new_dt:
+            chosen = cur_dt if cur_dt > new_dt else new_dt
+        else:
+            chosen = new_dt or cur_dt
+
+        if chosen:
+            return write_bookmark(state, stream, rk, self._fmt(chosen))
+        return state
+
+    # ---------- Sync ----------
     def sync(
         self,
         state: Dict,
         transformer: Transformer,
         parent_obj: Dict = None,
     ) -> Dict:
-        """Incremental sync with strict bookmark filtering and real counting."""
+        """Incremental sync with inclusive boundary and correct state writes."""
+        rk = self.replication_keys[0] if self.replication_keys else None
 
-        bookmark_str = self.get_bookmark(state, self.tap_stream_id)
-        bookmark_dt = self._parse_utc(bookmark_str)
+        # Resolve bookmark (or start_date) and compute request param (bookmark - 1s)
+        bookmark_str = self.get_bookmark(state, self.tap_stream_id, rk)
+        bookmark_dt = self._parse_utc(bookmark_str) if bookmark_str else None
         max_seen_dt = bookmark_dt
 
-        # Apply -1s shift for the request param, if we have a bookmark.
-        if bookmark_str:
-            try:
-                shifted = self._minus_one_second_iso8601(bookmark_str)
-                self.update_params(updatedAfter=shifted)
-            except ValueError:
-                LOGGER.warning(
-                    "[%s] Could not parse bookmark '%s'; using it as-is",
-                    self.tap_stream_id,
-                    bookmark_str,
-                )
-                self.update_params(updatedAfter=bookmark_str)
+        shifted = self._minus_one_second_str(bookmark_str) if bookmark_str else None
+        if shifted:
+            key_param = getattr(self, "replication_key_param", "updatedAfter")
+            self.update_params(**{key_param: shifted})
 
         self.url_endpoint = self.get_url_endpoint(parent_obj)
 
@@ -260,11 +267,13 @@ class IncrementalStream(BaseStream):
                     )
                     continue
 
-                rk = self.replication_keys[0] if self.replication_keys else None
-                rec_dt = self._parse_utc(transformed_record.get(rk)) if rk else None
+                # Parse replication key value (nil-safe)
+                rec_val = transformed_record.get(rk) if rk else None
+                rec_dt = self._parse_utc(rec_val) if rec_val else None
 
-                # STRICT filter: only accept strictly newer records
-                if bookmark_dt and rec_dt and rec_dt <= bookmark_dt:
+                # INCLUSIVE boundary: skip only records strictly OLDER than bookmark.
+                # If rec_dt is None, we keep the record but it won't advance the bookmark.
+                if bookmark_dt and rec_dt is not None and rec_dt < bookmark_dt:
                     continue
 
                 if self.is_selected():
@@ -286,7 +295,8 @@ class IncrementalStream(BaseStream):
             state = self.write_bookmark(
                 state,
                 self.tap_stream_id,
-                value=max_seen_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                rk,
+                max_seen_dt,  # pass datetime; formatter handles to string
             )
 
         LOGGER.info("FINISHED Syncing: %s, total_records: %d",
@@ -325,13 +335,12 @@ class FullTableStream(BaseStream):
                     counter.increment()
 
                 for child in self.child_to_sync:
-                    context = child.get_child_context(record, parent_obj)
-                    if context:
-                        child.sync(
-                            state=state,
-                            transformer=transformer,
-                            parent_obj=context,
-                        )
+                    # If your children need a context, override in child streams.
+                    child.sync(
+                        state=state,
+                        transformer=transformer,
+                        parent_obj=record,
+                    )
 
         LOGGER.info("FINISHED Syncing: %s, total_records: %d",
                     self.tap_stream_id, written)
