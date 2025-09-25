@@ -22,7 +22,8 @@ class Collaborators(FullTableStream):
             raise ValueError("Missing 'id' in parent_obj for collaborators stream")
 
         LOGGER.info("Fetching collaborators for id=%s", space_id)
-        return f"{self.client.base_url}spaces/api/v1/spaces/{space_id}/collaborators.json"
+
+        return self.client.build_url(f"spaces/api/v1/spaces/{space_id}/collaborators.json")
 
     def get_child_context(
         self, record: Dict[str, Any], context: Optional[Dict[str, Any]]

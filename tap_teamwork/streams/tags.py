@@ -22,7 +22,7 @@ class Tags(FullTableStream):
             raise ValueError("Missing 'id' in parent_obj for tags stream")
 
         LOGGER.info("Fetching tags for id=%s", space_id)
-        return f"{self.client.base_url}spaces/api/v1/spaces/{space_id}/tags.json"
+        return self.client.build_url("spaces/api/v1/tags.json")
 
     def get_child_context(
         self,

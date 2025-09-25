@@ -131,7 +131,7 @@ class BaseStream(ABC):
         else:
             formatted_path = self.path
 
-        full_url = f"{self.client.base_url}/{formatted_path}"
+        full_url = self.client.build_url(formatted_path)
         LOGGER.info("[%s] Final URL: %s", self.tap_stream_id, full_url)
         return full_url
 

@@ -23,7 +23,8 @@ class Pages(FullTableStream):
             raise ValueError("Missing 'spaceId' or 'pageId' in parent_obj for pages stream")
 
         LOGGER.info("Fetching page for spaceId=%s, pageId=%s", space_id, page_id)
-        return f"{self.client.base_url}spaces/api/v1/spaces/{space_id}/pages/{page_id}.json"
+        return self.client.build_url(f"spaces/api/v1/pages/{page_id}.json")
+
 
     def get_child_context(
         self,

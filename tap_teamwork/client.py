@@ -24,22 +24,16 @@ REQUEST_TIMEOUT = 300
 
 
 def raise_for_error(response: requests.Response) -> None:
-    """
-    Raise a domain-specific exception for non-2xx responses.
-
-    Tries to parse JSON error payload; falls back to status mapping.
-    """
+    """Raise a domain-specific exception for non-2xx responses."""
     try:
         response_json = response.json()
     except (ValueError, json.JSONDecodeError) as exc:
-        # Endpoints sometimes return non-JSON bodies (HTML, text, empty).
         LOGGER.warning("Failed to parse response JSON: %s", exc)
         response_json = {}
 
     if response.status_code in (200, 201, 204):
         return
 
-    # Prefer explicit "error" key, else "message", else mapping default
     payload_msg = response_json.get("error") or response_json.get("message")
     mapped_msg = ERROR_CODE_EXCEPTION_MAPPING.get(response.status_code, {}).get(
         "message", "Unknown Error"
@@ -66,11 +60,8 @@ class Client:
         self.config: Dict[str, Any] = dict(config)
         self._session = session()
 
-        # Strictly build base URL from subdomain (no base_url support).
-        self.base_url = self._build_base_url_from_subdomain()
-
-        # Normalize exactly one trailing slash
-        self.base_url = self.base_url.rstrip("/") + "/"
+        # Build base URL from subdomain and normalize: NO trailing slash
+        self.base_url = self._build_base_url_from_subdomain().rstrip("/")
 
         # Request timeout
         config_request_timeout = self.config.get("request_timeout")
@@ -81,9 +72,7 @@ class Client:
     def _build_base_url_from_subdomain(self) -> str:
         subdomain = self.config.get("subdomain")
         if not subdomain:
-            raise ValueError(
-                "Missing required config property: 'subdomain'. "
-            )
+            raise ValueError("Missing required config property: 'subdomain'.")
         return f"https://{subdomain}.teamwork.com/"
 
     def __enter__(self):
@@ -107,34 +96,35 @@ class Client:
             raise teamworkError("Missing required access_token in config") from exc
         return headers, params
 
-    # ---------- Helper to unify endpoint construction ----------
+    # ---------- Single source of truth for URL building ----------
+    def build_url(self, path: str) -> str:
+        """Join base_url and relative path with normalized single slash."""
+        return f"{self.base_url}/{(path or '').lstrip('/')}"
+
     def _resolve_endpoint(self, endpoint: Optional[str], path: Optional[str]) -> str:
         """
-        Build the absolute request URL from an explicit endpoint or a relative path.
-
-        - If `endpoint` is provided, return it as-is.
-        - Else, join `base_url` with a left-stripped `path` (or empty string).
-        - If both are missing, this returns `base_url`.
+        If an absolute endpoint is provided, return it.
+        Otherwise, build from base_url + path (normalized).
         """
         if endpoint:
             return endpoint
-        return f"{self.base_url}{(path or '').lstrip('/')}"
+        return self.build_url(path or "")
 
     def get(self, endpoint: str, params: Dict, headers: Dict, path: str = None) -> Any:
         """Perform a GET request."""
         try:
-            endpoint = self._resolve_endpoint(endpoint, path)
+            final_url = self._resolve_endpoint(endpoint, path)
             headers, params = self.authenticate(headers, params)
+            LOGGER.info("Final URL: %s", final_url)
             return self.__make_request(
                 "GET",
-                endpoint,
+                final_url,
                 headers=headers,
                 params=params,
                 timeout=self.request_timeout,
             )
         except Exception as exc:  # pylint: disable=broad-except
-            # Intentionally broad so callers don’t need to wrap every request.
-            LOGGER.exception("Failed GET request to %s: %s", endpoint, exc)
+            LOGGER.exception("Failed GET request to %s: %s", endpoint or path, exc)
             raise
 
     def post(  # pylint: disable=too-many-arguments,too-many-positional-arguments
@@ -147,18 +137,19 @@ class Client:
     ) -> Any:
         """Perform a POST request."""
         try:
-            endpoint = self._resolve_endpoint(endpoint, path)
+            final_url = self._resolve_endpoint(endpoint, path)
             headers, params = self.authenticate(headers, params)
+            LOGGER.info("Final URL: %s", final_url)
             return self.__make_request(
                 "POST",
-                endpoint,
+                final_url,
                 headers=headers,
                 params=params,
                 json=body,
                 timeout=self.request_timeout,
             )
         except Exception as exc:  # pylint: disable=broad-except
-            LOGGER.exception("Failed POST request to %s: %s", endpoint, exc)
+            LOGGER.exception("Failed POST request to %s: %s", endpoint or path, exc)
             raise
 
     @backoff.on_exception(

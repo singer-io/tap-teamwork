@@ -31,7 +31,7 @@ class TicketDetails(FullTableStream):
             # let caller decide to skip this one
             raise ValueError("Missing 'ticketId' or 'id' in parent_obj")
 
-        return f"{self.client.base_url}{self.path.format(ticketId=ticket_id)}"
+        return self.client.build_url(f"desk/api/v2/tickets/{ticket_id}.json")
 
     def get_child_context(
         self,
