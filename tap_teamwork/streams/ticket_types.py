@@ -1,14 +1,13 @@
-from typing import Dict, Iterator, List
+from typing import List
 from singer import get_logger
-from tap_teamwork.streams.abstracts import FullTableStream
+from tap_teamwork.streams.abstracts import IncrementalStream
 
 LOGGER = get_logger()
 
-
-class TicketTypes(FullTableStream):
+class TicketTypes(IncrementalStream):
     tap_stream_id = "ticket_types"
     key_properties = ["id"]
-    replication_method = "FULL_TABLE"
-    replication_keys: List[str] = []
+    replication_method = "INCREMENTAL"
+    replication_keys: List[str] = ["updatedAt"]
     data_key = "types"
     path = "desk/api/v2/tickettypes.json"

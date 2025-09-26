@@ -243,8 +243,5 @@
                 "boolean"
             ]
         }
-    },
-    "required": [
-        "id"
-    ]
+    }
 }

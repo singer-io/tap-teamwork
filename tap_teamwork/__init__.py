@@ -21,9 +21,6 @@ def do_discover():
 
 @singer.utils.handle_top_exception(LOGGER)
 def main():
-    """
-    Run the tap
-    """
     parsed_args = singer.utils.parse_args(REQUIRED_CONFIG_KEYS)
     state = {}
     if parsed_args.state:
