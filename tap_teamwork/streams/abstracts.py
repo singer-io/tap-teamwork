@@ -299,8 +299,6 @@ class IncrementalStream(BaseStream):
                 max_seen_dt,  # pass datetime; formatter handles to string
             )
 
-        LOGGER.info("FINISHED Syncing: %s, total_records: %d",
-                    self.tap_stream_id, written)
         return written
 
 
