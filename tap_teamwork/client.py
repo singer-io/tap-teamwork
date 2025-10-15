@@ -164,7 +164,7 @@ class Client:
         on_backoff=wait_if_retry_after,
         exception=(
             ConnectionResetError,
-            ConnectionError,
+            RequestsConnectionError,
             ChunkedEncodingError,
             Timeout,
             teamworkBackoffError,
