@@ -10,27 +10,23 @@ class teamworkError(Exception):
 class teamworkBackoffError(teamworkError):
     """class representing 429 status code."""
     def __init__(self, message=None, response=None):
-        """Initialize the teamwork_RateLimitError. Parses the 'Retry-After' header from the response (if present) and sets the
-            `X-Rate-Limit-Reset` attribute accordingly.
+        """
+        Initialize the teamwork_RateLimitError.
+        Sets the `retry_after` attribute from the 'X-Rate-Limit-Reset' header if available.
         """
         self.response = response
 
-        # Retry-After header parsing
-        retry_after = None
-        if response and hasattr(response, 'headers'):
-            raw_retry = response.headers.get('X-Rate-Limit-Reset')
-            if raw_retry:
-                try:
-                    retry_after = int(raw_retry)
-                except ValueError:
-                    retry_after = None
+        # Use 'X-Rate-Limit-Reset' header or fallback to 60 seconds
+        try:
+            self.retry_after = int(response.headers.get('X-Rate-Limit-Reset', 60)) if response and hasattr(response, 'headers') else 60
+        except ValueError:
+            self.retry_after = 60
 
-        self.retry_after = retry_after
         base_msg = message or "Rate limit hit"
-        retry_info = f"(Retry after {self.retry_after} seconds.)" \
-            if self.retry_after is not None else "(Retry after unknown delay.)"
+        retry_info = f"(Retry after {self.retry_after} seconds.)"
         full_message = f"{base_msg} {retry_info}"
         super().__init__(full_message, response=response)
+
 
 class teamworkBadRequestError(teamworkError):
     """class representing 400 status code."""
