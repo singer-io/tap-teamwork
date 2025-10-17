@@ -14,6 +14,9 @@ from requests.exceptions import ConnectionError, Timeout, ChunkedEncodingError
 
 from tap_teamwork.client import Client, raise_for_error
 from tap_teamwork.exceptions import teamworkError
+from tap_teamwork.client import Client
+from tap_teamwork.exceptions import teamworkBackoffError
+from requests.models import Response
 
 
 # ------------------------------
@@ -125,3 +128,23 @@ def test_retry_on_network_exceptions(mock_request, exception_type, config):
 
     # Should retry more than once
     assert mock_request.call_count >= 1
+
+
+@patch("tap_teamwork.client.requests.sessions.Session.request")
+def test_request_retries_on_429(mock_request, config):
+    """Ensure __make_request retries up to max_tries on teamworkBackoffError (429) and includes correct message."""
+
+    mock_response = Mock(spec=Response)
+    mock_response.status_code = 429
+    mock_response.headers = {"X-Rate-Limit-Reset": "10"}
+    mock_response.json.return_value = {"message": "Rate limit exceeded"}
+
+    mock_request.return_value = mock_response
+
+    with Client(config) as client:
+        with pytest.raises(teamworkBackoffError) as exc_info:
+            client.get("https://example.com/test", params={}, headers={})
+
+    assert mock_request.call_count == 5
+    assert exc_info.value.retry_after == 10
+    assert "Retry after 10 seconds." in str(exc_info.value)
