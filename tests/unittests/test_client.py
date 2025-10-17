@@ -24,6 +24,8 @@ from tap_teamwork.exceptions import teamworkError
     (401, {"message": "Unauthorized"}, "Unauthorized"),
     (403, {"message": "Forbidden"}, "Forbidden"),
     (500, {"message": "Internal server error"}, "Internal server error"),
+    (429, {"message": "The API rate limit for your organisation/application pairing has been exceeded."},
+         "The API rate limit for your organisation/application pairing has been exceeded. (Retry after 60 seconds.)"),
 ])
 def test_raise_for_error_with_various_errors(status_code, json_data, expected_message):
     """Ensure raise_for_error raises teamworkError with correct message for various HTTP codes."""
@@ -34,7 +36,7 @@ def test_raise_for_error_with_various_errors(status_code, json_data, expected_me
 
     with pytest.raises(teamworkError) as exc_info:
         raise_for_error(response)
-
+    print(expected_message,'    :sdghajfgsf:  ', str(exc_info.value))
     assert expected_message in str(exc_info.value)
 
 
