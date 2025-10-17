@@ -1,0 +1,418 @@
+{
+    "type": "object",
+    "properties": {
+        "autoReplyEnabled": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "autoReplyFromUserId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "autoReplyMessage": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "autoReplySubject": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "clientOnly": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "createdAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "delete": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "properties": {
+                        "additionalProp": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        }
+                    }
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                }
+            }
+        },
+        "deletedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "deletedBy": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "delete": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "properties": {
+                        "additionalProp": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        }
+                    }
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                }
+            }
+        },
+        "displayOrder": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "email": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "emailForwardingState": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "happinessRatingEnabled": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "happinessRatingMessage": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "iconImage": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "includeTicketHistoryOnForward": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isAdmin": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "languageCode": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "localPart": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "name": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "notificationsOnly": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "onClosedLock": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "onClosedWait": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "publicIconImage": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "sendEmailsFrom": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "signature": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "smtpPassword": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "smtpPort": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "smtpProvider": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "smtpSecurity": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "smtpServer": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "smtpUsername": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "spamThreshold": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "starred": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "state": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "syncAccountId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "syncDays": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "syncSubscriptionId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "synced": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "ticketstatus": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "timeloggingEnabled": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "timeloggingProjectId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "type": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "updatedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updatedBy": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "delete": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "properties": {
+                        "additionalProp": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        }
+                    }
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                }
+            }
+        },
+        "useTeamworkMailServer": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "user": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "usingOfficeHours": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        }
+    }
+}

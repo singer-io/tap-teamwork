@@ -1,0 +1,247 @@
+{
+    "type": "object",
+    "properties": {
+        "addMethod": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "address": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "avatarURL": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "company": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "delete": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ]
+                },
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "properties": {
+                        "additionalProp": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        }
+                    }
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                }
+            }
+        },
+        "contacts": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "delete": {
+                        "type": [
+                            "null",
+                            "boolean"
+                        ]
+                    },
+                    "id": {
+                        "type": [
+                            "null",
+                            "integer"
+                        ]
+                    },
+                    "meta": {
+                        "type": [
+                            "null",
+                            "object"
+                        ],
+                        "properties": {
+                            "additionalProp": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "createdAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "deletedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "email": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "externalId": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "facebookURL": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "firstName": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "jobTitle": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "lastName": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "linkedinURL": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "mobile": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "organization": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "password": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "permission": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "phone": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "standing": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "state": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "trusted": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "twitterHandle": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "updatedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updatedBy": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "verifiedEmail": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "welcomeEmailSent": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        }
+    }
+}

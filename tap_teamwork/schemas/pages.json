@@ -1,0 +1,580 @@
+{
+    "type": "object",
+    "properties": {
+        "LinkedInstallation": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "installation": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "properties": {
+                        "id": {
+                            "type": [
+                                "null",
+                                "integer"
+                            ]
+                        },
+                        "meta": {
+                            "type": [
+                                "null",
+                                "object"
+                            ]
+                        },
+                        "type": {
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "banner": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "url": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "x": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "y": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                }
+            }
+        },
+        "breadcrumb": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "trash": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": [
+                                    "null",
+                                    "integer"
+                                ]
+                            },
+                            "slug": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "title": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "updatedAt": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "format": "date-time"
+                            },
+                            "childPages": {
+                                "type": [
+                                    "null",
+                                    "array"
+                                ],
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": [
+                                                "null",
+                                                "integer"
+                                            ]
+                                        },
+                                        "slug": {
+                                            "type": [
+                                                "null",
+                                                "string"
+                                            ]
+                                        },
+                                        "title": {
+                                            "type": [
+                                                "null",
+                                                "string"
+                                            ]
+                                        },
+                                        "updatedAt": {
+                                            "type": [
+                                                "null",
+                                                "string"
+                                            ],
+                                            "format": "date-time"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "changeMessage": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "content": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "contentRevision": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "createdAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "createdBy": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "deletedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "deletedBy": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "draftVersion": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "isFullWidth": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isHomePage": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isPrivate": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isPublished": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "isRequiredReading": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "meta": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "timeToRead": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "wordCount": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                }
+            }
+        },
+        "order": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "parentId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "publicShare": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "reactions": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "counts": {
+                    "type": [
+                        "null",
+                        "object"
+                    ]
+                },
+                "userReactionId": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                }
+            }
+        },
+        "readerInlineCommentsEnabled": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "slug": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "space": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        },
+        "state": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "summary": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "tags": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "tag": {
+                        "type": [
+                            "null",
+                            "object"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": [
+                                    "null",
+                                    "integer"
+                                ]
+                            },
+                            "name": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "color": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "pageCount": {
+                                "type": [
+                                    "null",
+                                    "integer"
+                                ]
+                            },
+                            "createdAt": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "format": "date-time"
+                            },
+                            "createdBy": {
+                                "type": [
+                                    "null",
+                                    "object"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": [
+                                            "null",
+                                            "integer"
+                                        ]
+                                    },
+                                    "meta": {
+                                        "type": [
+                                            "null",
+                                            "object"
+                                        ]
+                                    },
+                                    "type": {
+                                        "type": [
+                                            "null",
+                                            "string"
+                                        ]
+                                    }
+                                }
+                            },
+                            "updatedAt": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "format": "date-time"
+                            },
+                            "updatedBy": {
+                                "type": [
+                                    "null",
+                                    "object"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": [
+                                            "null",
+                                            "integer"
+                                        ]
+                                    },
+                                    "meta": {
+                                        "type": [
+                                            "null",
+                                            "object"
+                                        ]
+                                    },
+                                    "type": {
+                                        "type": [
+                                            "null",
+                                            "string"
+                                        ]
+                                    }
+                                }
+                            },
+                            "deletedAt": {
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "format": "date-time"
+                            },
+                            "deletedBy": {
+                                "type": [
+                                    "null",
+                                    "object"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": [
+                                            "null",
+                                            "integer"
+                                        ]
+                                    },
+                                    "meta": {
+                                        "type": [
+                                            "null",
+                                            "object"
+                                        ]
+                                    },
+                                    "type": {
+                                        "type": [
+                                            "null",
+                                            "string"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "title": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "updatedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "updatedBy": {
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                },
+                "meta": {
+                    "type": [
+                        "null",
+                        "object"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            }
+        }
+    }
+}
