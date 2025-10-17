@@ -36,7 +36,6 @@ def test_raise_for_error_with_various_errors(status_code, json_data, expected_me
 
     with pytest.raises(teamworkError) as exc_info:
         raise_for_error(response)
-    print(expected_message,'    :sdghajfgsf:  ', str(exc_info.value))
     assert expected_message in str(exc_info.value)
 
 
