@@ -303,38 +303,6 @@
         }
       }
     },
-    "customfieldValues": {
-      "type": [
-        "null",
-        "array"
-      ],
-      "items": {
-        "type": [
-          "null",
-          "object"
-        ],
-        "properties": {
-          "id": {
-            "type": [
-              "null",
-              "integer"
-            ]
-          },
-          "meta": {
-            "type": [
-              "null",
-              "object"
-            ]
-          },
-          "type": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        }
-      }
-    },
     "isBillable": {
       "type": [
         "null",
