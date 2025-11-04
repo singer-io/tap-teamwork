@@ -7,7 +7,7 @@ from tap_teamwork.sync import sync
 
 LOGGER = singer.get_logger()
 
-REQUIRED_CONFIG_KEYS = ["access_token", "start_date", "subdomain"]
+REQUIRED_CONFIG_KEYS = ["api_key", "start_date", "subdomain"]
 
 def do_discover():
     """
