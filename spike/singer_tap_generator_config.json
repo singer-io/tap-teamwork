@@ -170,7 +170,7 @@
     }
   ],
   "tap_tester_creds": {
-    "api_key": "TEAMWORK_api_key",
+    "api_key": "TEAMWORK_API_KEY",
     "project_id": "12345678"
   },
   "author": "Stitch",
