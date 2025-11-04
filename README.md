@@ -178,26 +178,25 @@ This tap:
 
 3. Create your tap's `config.json` file.  The tap config file for this tap should include these entries:
    - `start_date` - the default value to use if no bookmark exists for an endpoint (rfc3339 date string)
-   - `user_agent` (string, optional): Process and email for API logging purposes. Example: `tap-teamwork <api_user_email@your_company.com>`
-   - `request_timeout` (integer, `300`): Max time for which request should wait to get a response. Default request_timeout is 300 seconds.
+   - `api_key` (string, optional): Api_key for API logging purposes.
+   - `subdomain` Required for building the api url.
    
     ```json
     {
         "start_date": "2019-01-01T00:00:00Z",
-        "user_agent": "tap-teamwork <api_user_email@your_company.com>",
-        "request_timeout": 300,
-        ...
+        "api_key": "Dummy_API_KEY",
+        "subdomain": "Domain",
     }```
 
     Optionally, also create a `state.json` file. `currently_syncing` is an optional attribute used for identifying the last object to be synced in case the job is interrupted mid-stream. The next run would begin where the last job left off.
 
     ```json
     {
-        "currently_syncing": "engage",
+        "currently_syncing": "pages",
         "bookmarks": {
-            "export": "2019-09-27T22:34:39.000000Z",
-            "funnels": "2019-09-28T15:30:26.000000Z",
-            "revenue": "2019-09-28T18:23:53Z"
+            "projects": "2019-09-27T22:34:39.000000Z",
+            "spaces": "2019-09-28T15:30:26.000000Z",
+            "tags": "2019-09-28T18:23:53Z"
         }
     }
     ```

@@ -67,7 +67,7 @@ def test_raise_for_error_204_without_json():
 def config():
     """Returns test config with dummy token."""
     return {
-        "access_token": "dummy_token",
+        "api_key": "dummy_token",
         "base_url": "https://example.com",
         "subdomain": "example"
     }
