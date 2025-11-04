@@ -178,7 +178,7 @@ This tap:
 
 3. Create your tap's `config.json` file.  The tap config file for this tap should include these entries:
    - `start_date` - the default value to use if no bookmark exists for an endpoint (rfc3339 date string)
-   - `api_key` (string, optional): Api_key for API logging purposes.
+   - `api_key` (string, optional): Authentication key required for API access.
    - `subdomain` Required for building the api url.
    
     ```json
