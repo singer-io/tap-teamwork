@@ -31,7 +31,9 @@ This tap:
 
 [Spaces](https://apidocs.teamwork.com/docs/spaces/v1/spaces/get-v1-spaces-json)
 
-[Tags](https://apidocs.teamwork.com/docs/spaces/v1/tags/get-v1-tags-json)
+[ProjectTags](https://apidocs.teamwork.com/docs/teamwork/v3/tags/get-projects-api-v3-tags-json)
+
+[SpaceTags](https://apidocs.teamwork.com/docs/spaces/v1/tags/get-v1-tags-json)
 
 [Tasks](https://apidocs.teamwork.com/docs/teamwork/v3/tasks/get-projects-api-v3-projects-project-id-tasks-json)
 
@@ -108,10 +110,15 @@ This tap:
 - Primary keys: ['id']  
 - Replication strategy: **INCREMENTAL**
 
-**[tags](https://apidocs.teamwork.com/docs/spaces/v1/tags/get-v1-tags-json)**  
+**[project_tags](https://apidocs.teamwork.com/docs/teamwork/v3/tags/get-projects-api-v3-tags-json)**  
 - Data Key: tags  
 - Primary keys: ['id']  
 - Replication strategy: **FULL_TABLE**
+
+**[space_tags](https://apidocs.teamwork.com/docs/teamwork/v3/tags/get-projects-api-v3-tags-json)**  
+- Data Key: tags  
+- Primary keys: ['id']  
+- Replication strategy: **INCREMENTAL**
 
 **[tasks](https://apidocs.teamwork.com/docs/teamwork/v3/tasks/get-projects-api-v3-projects-project-id-tasks-json)**  
 - Data Key: tasks  

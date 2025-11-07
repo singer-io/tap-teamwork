@@ -1,0 +1,55 @@
+{
+    "type": "object",
+    "properties": {
+        "color": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "count": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "name": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "project": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {
+                "id": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "type": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            }
+        },
+        "projectId": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        }
+    }
+}
