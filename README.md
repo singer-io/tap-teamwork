@@ -115,7 +115,7 @@ This tap:
 - Primary keys: ['id']  
 - Replication strategy: **FULL_TABLE**
 
-**[space_tags](https://apidocs.teamwork.com/docs/teamwork/v3/tags/get-projects-api-v3-tags-json)**  
+**[space_tags](https://apidocs.teamwork.com/docs/spaces/v1/tags/get-v1-tags-json)**  
 - Data Key: tags  
 - Primary keys: ['id']  
 - Replication strategy: **INCREMENTAL**
