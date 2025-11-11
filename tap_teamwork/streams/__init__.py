@@ -20,6 +20,8 @@ from tap_teamwork.streams.pages import Pages
 from tap_teamwork.streams.collaborators import Collaborators
 from tap_teamwork.streams.ticket_search import TicketSearch
 from tap_teamwork.streams.ticket_priorities import TicketPriorities
+from tap_teamwork.streams.project_tags import ProjectTags
+from tap_teamwork.streams.space_tags import SpaceTags
 
 # Dictionary mapping stream names to their classes
 STREAMS = {
@@ -41,4 +43,6 @@ STREAMS = {
     "collaborators": Collaborators,
     "ticket_search": TicketSearch,
     "ticket_priorities": TicketPriorities,
+    "project_tags": ProjectTags,
+    "space_tags": SpaceTags
 }

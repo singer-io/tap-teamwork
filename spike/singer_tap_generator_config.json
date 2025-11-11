@@ -117,12 +117,19 @@
       "doc_link": "https://apidocs.teamwork.com/docs/spaces/v1/pages/get-v1-spaces-space-id-homepage-json"
     },
     {
-      "name": "tags",
-      "path": "spaces/api/v1/spaces/{spaceId}/tags.json",
+      "name": "project_tags",
+      "path": "projects/api/v3/tags.json",
       "data_key": "tags",
       "replication_method": "FULL_TABLE",
       "key_properties": ["id"],
-      "parent": "spaces",
+      "doc_link": "https://apidocs.teamwork.com/docs/teamwork/v3/tags/get-projects-api-v3-tags-json"
+    },
+    {
+      "name": "space_tags",
+      "path": "spaces/api/v1/tags.json",
+      "data_key": "tags",
+      "replication_method": "INCREMENTAL",
+      "key_properties": ["id"],
       "doc_link": "https://apidocs.teamwork.com/docs/spaces/v1/tags/get-v1-tags-json"
     },
     {
