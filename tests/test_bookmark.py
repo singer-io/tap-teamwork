@@ -41,12 +41,21 @@ class teamworkBookMarkTest(BookmarkTest, teamworkBaseTest):
                     r['data'] for r in
                     self.synced_records_1.get(stream, {}).get('messages', [])
                     if r.get('action') == 'upsert']
+
+                bookmark_raw = self.bookmark_values_1.get(stream)
+                if not isinstance(bookmark_raw, str):
+                    self.fail(
+                        f"Missing or invalid bookmark for stream '{stream}' in first sync: "
+                        f"{bookmark_raw!r}"
+                    )
+                bookmark_dt = self.parse_date(bookmark_raw)
+
                 sync_2_records = [
                     r['data'] for r in
                     self.synced_records_2.get(stream, {}).get('messages', [])
                     if r.get('action') == 'upsert'
-                    and self.parse_date(r['data'][replication_key])
-                    <= self.parse_date(self.bookmark_values_1.get(stream, {}))]
+                    and self.parse_date(r['data'][replication_key]) <= bookmark_dt
+                ]
                 self.assertLessEqual(
                     len(sync_2_records), len(sync_1_records),
                     msg=f"sync 2 ({len(sync_2_records)}) should not exceed "
