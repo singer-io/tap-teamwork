@@ -96,11 +96,11 @@ class Client:
     def authenticate(self, headers: Dict, params: Dict) -> Tuple[Dict, Dict]:
         """Attach Bearer token & JSON headers; raise if token missing."""
         try:
-            headers["Authorization"] = f"Bearer {self.config['access_token']}"
+            headers["Authorization"] = f"Bearer {self.config['api_key']}"
             headers["Content-Type"] = "application/json"
         except KeyError as exc:
-            LOGGER.exception("Missing access_token in config")
-            raise teamworkError("Missing required access_token in config") from exc
+            LOGGER.exception("Missing api_key in config")
+            raise teamworkError("Missing required api_key in config") from exc
         return headers, params
 
     # ---------- Single source of truth for URL building ----------

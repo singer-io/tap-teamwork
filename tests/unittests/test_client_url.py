@@ -21,7 +21,7 @@ EXPECTED_BASE = f"https://{DUMMY_SUBDOMAIN}.teamwork.com"
 @patch("requests.Session.request")
 def test_get_with_path_no_leading_slash(mock_request):
     mock_request.return_value = make_mock_response()
-    config = {"access_token": "dummy", "subdomain": DUMMY_SUBDOMAIN}
+    config = {"api_key": "dummy", "subdomain": DUMMY_SUBDOMAIN}
 
     with Client(config) as client:
         client.get(endpoint=None, path="v1/users", params={}, headers={})
@@ -33,7 +33,7 @@ def test_get_with_path_no_leading_slash(mock_request):
 @patch("requests.Session.request")
 def test_get_with_path_leading_slash(mock_request):
     mock_request.return_value = make_mock_response()
-    config = {"access_token": "dummy", "subdomain": DUMMY_SUBDOMAIN}
+    config = {"api_key": "dummy", "subdomain": DUMMY_SUBDOMAIN}
 
     with Client(config) as client:
         client.get(endpoint=None, path="/v1/users", params={}, headers={})
@@ -45,7 +45,7 @@ def test_get_with_path_leading_slash(mock_request):
 @patch("requests.Session.request")
 def test_post_with_path_no_leading_slash(mock_request):
     mock_request.return_value = make_mock_response()
-    config = {"access_token": "dummy", "subdomain": DUMMY_SUBDOMAIN}
+    config = {"api_key": "dummy", "subdomain": DUMMY_SUBDOMAIN}
 
     with Client(config) as client:
         client.post(endpoint=None, path="v1/items", params={}, headers={}, body={"k": "v"})
@@ -57,7 +57,7 @@ def test_post_with_path_no_leading_slash(mock_request):
 @patch("requests.Session.request")
 def test_post_with_path_leading_slash(mock_request):
     mock_request.return_value = make_mock_response()
-    config = {"access_token": "dummy", "subdomain": DUMMY_SUBDOMAIN}
+    config = {"api_key": "dummy", "subdomain": DUMMY_SUBDOMAIN}
 
     with Client(config) as client:
         client.post(endpoint=None, path="/v1/items", params={}, headers={}, body={"k": "v"})
@@ -69,7 +69,7 @@ def test_post_with_path_leading_slash(mock_request):
 @patch("requests.Session.request")
 def test_explicit_endpoint_bypasses_path(mock_request):
     mock_request.return_value = make_mock_response()
-    config = {"access_token": "dummy", "subdomain": DUMMY_SUBDOMAIN}
+    config = {"api_key": "dummy", "subdomain": DUMMY_SUBDOMAIN}
 
     with Client(config) as client:
         client.get(endpoint="https://alt.example.com/x", path="/ignored", params={}, headers={})

@@ -166,7 +166,7 @@ class teamworkBaseTest(BaseCase):
     def get_credentials():
         """Authentication information for the test account."""
         credentials_dict = {}
-        creds = {'access_token': 'TEAMWORK_ACCESS_TOKEN', 'subdomain': 'TEAMWORK_SUB_DOMAIN'}
+        creds = {'api_key': 'TEAMWORK_API_KEY', 'subdomain': 'TEAMWORK_SUB_DOMAIN'}
 
         for cred in creds:
             credentials_dict[cred] = os.getenv(creds[cred])
