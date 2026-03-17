@@ -47,12 +47,12 @@ def raise_for_error(response: requests.Response) -> None:
     raise exc_class(message, response) from None
 
 def wait_if_retry_after(details):
-    """Backoff handler that checks for a 'retry_after' attribute in the exception
-    and sleeps for the specified duration to respect API rate limits.
+    """Backoff handler that respects API rate-limit headers.
 
-    When 'exception' is not present in details (can happen depending on
-    backoff library version/call timing), the handler is a no-op and
-    backoff falls back to its default exponential wait strategy.
+    Lookup order:
+      1. exc.retry_after  – set by teamworkBackoffError subclasses
+      2. Retry-After / X-Rate-Limit-Reset response headers on exc.response
+      3. Fall back to default backoff exponential wait
     """
     exc = details.get('exception')
     if exc is None:
@@ -61,8 +61,28 @@ def wait_if_retry_after(details):
             "falling back to default backoff wait strategy."
         )
         return
-    if hasattr(exc, 'retry_after') and exc.retry_after is not None:
-        time.sleep(exc.retry_after)  # Force exact wait
+
+    retry_after = getattr(exc, 'retry_after', None)
+
+    if not retry_after:
+        response = getattr(exc, 'response', None)
+        if response is not None and hasattr(response, 'headers'):
+            header_val = (response.headers.get('Retry-After')
+                          or response.headers.get('X-Rate-Limit-Reset'))
+            if header_val:
+                try:
+                    retry_after = int(header_val)
+                except (ValueError, TypeError):
+                    retry_after = None
+
+    if retry_after:
+        time.sleep(retry_after)
+        return
+
+    LOGGER.warning(
+        "No retry_after found in exception or response headers; "
+        "falling back to default backoff wait strategy."
+    )
 
 class Client:
     """
