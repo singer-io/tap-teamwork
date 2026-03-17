@@ -49,9 +49,19 @@ def raise_for_error(response: requests.Response) -> None:
 def wait_if_retry_after(details):
     """Backoff handler that checks for a 'retry_after' attribute in the exception
     and sleeps for the specified duration to respect API rate limits.
+
+    When 'exception' is not present in details (can happen depending on
+    backoff library version/call timing), the handler is a no-op and
+    backoff falls back to its default exponential wait strategy.
     """
     exc = details.get('exception')
-    if exc and hasattr(exc, 'retry_after') and exc.retry_after is not None:
+    if exc is None:
+        LOGGER.warning(
+            "on_backoff handler called without 'exception' in details; "
+            "falling back to default backoff wait strategy."
+        )
+        return
+    if hasattr(exc, 'retry_after') and exc.retry_after is not None:
         time.sleep(exc.retry_after)  # Force exact wait
 
 class Client:
