@@ -11,12 +11,10 @@ Covers:
 import pytest
 from unittest.mock import Mock, patch
 from requests.exceptions import ConnectionError, Timeout, ChunkedEncodingError
-
-from tap_teamwork.client import Client, raise_for_error
-from tap_teamwork.exceptions import teamworkError
-from tap_teamwork.client import Client
-from tap_teamwork.exceptions import teamworkBackoffError
 from requests.models import Response
+
+from tap_teamwork.client import Client, raise_for_error, wait_if_retry_after
+from tap_teamwork.exceptions import teamworkError, teamworkBackoffError, teamworkRateLimitError
 
 
 # ------------------------------
@@ -128,6 +126,57 @@ def test_retry_on_network_exceptions(mock_request, exception_type, config):
 
     # Should retry more than once
     assert mock_request.call_count >= 1
+
+
+# ------------------------------
+# Tests for wait_if_retry_after()
+# ------------------------------
+
+
+@patch("tap_teamwork.client.time.sleep")
+def test_wait_if_retry_after_with_exception_and_retry_after(mock_sleep):
+    """When 'exception' is present and has retry_after, sleep for that duration."""
+    exc = teamworkRateLimitError("Rate limit hit", response=Mock(headers={"X-Rate-Limit-Reset": "30"}))
+    details = {"exception": exc}
+    wait_if_retry_after(details)
+    mock_sleep.assert_called_once_with(30)
+
+
+@patch("tap_teamwork.client.time.sleep")
+def test_wait_if_retry_after_with_exception_no_retry_after(mock_sleep):
+    """When 'exception' has no retry_after and no response headers, do not sleep."""
+    exc = Exception("generic error")
+    details = {"exception": exc}
+    wait_if_retry_after(details)
+    mock_sleep.assert_not_called()
+
+
+@patch("tap_teamwork.client.time.sleep")
+def test_wait_if_retry_after_without_exception_key(mock_sleep):
+    """When 'exception' key is absent from details, fall back to default backoff (no sleep)."""
+    details = {"target": "some_func", "tries": 1}
+    wait_if_retry_after(details)
+    mock_sleep.assert_not_called()
+
+
+@patch("tap_teamwork.client.time.sleep")
+def test_wait_if_retry_after_fallback_to_response_header(mock_sleep):
+    """When exception lacks retry_after but response has Retry-After header, use it."""
+    exc = ConnectionError("connection reset")
+    exc.response = Mock(headers={"Retry-After": "45"})
+    details = {"exception": exc}
+    wait_if_retry_after(details)
+    mock_sleep.assert_called_once_with(45)
+
+
+@patch("tap_teamwork.client.time.sleep")
+def test_wait_if_retry_after_fallback_to_x_rate_limit_header(mock_sleep):
+    """When exception lacks retry_after but response has X-Rate-Limit-Reset, use it."""
+    exc = ConnectionError("connection reset")
+    exc.response = Mock(headers={"X-Rate-Limit-Reset": "20"})
+    details = {"exception": exc}
+    wait_if_retry_after(details)
+    mock_sleep.assert_called_once_with(20)
 
 
 @patch("tap_teamwork.client.requests.sessions.Session.request")
