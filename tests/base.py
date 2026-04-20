@@ -159,6 +159,20 @@ class teamworkBaseTest(BaseCase):
                 cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
+            },
+            "space_tags": {
+                cls.PRIMARY_KEYS: { "id" },
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
+                cls.OBEYS_START_DATE: False,
+                cls.API_LIMIT: 100
+            },
+            "project_tags": {
+                cls.PRIMARY_KEYS: { "id" },
+                cls.REPLICATION_METHOD: cls.FULL_TABLE,
+                cls.REPLICATION_KEYS: set(),
+                cls.OBEYS_START_DATE: False,
+                cls.API_LIMIT: 100
             }
         }
 
@@ -166,7 +180,7 @@ class teamworkBaseTest(BaseCase):
     def get_credentials():
         """Authentication information for the test account."""
         credentials_dict = {}
-        creds = {'api_key': 'TEAMWORK_API_KEY', 'subdomain': 'TEAMWORK_SUB_DOMAIN'}
+        creds = {'api_key': 'TAP_TEAMWORK_API_KEY', 'subdomain': 'TAP_TEAMWORK_SUB_DOMAIN'}
 
         for cred in creds:
             credentials_dict[cred] = os.getenv(creds[cred])
