@@ -10,7 +10,7 @@ class teamworkInterruptedSyncTest(InterruptedSyncTest, teamworkBaseTest):
 
     def streams_to_test(self):
         # Keep scope small to avoid instability selecting "tasks" only
-        return {"tasks", "projects", "milestones", "ticket_search","notebooks", "spaces", "tickets", "ticket_search", "users"}
+        return {"tasks", "projects", "milestones","notebooks", "spaces", "tickets", "ticket_search", "users"}
 
 
     def manipulate_state(self):
