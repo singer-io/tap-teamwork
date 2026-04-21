@@ -3,7 +3,7 @@
 from typing import Any, Dict, Mapping, Optional, Tuple
 import json
 
-import backoff, time
+import backoff
 import requests
 from requests import session
 from requests.exceptions import (
@@ -76,7 +76,7 @@ def wait_if_retry_after(details):
                     retry_after = None
 
     if retry_after:
-        time.sleep(retry_after)
+        details['wait'] = max(details.get('wait', 0), retry_after)
         return
 
     LOGGER.warning(
