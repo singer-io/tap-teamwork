@@ -135,48 +135,53 @@ def test_retry_on_network_exceptions(mock_request, exception_type, config):
 
 @patch("tap_teamwork.client.time.sleep")
 def test_wait_if_retry_after_with_exception_and_retry_after(mock_sleep):
-    """When 'exception' is present and has retry_after, sleep for that duration."""
+    """When 'exception' is present and has retry_after, update the backoff wait."""
     exc = teamworkRateLimitError("Rate limit hit", response=Mock(headers={"X-Rate-Limit-Reset": "30"}))
-    details = {"exception": exc}
+    details = {"exception": exc, "wait": 1}
     wait_if_retry_after(details)
-    mock_sleep.assert_called_once_with(30)
+    assert details["wait"] == 30
+    mock_sleep.assert_not_called()
 
 
 @patch("tap_teamwork.client.time.sleep")
 def test_wait_if_retry_after_with_exception_no_retry_after(mock_sleep):
-    """When 'exception' has no retry_after and no response headers, do not sleep."""
+    """When 'exception' has no retry_after and no response headers, keep default backoff wait."""
     exc = Exception("generic error")
-    details = {"exception": exc}
+    details = {"exception": exc, "wait": 1}
     wait_if_retry_after(details)
+    assert details["wait"] == 1
     mock_sleep.assert_not_called()
 
 
 @patch("tap_teamwork.client.time.sleep")
 def test_wait_if_retry_after_without_exception_key(mock_sleep):
-    """When 'exception' key is absent from details, fall back to default backoff (no sleep)."""
-    details = {"target": "some_func", "tries": 1}
+    """When 'exception' key is absent from details, fall back to default backoff wait."""
+    details = {"target": "some_func", "tries": 1, "wait": 1}
     wait_if_retry_after(details)
+    assert details["wait"] == 1
     mock_sleep.assert_not_called()
 
 
 @patch("tap_teamwork.client.time.sleep")
 def test_wait_if_retry_after_fallback_to_response_header(mock_sleep):
-    """When exception lacks retry_after but response has Retry-After header, use it."""
+    """When exception lacks retry_after but response has Retry-After header, use it to override wait."""
     exc = ConnectionError("connection reset")
     exc.response = Mock(headers={"Retry-After": "45"})
-    details = {"exception": exc}
+    details = {"exception": exc, "wait": 1}
     wait_if_retry_after(details)
-    mock_sleep.assert_called_once_with(45)
+    assert details["wait"] == 45
+    mock_sleep.assert_not_called()
 
 
 @patch("tap_teamwork.client.time.sleep")
 def test_wait_if_retry_after_fallback_to_x_rate_limit_header(mock_sleep):
-    """When exception lacks retry_after but response has X-Rate-Limit-Reset, use it."""
+    """When exception lacks retry_after but response has X-Rate-Limit-Reset, use it to override wait."""
     exc = ConnectionError("connection reset")
     exc.response = Mock(headers={"X-Rate-Limit-Reset": "20"})
-    details = {"exception": exc}
+    details = {"exception": exc, "wait": 1}
     wait_if_retry_after(details)
-    mock_sleep.assert_called_once_with(20)
+    assert details["wait"] == 20
+    mock_sleep.assert_not_called()
 
 
 @patch("tap_teamwork.client.requests.sessions.Session.request")
