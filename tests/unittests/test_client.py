@@ -114,9 +114,10 @@ def test_post_success_response(mock_request, config):
 # Retry logic tests
 # ------------------------------
 
+@patch("backoff._sync.time.sleep", return_value=None)
 @patch("tap_teamwork.client.requests.sessions.Session.request")
 @pytest.mark.parametrize("exception_type", [ConnectionError, Timeout, ChunkedEncodingError])
-def test_retry_on_network_exceptions(mock_request, exception_type, config):
+def test_retry_on_network_exceptions(mock_request, mock_sleep, exception_type, config):
     """Validate retry behavior on transient errors (multiple tries)."""
     mock_request.side_effect = exception_type("Simulated network issue")
 
@@ -174,9 +175,73 @@ def test_wait_if_retry_after_fallback_to_x_rate_limit_header():
     assert details["wait"] == 20
 
 
+def test_wait_if_retry_after_retry_after_header_takes_priority_over_x_rate_limit():
+    """When both Retry-After and X-Rate-Limit-Reset are present, Retry-After wins."""
+    exc = ConnectionError("connection reset")
+    exc.response = Mock(headers={"Retry-After": "60", "X-Rate-Limit-Reset": "10"})
+    details = {"exception": exc, "wait": 1}
+    wait_if_retry_after(details)
+    assert details["wait"] == 60
+
+
+def test_wait_if_retry_after_non_numeric_header_ignored():
+    """When header value is non-numeric, retry_after stays None and falls back to default."""
+    exc = ConnectionError("connection reset")
+    exc.response = Mock(headers={"Retry-After": "not-a-number"})
+    details = {"exception": exc, "wait": 1}
+    wait_if_retry_after(details)
+    assert details["wait"] == 1
+
+
+def test_wait_if_retry_after_response_without_headers_attr():
+    """When exception has response but response lacks headers attribute, fall back to default."""
+    exc = ConnectionError("connection reset")
+    exc.response = object()  # no 'headers' attr
+    details = {"exception": exc, "wait": 1}
+    wait_if_retry_after(details)
+    assert details["wait"] == 1
+
+
+def test_wait_if_retry_after_response_is_none():
+    """When exception.response is None, fall back to default backoff."""
+    exc = ConnectionError("connection reset")
+    exc.response = None
+    details = {"exception": exc, "wait": 1}
+    wait_if_retry_after(details)
+    assert details["wait"] == 1
+
+
+def test_wait_if_retry_after_exc_retry_after_zero_falls_through_to_headers():
+    """When exc.retry_after is 0 (falsy), fall through to response headers."""
+    exc = ConnectionError("connection reset")
+    exc.retry_after = 0
+    exc.response = Mock(headers={"Retry-After": "25"})
+    details = {"exception": exc, "wait": 1}
+    wait_if_retry_after(details)
+    assert details["wait"] == 25
+
+
+def test_wait_if_retry_after_uses_max_of_existing_wait_and_retry():
+    """When existing wait is larger than retry_after, keep the larger value."""
+    exc = teamworkRateLimitError("Rate limit hit", response=Mock(headers={"X-Rate-Limit-Reset": "5"}))
+    details = {"exception": exc, "wait": 100}
+    wait_if_retry_after(details)
+    assert details["wait"] == 100
+
+
+def test_wait_if_retry_after_empty_headers():
+    """When response headers exist but contain neither Retry-After nor X-Rate-Limit-Reset."""
+    exc = ConnectionError("connection reset")
+    exc.response = Mock(headers={})
+    details = {"exception": exc, "wait": 1}
+    wait_if_retry_after(details)
+    assert details["wait"] == 1
+
+
+@patch("backoff._sync.time.sleep", return_value=None)
 @patch("tap_teamwork.client.requests.sessions.Session.request")
-def test_request_retries_on_429(mock_request, config):
-    """Ensure __make_request retries up to max_tries on teamworkBackoffError (429) and includes correct message."""
+def test_request_retries_on_429(mock_request, mock_sleep, config):
+    """Ensure __make_request retries up to max_tries on teamworkBackoffError (429) and sleeps between retries."""
 
     mock_response = Mock(spec=Response)
     mock_response.status_code = 429
@@ -192,3 +257,26 @@ def test_request_retries_on_429(mock_request, config):
     assert mock_request.call_count == 5
     assert exc_info.value.retry_after == 10
     assert "Retry after 10 seconds." in str(exc_info.value)
+
+    # Verify backoff actually slept between retries (5 tries = 4 sleeps)
+    assert mock_sleep.call_count == 4
+    for call in mock_sleep.call_args_list:
+        slept = call[0][0]
+        assert slept > 0, f"Expected positive sleep duration, got {slept}"
+
+
+@patch("backoff._sync.time.sleep", return_value=None)
+@patch("tap_teamwork.client.requests.sessions.Session.request")
+def test_request_retry_sleep_called_on_connection_error(mock_request, mock_sleep, config):
+    """Ensure backoff sleeps between retries on transient ConnectionError."""
+    mock_request.side_effect = ConnectionError("connection reset")
+
+    with Client(config) as client:
+        with pytest.raises(ConnectionError):
+            client.get("https://example.com/test", params={}, headers={})
+
+    assert mock_request.call_count == 5
+    assert mock_sleep.call_count == 4
+    for call in mock_sleep.call_args_list:
+        slept = call[0][0]
+        assert slept > 0, f"Expected positive sleep duration, got {slept}"
