@@ -64,19 +64,20 @@ def wait_if_retry_after(details):
 
     retry_after = getattr(exc, 'retry_after', None)
 
+    if not retry_after:
+        response = getattr(exc, 'response', None)
+        if response is not None and hasattr(response, 'headers'):
+            header_val = (response.headers.get('Retry-After')
+                          or response.headers.get('X-Rate-Limit-Reset'))
+            if header_val:
+                try:
+                    retry_after = int(header_val)
+                except (ValueError, TypeError):
+                    retry_after = None
+
     if retry_after:
         details['wait'] = max(details.get('wait', 0), retry_after)
         return
-    
-    response = getattr(exc, 'response', None)
-    if response is not None and hasattr(response, 'headers'):
-        header_val = (response.headers.get('Retry-After')
-                        or response.headers.get('X-Rate-Limit-Reset'))
-        if header_val:
-            try:
-                retry_after = int(header_val)
-            except (ValueError, TypeError):
-                retry_after = None
 
     LOGGER.warning(
         "No retry_after found in exception or response headers; "

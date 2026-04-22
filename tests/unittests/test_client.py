@@ -157,21 +157,21 @@ def test_wait_if_retry_after_without_exception_key():
 
 
 def test_wait_if_retry_after_fallback_to_response_header():
-    """When exception lacks retry_after but response has Retry-After header, fall back to default backoff."""
+    """When exception lacks retry_after but response has Retry-After header, use it to override wait."""
     exc = ConnectionError("connection reset")
     exc.response = Mock(headers={"Retry-After": "45"})
     details = {"exception": exc, "wait": 1}
     wait_if_retry_after(details)
-    assert details["wait"] == 1
+    assert details["wait"] == 45
 
 
 def test_wait_if_retry_after_fallback_to_x_rate_limit_header():
-    """When exception lacks retry_after but response has X-Rate-Limit-Reset, fall back to default backoff."""
+    """When exception lacks retry_after but response has X-Rate-Limit-Reset, use it to override wait."""
     exc = ConnectionError("connection reset")
     exc.response = Mock(headers={"X-Rate-Limit-Reset": "20"})
     details = {"exception": exc, "wait": 1}
     wait_if_retry_after(details)
-    assert details["wait"] == 1
+    assert details["wait"] == 20
 
 
 @patch("tap_teamwork.client.requests.sessions.Session.request")
