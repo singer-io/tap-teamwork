@@ -259,7 +259,7 @@ def test_request_retries_on_429(mock_request, mock_sleep, config):
     assert exc_info.value.retry_after == 10
     assert "Retry after 10 seconds." in str(exc_info.value)
 
-    # Verify backoff actually slept between retries (7 tries = 6 sleeps)
+    # Verify backoff actually slept between retries (5 tries = 4 sleeps)
     assert mock_sleep.call_count == 4
     for call in mock_sleep.call_args_list:
         slept = call[0][0]
