@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any, Iterator
+from typing import List, Optional, Dict, Any
 from singer import get_logger
 from tap_teamwork.streams.abstracts import FullTableStream
 
