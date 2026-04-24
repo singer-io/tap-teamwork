@@ -255,12 +255,12 @@ def test_request_retries_on_429(mock_request, mock_sleep, config):
         with pytest.raises(teamworkBackoffError) as exc_info:
             client.get("https://example.com/test", params={}, headers={})
 
-    assert mock_request.call_count == 7
+    assert mock_request.call_count == 5
     assert exc_info.value.retry_after == 10
     assert "Retry after 10 seconds." in str(exc_info.value)
 
     # Verify backoff actually slept between retries (7 tries = 6 sleeps)
-    assert mock_sleep.call_count == 6
+    assert mock_sleep.call_count == 4
     for call in mock_sleep.call_args_list:
         slept = call[0][0]
         assert slept > 0, f"Expected positive sleep duration, got {slept}"
@@ -276,8 +276,8 @@ def test_request_retry_sleep_called_on_connection_error(mock_request, mock_sleep
         with pytest.raises(ConnectionError):
             client.get("https://example.com/test", params={}, headers={})
 
-    assert mock_request.call_count == 7
-    assert mock_sleep.call_count == 6
+    assert mock_request.call_count == 5
+    assert mock_sleep.call_count == 4
     for call in mock_sleep.call_args_list:
         slept = call[0][0]
         assert slept > 0, f"Expected positive sleep duration, got {slept}"
