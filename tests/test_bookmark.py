@@ -24,4 +24,9 @@ class teamworkBookMarkTest(BookmarkTest, teamworkBaseTest):
         return "tap_tester_teamwork_bookmark_test"
 
     def streams_to_test(self):
-        return {"projects", "tasks", "milestones", "notebooks", "spaces", "space_tags"}
+        # Incremental streams with >= 2 unique replication key values in test account.
+        # Other incremental streams excluded due to insufficient data variance.
+        return {
+            "projects", "tasks", "milestones", "notebooks", "spaces",
+            "space_tags",
+        }

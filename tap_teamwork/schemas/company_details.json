@@ -36,7 +36,8 @@
                 "type": {
                     "type": [
                         "null",
-                        "integer"
+                        "integer",
+                        "string"
                     ]
                 }
             }
@@ -89,7 +90,8 @@
                 "type": {
                     "type": [
                         "null",
-                        "integer"
+                        "integer",
+                        "string"
                     ]
                 }
             }
@@ -136,7 +138,8 @@
                 "type": {
                     "type": [
                         "null",
-                        "integer"
+                        "integer",
+                        "string"
                     ]
                 }
             }
@@ -231,7 +234,8 @@
                 "type": {
                     "type": [
                         "null",
-                        "integer"
+                        "integer",
+                        "string"
                     ]
                 }
             }
