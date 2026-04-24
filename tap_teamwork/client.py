@@ -47,42 +47,62 @@ def raise_for_error(response: requests.Response) -> None:
     raise exc_class(message, response) from None
 
 def wait_if_retry_after(details):
-    """Backoff handler that respects API rate-limit headers.
+    """Backoff on_backoff handler – logs the retry-after value (informational only).
 
-    Lookup order:
-      1. exc.retry_after  – set by teamworkBackoffError subclasses
-      2. Retry-After / X-Rate-Limit-Reset response headers on exc.response
-      3. Fall back to default backoff exponential wait
+    NOTE: This callback cannot override the sleep duration. The actual wait
+    time is controlled by the ``wait_gen`` parameter on the decorator.
+    See ``_rate_limit_wait`` for the generator that respects Retry-After.
     """
     exc = details.get('exception')
     if exc is None:
-        LOGGER.warning(
-            "on_backoff handler called without 'exception' in details; "
-            "falling back to default backoff wait strategy."
-        )
         return
 
     retry_after = getattr(exc, 'retry_after', None)
-
-    if not retry_after:
-        response = getattr(exc, 'response', None)
-        if response is not None and hasattr(response, 'headers'):
-            header_val = (response.headers.get('Retry-After')
-                          or response.headers.get('X-Rate-Limit-Reset'))
-            if header_val:
-                try:
-                    retry_after = int(header_val)
-                except (ValueError, TypeError):
-                    retry_after = None
-
     if retry_after:
-        details['wait'] = max(details.get('wait', 0), retry_after)
-        return
+        LOGGER.info(
+            "Rate-limited; server requested retry after %s seconds.", retry_after
+        )
 
-    LOGGER.warning(
-        "No retry_after found in exception or response headers; "
-        "falling back to default backoff wait strategy."
-    )
+
+def _rate_limit_wait():
+    """Wait generator that respects the Retry-After / retry_after value.
+
+    On each iteration the backoff library sends the triggering exception
+    via ``.send(exc)``.  If the exception carries a ``retry_after``
+    attribute (set by teamworkBackoffError) or the response has a
+    ``Retry-After`` header, we use that value.  Otherwise we fall back
+    to exponential backoff (factor=2).
+    """
+    expo = backoff.expo(factor=2)
+    next(expo)  # prime the inner generator
+
+    exc = yield  # first yield consumed by _init_wait_gen's send(None)
+    while True:
+        retry_after = None
+
+        # 1. Check exc.retry_after (set by teamworkBackoffError)
+        if exc is not None:
+            retry_after = getattr(exc, 'retry_after', None)
+
+        # 2. Check Retry-After / X-Rate-Limit-Reset headers
+        if not retry_after and exc is not None:
+            response = getattr(exc, 'response', None)
+            if response is not None and hasattr(response, 'headers'):
+                header_val = (
+                    response.headers.get('Retry-After')
+                    or response.headers.get('X-Rate-Limit-Reset')
+                )
+                if header_val:
+                    try:
+                        retry_after = int(header_val)
+                    except (ValueError, TypeError):
+                        retry_after = None
+
+        if retry_after:
+            exc = yield max(retry_after, 1)
+        else:
+            # Fall back to exponential backoff
+            exc = yield expo.send(exc)
 
 class Client:
     """
@@ -190,7 +210,7 @@ class Client:
             raise
 
     @backoff.on_exception(
-        wait_gen=lambda: backoff.expo(factor=2),
+        wait_gen=_rate_limit_wait,
         on_backoff=wait_if_retry_after,
         exception=(
             ConnectionResetError,
@@ -199,7 +219,7 @@ class Client:
             Timeout,
             teamworkBackoffError,
         ),
-        max_tries=5,
+        max_tries=7,
     )
     def __make_request(
         self,

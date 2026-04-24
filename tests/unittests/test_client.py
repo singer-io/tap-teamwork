@@ -13,7 +13,7 @@ from unittest.mock import Mock, patch
 from requests.exceptions import ConnectionError, Timeout, ChunkedEncodingError
 from requests.models import Response
 
-from tap_teamwork.client import Client, raise_for_error, wait_if_retry_after
+from tap_teamwork.client import Client, raise_for_error, wait_if_retry_after, _rate_limit_wait
 from tap_teamwork.exceptions import teamworkError, teamworkBackoffError, teamworkRateLimitError
 
 
@@ -130,103 +130,104 @@ def test_retry_on_network_exceptions(mock_request, mock_sleep, exception_type, c
 
 
 # ------------------------------
-# Tests for wait_if_retry_after()
+# Tests for wait_if_retry_after() — informational on_backoff handler
 # ------------------------------
 
 
 def test_wait_if_retry_after_with_exception_and_retry_after():
-    """When 'exception' is present and has retry_after, update the backoff wait."""
+    """When 'exception' is present and has retry_after, handler logs without error."""
     exc = teamworkRateLimitError("Rate limit hit", response=Mock(headers={"X-Rate-Limit-Reset": "30"}))
     details = {"exception": exc, "wait": 1}
-    wait_if_retry_after(details)
-    assert details["wait"] == 30
+    wait_if_retry_after(details)  # should not raise
 
 
 def test_wait_if_retry_after_with_exception_no_retry_after():
-    """When 'exception' has no retry_after and no response headers, keep default backoff wait."""
+    """When 'exception' has no retry_after, handler runs without error."""
     exc = Exception("generic error")
     details = {"exception": exc, "wait": 1}
-    wait_if_retry_after(details)
-    assert details["wait"] == 1
+    wait_if_retry_after(details)  # should not raise
 
 
 def test_wait_if_retry_after_without_exception_key():
-    """When 'exception' key is absent from details, fall back to default backoff wait."""
+    """When 'exception' key is absent from details, handler runs without error."""
     details = {"target": "some_func", "tries": 1, "wait": 1}
-    wait_if_retry_after(details)
-    assert details["wait"] == 1
+    wait_if_retry_after(details)  # should not raise
 
 
-def test_wait_if_retry_after_fallback_to_response_header():
-    """When exception lacks retry_after but response has Retry-After header, use it to override wait."""
-    exc = ConnectionError("connection reset")
+# ------------------------------
+# Tests for _rate_limit_wait() — wait generator that respects Retry-After
+# ------------------------------
+
+
+def _prime_wait_gen():
+    """Create and prime a _rate_limit_wait generator (same as backoff does)."""
+    gen = _rate_limit_wait()
+    gen.send(None)  # prime, matches _init_wait_gen behavior
+    return gen
+
+
+def test_rate_limit_wait_uses_retry_after_from_exception():
+    """When exception has retry_after=60, generator yields 60."""
+    gen = _prime_wait_gen()
+    exc = teamworkRateLimitError("Rate limit hit", response=Mock(headers={"X-Rate-Limit-Reset": "60"}))
+    wait = gen.send(exc)
+    assert wait == 60
+
+
+def test_rate_limit_wait_uses_retry_after_header():
+    """When exception has Retry-After response header, generator uses it."""
+    gen = _prime_wait_gen()
+    exc = ConnectionError("reset")
     exc.response = Mock(headers={"Retry-After": "45"})
-    details = {"exception": exc, "wait": 1}
-    wait_if_retry_after(details)
-    assert details["wait"] == 45
+    wait = gen.send(exc)
+    assert wait == 45
 
 
-def test_wait_if_retry_after_fallback_to_x_rate_limit_header():
-    """When exception lacks retry_after but response has X-Rate-Limit-Reset, use it to override wait."""
-    exc = ConnectionError("connection reset")
+def test_rate_limit_wait_uses_x_rate_limit_reset_header():
+    """When exception has X-Rate-Limit-Reset response header, generator uses it."""
+    gen = _prime_wait_gen()
+    exc = ConnectionError("reset")
     exc.response = Mock(headers={"X-Rate-Limit-Reset": "20"})
-    details = {"exception": exc, "wait": 1}
-    wait_if_retry_after(details)
-    assert details["wait"] == 20
+    wait = gen.send(exc)
+    assert wait == 20
 
 
-def test_wait_if_retry_after_retry_after_header_takes_priority_over_x_rate_limit():
+def test_rate_limit_wait_retry_after_header_takes_priority():
     """When both Retry-After and X-Rate-Limit-Reset are present, Retry-After wins."""
-    exc = ConnectionError("connection reset")
+    gen = _prime_wait_gen()
+    exc = ConnectionError("reset")
     exc.response = Mock(headers={"Retry-After": "60", "X-Rate-Limit-Reset": "10"})
-    details = {"exception": exc, "wait": 1}
-    wait_if_retry_after(details)
-    assert details["wait"] == 60
+    wait = gen.send(exc)
+    assert wait == 60
 
 
-def test_wait_if_retry_after_non_numeric_header_ignored():
-    """When header value is non-numeric, retry_after stays None and falls back to default."""
-    exc = ConnectionError("connection reset")
+def test_rate_limit_wait_non_numeric_header_falls_back_to_expo():
+    """When header value is non-numeric, fall back to exponential backoff."""
+    gen = _prime_wait_gen()
+    exc = ConnectionError("reset")
     exc.response = Mock(headers={"Retry-After": "not-a-number"})
-    details = {"exception": exc, "wait": 1}
-    wait_if_retry_after(details)
-    assert details["wait"] == 1
+    wait = gen.send(exc)
+    assert isinstance(wait, (int, float))
+    assert wait > 0  # exponential backoff value
 
 
-def test_wait_if_retry_after_response_without_headers_attr():
-    """When exception has response but response lacks headers attribute, fall back to default."""
-    exc = ConnectionError("connection reset")
-    exc.response = object()  # no 'headers' attr
-    details = {"exception": exc, "wait": 1}
-    wait_if_retry_after(details)
-    assert details["wait"] == 1
-
-
-def test_wait_if_retry_after_response_is_none():
-    """When exception.response is None, fall back to default backoff."""
-    exc = ConnectionError("connection reset")
+def test_rate_limit_wait_no_retry_info_falls_back_to_expo():
+    """When exception has no retry_after and no headers, fall back to exponential backoff."""
+    gen = _prime_wait_gen()
+    exc = ConnectionError("reset")
     exc.response = None
-    details = {"exception": exc, "wait": 1}
-    wait_if_retry_after(details)
-    assert details["wait"] == 1
+    wait = gen.send(exc)
+    assert isinstance(wait, (int, float))
+    assert wait > 0
 
 
-def test_wait_if_retry_after_exc_retry_after_zero_falls_through_to_headers():
-    """When exc.retry_after is 0 (falsy), fall through to response headers."""
-    exc = ConnectionError("connection reset")
-    exc.retry_after = 0
-    exc.response = Mock(headers={"Retry-After": "25"})
-    details = {"exception": exc, "wait": 1}
-    wait_if_retry_after(details)
-    assert details["wait"] == 25
-
-
-def test_wait_if_retry_after_uses_max_of_existing_wait_and_retry():
-    """When existing wait is larger than retry_after, keep the larger value."""
-    exc = teamworkRateLimitError("Rate limit hit", response=Mock(headers={"X-Rate-Limit-Reset": "5"}))
-    details = {"exception": exc, "wait": 100}
-    wait_if_retry_after(details)
-    assert details["wait"] == 100
+def test_rate_limit_wait_minimum_of_1_second():
+    """When retry_after is very small, generator enforces minimum of 1 second."""
+    gen = _prime_wait_gen()
+    exc = teamworkBackoffError("rate limited", response=Mock(headers={"X-Rate-Limit-Reset": "0"}))
+    # retry_after=0 is falsy so it falls through to expo
+    wait = gen.send(exc)
+    assert wait >= 1
 
 
 def test_wait_if_retry_after_empty_headers():
@@ -254,12 +255,12 @@ def test_request_retries_on_429(mock_request, mock_sleep, config):
         with pytest.raises(teamworkBackoffError) as exc_info:
             client.get("https://example.com/test", params={}, headers={})
 
-    assert mock_request.call_count == 5
+    assert mock_request.call_count == 7
     assert exc_info.value.retry_after == 10
     assert "Retry after 10 seconds." in str(exc_info.value)
 
-    # Verify backoff actually slept between retries (5 tries = 4 sleeps)
-    assert mock_sleep.call_count == 4
+    # Verify backoff actually slept between retries (7 tries = 6 sleeps)
+    assert mock_sleep.call_count == 6
     for call in mock_sleep.call_args_list:
         slept = call[0][0]
         assert slept > 0, f"Expected positive sleep duration, got {slept}"
@@ -275,8 +276,8 @@ def test_request_retry_sleep_called_on_connection_error(mock_request, mock_sleep
         with pytest.raises(ConnectionError):
             client.get("https://example.com/test", params={}, headers={})
 
-    assert mock_request.call_count == 5
-    assert mock_sleep.call_count == 4
+    assert mock_request.call_count == 7
+    assert mock_sleep.call_count == 6
     for call in mock_sleep.call_args_list:
         slept = call[0][0]
         assert slept > 0, f"Expected positive sleep duration, got {slept}"
