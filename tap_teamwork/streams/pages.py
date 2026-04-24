@@ -64,7 +64,7 @@ class Pages(FullTableStream):
                 transformed = transformer.transform(
                     record, self.schema, self.metadata
                 )
-                if transformed and self.is_selected():
+                if transformed is not None and self.is_selected():
                     write_record(self.tap_stream_id, transformed)
                     written += 1
                     counter.increment()
