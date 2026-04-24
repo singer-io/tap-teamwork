@@ -10,18 +10,19 @@ class teamworkStartDateTest(StartDateTest, teamworkBaseTest):
 
     def streams_to_test(self):
         # Incremental streams with timestamp replication keys and data.
-        # Excluded: ticket_types/ticket_priorities (0 records).
         return {
-            "milestones",       # lastChangedOn
-            "notebooks",        # updatedAt
-            "projects",         # updatedAt
-            "spaces",           # updatedAt
-            "tasks",            # updatedAt
-            "tickets",          # updatedAt
-            "ticket_search",    # updatedAt
-            "users",            # updatedAt
-            "companies",        # updatedAt
-            "space_tags",       # updatedAt
+            "milestones",         # lastChangedOn
+            "notebooks",          # updatedAt
+            "projects",           # updatedAt
+            "spaces",             # updatedAt
+            "tasks",              # updatedAt
+            "tickets",            # updatedAt
+            "ticket_search",      # updatedAt
+            "users",              # updatedAt
+            "companies",          # updatedAt
+            "space_tags",         # updatedAt
+            "ticket_types",       # updatedAt
+            "ticket_priorities",  # updatedAt
         }
 
     @property

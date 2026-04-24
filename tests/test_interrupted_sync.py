@@ -10,11 +10,11 @@ class teamworkInterruptedSyncTest(InterruptedSyncTest, teamworkBaseTest):
 
     def streams_to_test(self):
         # Incremental streams with data in test account.
-        # Excluded: ticket_types/ticket_priorities (0 records).
         return {
             "tasks", "projects", "milestones", "notebooks", "spaces",
             "tickets", "ticket_search", "users",
             "companies", "space_tags",
+            "ticket_types", "ticket_priorities",
         }
 
 

@@ -9,5 +9,5 @@ class TicketTypes(IncrementalStream):
     key_properties = ["id"]
     replication_method = "INCREMENTAL"
     replication_keys: List[str] = ["updatedAt"]
-    data_key = "types"
+    data_key = "tickettypes"
     path = "desk/api/v2/tickettypes.json"

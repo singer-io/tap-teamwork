@@ -51,37 +51,9 @@ class teamworkAllFields(AllFieldsTest, teamworkBaseTest):
             'reviewStatus'
         },
         "pages" : {
-            'draftVersion',
             'deletedBy',
-            'changeMessage',
-            'createdBy',
-            'tags',
-            'isPrivate',
-            'isFullWidth',
             'LinkedInstallation',
-            'contentRevision',
-            'isRequiredReading',
-            'banner',
-            'parentId',
-            'meta',
-            'updatedBy',
-            'isPublished',
-            'id',
-            'isHomePage',
-            'content',
-            'title',
-            'reactions',
-            'slug',
-            'summary',
-            'updatedAt',
-            'order',
-            'state',
-            'breadcrumb',
-            'publicShare',
-            'readerInlineCommentsEnabled',
-            'space',
-            'deletedAt',
-            'createdAt'
+            'deletedAt'
         },
         "ticket_search" : {
             'deletedBy',
@@ -179,6 +151,12 @@ class teamworkAllFields(AllFieldsTest, teamworkBaseTest):
         "project_tags" : {
             'count'
         },
+        "ticket_priorities" : {
+            'deletedAt',
+            'deletedBy',
+            'filter_args',
+            'ticketCount'
+        },
     }
     @staticmethod
     def name():
@@ -187,10 +165,10 @@ class teamworkAllFields(AllFieldsTest, teamworkBaseTest):
     def streams_to_test(self):
         # All streams with data in this env.
         # tasks/milestones excluded: many optional fields not returned.
-        # pages/ticket_types/ticket_priorities excluded: 0 records in test account.
         return {
             "projects", "notebooks", "tickets", "ticket_details",
             "users", "customers", "collaborators", "customer_details",
             "ticket_search", "companies", "company_details",
             "inboxes", "space_tags", "project_tags",
+            "ticket_types", "ticket_priorities", "pages",
         }

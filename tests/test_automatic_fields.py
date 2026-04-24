@@ -10,12 +10,12 @@ class teamworkAutomaticFields(MinimumSelectionTest, teamworkBaseTest):
 
     def streams_to_test(self):
         # All streams with data in this account.
-        # Excluded: pages/ticket_types/ticket_priorities (0 records in test account),
-        #           collaborators (same user appears across multiple spaces, non-unique PKs).
+        # Excluded: collaborators (same user appears across multiple spaces, non-unique PKs).
         return {
             "projects", "tasks", "milestones", "notebooks",
             "spaces", "tickets", "ticket_details", "users",
             "inboxes", "customers", "companies",
             "company_details", "customer_details", "ticket_search",
             "space_tags", "project_tags",
+            "ticket_types", "ticket_priorities", "pages",
         }
