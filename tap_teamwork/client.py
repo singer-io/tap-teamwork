@@ -219,7 +219,7 @@ class Client:
             Timeout,
             teamworkBackoffError,
         ),
-        max_tries=7,
+        max_tries=5,
     )
     def __make_request(
         self,

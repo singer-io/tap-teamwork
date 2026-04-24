@@ -46,11 +46,11 @@ class teamworkNotFoundError(teamworkError):
     pass
 
 class teamworkConflictError(teamworkError):
-    """class representing 406 status code."""
+    """class representing 409 status code."""
     pass
 
 class teamworkUnprocessableEntityError(teamworkBackoffError):
-    """class representing 409 status code."""
+    """class representing 422 status code."""
     pass
 
 class teamworkRateLimitError(teamworkBackoffError):
