@@ -222,12 +222,12 @@ def test_rate_limit_wait_no_retry_info_falls_back_to_expo():
 
 
 def test_rate_limit_wait_minimum_of_1_second():
-    """When retry_after is very small, generator enforces minimum of 1 second."""
+    """When retry_after is 0, generator clamps to minimum of 1 second."""
     gen = _prime_wait_gen()
     exc = teamworkBackoffError("rate limited", response=Mock(headers={"X-Rate-Limit-Reset": "0"}))
-    # retry_after=0 is falsy so it falls through to expo
+    # retry_after=0 is not None, so max(0, 1) = 1
     wait = gen.send(exc)
-    assert wait >= 1
+    assert wait == 1
 
 
 def test_wait_if_retry_after_empty_headers():

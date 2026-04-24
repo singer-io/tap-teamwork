@@ -85,20 +85,20 @@ def _rate_limit_wait():
             retry_after = getattr(exc, 'retry_after', None)
 
         # 2. Check Retry-After / X-Rate-Limit-Reset headers
-        if not retry_after and exc is not None:
+        if retry_after is None and exc is not None:
             response = getattr(exc, 'response', None)
             if response is not None and hasattr(response, 'headers'):
                 header_val = (
                     response.headers.get('Retry-After')
                     or response.headers.get('X-Rate-Limit-Reset')
                 )
-                if header_val:
+                if header_val is not None:
                     try:
                         retry_after = int(header_val)
                     except (ValueError, TypeError):
                         retry_after = None
 
-        if retry_after:
+        if retry_after is not None:
             exc = yield max(retry_after, 1)
         else:
             # Fall back to exponential backoff
