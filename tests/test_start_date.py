@@ -9,15 +9,20 @@ class teamworkStartDateTest(StartDateTest, teamworkBaseTest):
         return "tap_tester_teamwork_start_date_test"
 
     def streams_to_test(self):
-        # Only streams with a single, valid timestamp replication key
+        # Incremental streams with timestamp replication keys and data.
         return {
-            "milestones",   # lastChangedOn
-            "notebooks",    # lastChangedOn
-            "projects",     # updatedAt
-            "spaces",       # updatedAt
-            "tasks",        # updatedAt
-            "tickets",
-            "ticket_search"
+            "milestones",         # lastChangedOn
+            "notebooks",          # updatedAt
+            "projects",           # updatedAt
+            "spaces",             # updatedAt
+            "tasks",              # updatedAt
+            "tickets",            # updatedAt
+            "ticket_search",      # updatedAt
+            "users",              # updatedAt
+            "companies",          # updatedAt
+            "space_tags",         # updatedAt
+            "ticket_types",       # updatedAt
+            "ticket_priorities",  # updatedAt
         }
 
     @property

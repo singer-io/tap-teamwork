@@ -9,19 +9,13 @@ class teamworkAutomaticFields(MinimumSelectionTest, teamworkBaseTest):
         return "tap_tester_teamwork_automatic_fields_test"
 
     def streams_to_test(self):
-        # Limit to streams that reliably have data in this account
-        # (Avoiding empty/rare streams like pages, collaborators, customers, etc.)
+        # All streams with data in this account.
+        # Excluded: collaborators (same user appears across multiple spaces, non-unique PKs).
         return {
-            "projects",
-            "tasks",
-            "milestones",
-            "notebooks",
-            "ticket_details",
-            "customer_details",
-            "inboxes",
-            'spaces',
-            'customers',
-            'tickets',
-            'ticket_search',
-            'users'
+            "projects", "tasks", "milestones", "notebooks",
+            "spaces", "tickets", "ticket_details", "users",
+            "inboxes", "customers", "companies",
+            "company_details", "customer_details", "ticket_search",
+            "space_tags", "project_tags",
+            "ticket_types", "ticket_priorities", "pages",
         }

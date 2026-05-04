@@ -9,9 +9,13 @@ class teamworkInterruptedSyncTest(InterruptedSyncTest, teamworkBaseTest):
         return "tap_tester_teamwork_interrupted_sync_test"
 
     def streams_to_test(self):
-        # Keep scope small to avoid instability selecting "tasks" only
-        return {"tasks", "projects", "milestones", "ticket_search","notebooks", "spaces", "tickets", "ticket_search", "users"}
-        # return {"ticket_types"}
+        # Incremental streams with data in test account.
+        return {
+            "tasks", "projects", "milestones", "notebooks", "spaces",
+            "tickets", "ticket_search", "users",
+            "companies", "space_tags",
+            "ticket_types", "ticket_priorities",
+        }
 
 
     def manipulate_state(self):

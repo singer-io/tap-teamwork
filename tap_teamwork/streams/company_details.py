@@ -27,7 +27,7 @@ class CompanyDetails(BaseStream):
             LOGGER.warning("[%s] Missing companyId in parent_obj: %s", self.tap_stream_id, parent_obj)
             return 0
 
-        payload = self.client.get(endpoint=None, path=self.path.format(companyId=company_id))
+        payload = self.client.get(endpoint=None, params={}, headers={}, path=self.path.format(companyId=company_id))
         record = payload.get(self.data_key) if isinstance(payload, dict) else None
         if not record:
             return 0

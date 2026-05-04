@@ -51,37 +51,9 @@ class teamworkAllFields(AllFieldsTest, teamworkBaseTest):
             'reviewStatus'
         },
         "pages" : {
-            'draftVersion',
             'deletedBy',
-            'changeMessage',
-            'createdBy',
-            'tags',
-            'isPrivate',
-            'isFullWidth',
             'LinkedInstallation',
-            'contentRevision',
-            'isRequiredReading',
-            'banner',
-            'parentId',
-            'meta',
-            'updatedBy',
-            'isPublished',
-            'id',
-            'isHomePage',
-            'content',
-            'title',
-            'reactions',
-            'slug',
-            'summary',
-            'updatedAt',
-            'order',
-            'state',
-            'breadcrumb',
-            'publicShare',
-            'readerInlineCommentsEnabled',
-            'space',
-            'deletedAt',
-            'createdAt'
+            'deletedAt'
         },
         "ticket_search" : {
             'deletedBy',
@@ -161,14 +133,29 @@ class teamworkAllFields(AllFieldsTest, teamworkBaseTest):
             'deletedAt',
             'localPart'
         },
-        "inboxes" : {
-            'permissions',
-            'completedAt',
-            'dependencies',
-            'timer',
-            'projectId',
-            'endDate',
-            'taskList'
+        "companies" : {
+            'deletedBy',
+            'address',
+            'deletedAt'
+        },
+        "company_details" : {
+            'deletedBy',
+            'address',
+            'deletedAt'
+        },
+        "space_tags" : {
+            'deletedBy',
+            'pageCount',
+            'deletedAt'
+        },
+        "project_tags" : {
+            'count'
+        },
+        "ticket_priorities" : {
+            'deletedAt',
+            'deletedBy',
+            'filter_args',
+            'ticketCount'
         },
     }
     @staticmethod
@@ -176,6 +163,12 @@ class teamworkAllFields(AllFieldsTest, teamworkBaseTest):
         return "tap_tester_teamwork_all_fields_test"
 
     def streams_to_test(self):
-        # Use only streams that are stable in this env for "all fields" checks.
-        # tasks/milestones have many optional fields that aren't returned here.
-        return {"projects", "notebooks", "tickets", "ticket_details", "users", "customers", "collaborators", "customer_details", "ticket_search"}
+        # All streams with data in this env.
+        # tasks/milestones excluded: many optional fields not returned.
+        return {
+            "projects", "notebooks", "tickets", "ticket_details",
+            "users", "customers", "collaborators", "customer_details",
+            "ticket_search", "companies", "company_details",
+            "inboxes", "space_tags", "project_tags",
+            "ticket_types", "ticket_priorities", "pages",
+        }

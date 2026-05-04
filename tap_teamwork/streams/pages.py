@@ -13,18 +13,65 @@ class Pages(FullTableStream):
     replication_keys: List[str] = []
     data_key = "page"
 
-    def get_url_endpoint(self, parent_obj: Optional[Dict[str, Any]] = None) -> str:
+    def _collect_page_ids(self, node: Dict[str, Any]) -> List[int]:
+        """Recursively collect all page IDs from a pages tree node."""
+        ids = []
+        page_id = node.get("id")
+        if page_id:
+            ids.append(page_id)
+        for child in node.get("childPages", []):
+            ids.extend(self._collect_page_ids(child))
+        return ids
+
+    def sync(self, state, transformer, parent_obj=None):
+        """Sync pages for a given space by listing pages, then fetching each."""
         if not parent_obj:
-            raise ValueError("Missing parent_obj for pages stream")
+            return 0
 
-        space_id = parent_obj.get("spaceId")
-        page_id = parent_obj.get("pageId")
-        if not space_id or not page_id:
-            raise ValueError("Missing 'spaceId' or 'pageId' in parent_obj for pages stream")
+        space_id = parent_obj.get("id")
+        if not space_id:
+            return 0
 
-        LOGGER.info("Fetching page for spaceId=%s, pageId=%s", space_id, page_id)
-        return self.client.build_url(f"spaces/api/v1/pages/{page_id}.json")
+        # List pages tree for this space
+        list_url = self.client.build_url(
+            f"spaces/api/v1/spaces/{space_id}/pages.json"
+        )
+        LOGGER.info("Fetching pages list for space %s", space_id)
+        response = self.client.get(
+            endpoint=list_url, params={}, headers=self.headers
+        )
+        pages_tree = response.get("pages", {})
+        page_ids = self._collect_page_ids(pages_tree)
 
+        if not page_ids:
+            return 0
+
+        from singer import metrics, write_record
+        written = 0
+        with metrics.record_counter(self.tap_stream_id) as counter:
+            for page_id in page_ids:
+                detail_url = self.client.build_url(
+                    f"spaces/api/v1/spaces/{space_id}/pages/{page_id}.json"
+                )
+                LOGGER.info("Fetching page %s in space %s", page_id, space_id)
+                detail_resp = self.client.get(
+                    endpoint=detail_url, params={}, headers=self.headers
+                )
+                record = detail_resp.get("page")
+                if not record:
+                    continue
+
+                transformed = transformer.transform(
+                    record, self.schema, self.metadata
+                )
+                if transformed is not None and self.is_selected():
+                    write_record(self.tap_stream_id, transformed)
+                    written += 1
+                    counter.increment()
+
+        LOGGER.info("FINISHED Syncing: %s, total_records: %d",
+                     self.tap_stream_id, written)
+        return written
 
     def get_child_context(
         self,
