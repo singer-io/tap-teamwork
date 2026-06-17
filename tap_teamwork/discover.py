@@ -47,11 +47,11 @@ def _prune_inaccessible_children(schemas: dict, field_metadata: dict) -> None:
     Mutates schemas and field_metadata in place.
     """
     for name, stream_cls in list(STREAMS.items()):
-        stream_obj = stream_cls()
-        if name in schemas and stream_obj.parent and stream_obj.parent not in schemas:
+        parent = getattr(stream_cls, "parent", "")
+        if name in schemas and parent and parent not in schemas:
             LOGGER.warning(
                 "Stream '%s' excluded from catalog because its parent stream '%s' is not accessible.",
-                name, stream_obj.parent,
+                name, parent,
             )
             schemas.pop(name, None)
             field_metadata.pop(name, None)
