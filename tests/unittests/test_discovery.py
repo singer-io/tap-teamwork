@@ -28,11 +28,6 @@ def _make_client():
     return client
 
 
-def _schemas_and_metadata():
-    """Return minimal schemas / field_metadata dicts keyed by every stream."""
-    schemas = {name: {"type": "object", "properties": {"id": {"type": "string"}}} for name in STREAMS}
-    field_metadata = {name: [] for name in STREAMS}
-    return schemas, field_metadata
 
 
 # ─── _apply_access_checks ──────────────────────────────────────────
