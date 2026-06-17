@@ -41,9 +41,11 @@ class TestApplyAccessChecks:
 
         # Build a mock STREAMS dict where every stream's check_access returns True
         mock_cls_a = MagicMock()
+        mock_cls_a.parent = ""
         mock_cls_a.return_value.check_access.return_value = True
         mock_cls_a.return_value.parent = ""
         mock_cls_b = MagicMock()
+        mock_cls_b.parent = ""
         mock_cls_b.return_value.check_access.return_value = True
         mock_cls_b.return_value.parent = ""
 
@@ -63,9 +65,11 @@ class TestApplyAccessChecks:
         client = _make_client()
 
         accessible = MagicMock()
+        accessible.parent = ""
         accessible.return_value.check_access.return_value = True
         accessible.return_value.parent = ""
         forbidden = MagicMock()
+        forbidden.parent = ""
         forbidden.return_value.check_access.return_value = False
         forbidden.return_value.parent = ""
 
