@@ -11,7 +11,7 @@ Covers:
 """
 
 import pytest
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 from tap_teamwork.streams.abstracts import IncrementalStream, FullTableStream
 from tap_teamwork.exceptions import teamworkForbiddenError
 
