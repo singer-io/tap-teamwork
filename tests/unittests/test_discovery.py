@@ -14,7 +14,6 @@ from unittest.mock import MagicMock, patch
 
 from tap_teamwork.discover import _apply_access_checks, _prune_inaccessible_children, discover
 from tap_teamwork.exceptions import teamworkForbiddenError
-from tap_teamwork.streams import STREAMS
 
 
 # ─── helpers ────────────────────────────────────────────────────────
