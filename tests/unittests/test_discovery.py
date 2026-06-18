@@ -110,6 +110,65 @@ class TestApplyAccessChecks:
         with pytest.raises(teamworkForbiddenError):
             _apply_access_checks(client, schemas, fm)
 
+    @patch("tap_teamwork.discover.STREAMS")
+    def test_all_streams_forbidden_raises_expected_message(self, mock_streams):
+        """Raises the exact no-access error text when no streams remain."""
+        client = _make_client()
+
+        forbidden_a = MagicMock()
+        forbidden_a.parent = ""
+        forbidden_a.return_value.check_access.return_value = False
+        forbidden_a.return_value.parent = ""
+        forbidden_b = MagicMock()
+        forbidden_b.parent = ""
+        forbidden_b.return_value.check_access.return_value = False
+        forbidden_b.return_value.parent = ""
+
+        mock_streams.items.return_value = [
+            ("stream_a", forbidden_a),
+            ("stream_b", forbidden_b),
+        ]
+
+        schemas = {"stream_a": {}, "stream_b": {}}
+        fm = {"stream_a": [], "stream_b": []}
+
+        with pytest.raises(teamworkForbiddenError) as exc_info:
+            _apply_access_checks(client, schemas, fm)
+
+        assert str(exc_info.value) == (
+            "No streams are accessible. Ensure the credentials have read permission for at least one stream."
+        )
+
+    @patch("tap_teamwork.discover.LOGGER.warning")
+    @patch("tap_teamwork.discover.STREAMS")
+    def test_partial_access_logs_excluded_streams_message(self, mock_streams, mock_warning):
+        """Logs the exact 403 excluded-streams warning message."""
+        client = _make_client()
+
+        accessible = MagicMock()
+        accessible.parent = ""
+        accessible.return_value.check_access.return_value = True
+        accessible.return_value.parent = ""
+        forbidden = MagicMock()
+        forbidden.parent = ""
+        forbidden.return_value.check_access.return_value = False
+        forbidden.return_value.parent = ""
+
+        mock_streams.items.return_value = [
+            ("projects", accessible),
+            ("tasks", forbidden),
+        ]
+
+        schemas = {"projects": {}, "tasks": {}}
+        fm = {"projects": [], "tasks": []}
+
+        _apply_access_checks(client, schemas, fm)
+
+        mock_warning.assert_called_once_with(
+            "These streams have been excluded due to HTTP-Error-Code:403 Forbidden: %s",
+            "tasks",
+        )
+
 
 # ─── _prune_inaccessible_children ─────────────────────────────────
 

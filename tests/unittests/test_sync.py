@@ -148,6 +148,19 @@ class TestCheckAccess:
         stream = StubIncremental(client=mock_client, catalog=mock_catalog)
         assert stream.check_access() is False
 
+    @patch("tap_teamwork.streams.abstracts.LOGGER.warning")
+    def test_forbidden_stream_logs_expected_message(self, mock_warning, mock_client, mock_catalog):
+        """check_access logs the stream id and error text when access is forbidden."""
+        mock_client.get.side_effect = teamworkForbiddenError("Forbidden")
+        stream = StubIncremental(client=mock_client, catalog=mock_catalog)
+
+        assert stream.check_access() is False
+        mock_warning.assert_called_once_with(
+            "Unauthorized Stream: %s, excluding from catalog. HTTP-Error-Message:'%s'",
+            "stub_incremental",
+            "Forbidden",
+        )
+
     def test_child_stream_always_accessible(self, mock_client, mock_catalog):
         """Child streams always return True from check_access."""
         stream = StubChild(client=mock_client, catalog=mock_catalog)
