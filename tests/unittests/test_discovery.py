@@ -165,7 +165,7 @@ class TestApplyAccessChecks:
         _apply_access_checks(client, schemas, fm)
 
         mock_warning.assert_called_once_with(
-            "These streams have been excluded due to HTTP-Error-Code:403 Forbidden: %s",
+            "Unauthorized streams excluded from catalog: %s",
             "tasks",
         )
 

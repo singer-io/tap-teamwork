@@ -28,7 +28,7 @@ def _apply_access_checks(client, schemas: dict, field_metadata: dict) -> None:
         schemas.pop(stream_name, None)
         field_metadata.pop(stream_name, None)
 
-    _prune_inaccessible_children(schemas, field_metadata)
+    inaccessible_streams.extend(_prune_inaccessible_children(schemas, field_metadata))
 
     if not schemas:
         raise teamworkForbiddenError(
@@ -36,7 +36,7 @@ def _apply_access_checks(client, schemas: dict, field_metadata: dict) -> None:
         )
     elif inaccessible_streams:
         LOGGER.warning(
-            "These streams have been excluded due to HTTP-Error-Code:403 Forbidden: %s",
+            "Unauthorized streams excluded from catalog: %s",
             ", ".join(inaccessible_streams),
         )
 
@@ -46,6 +46,7 @@ def _prune_inaccessible_children(schemas: dict, field_metadata: dict) -> None:
     Remove child streams from the catalog whose parent stream was excluded.
     Mutates schemas and field_metadata in place.
     """
+    to_remove = []
     for name, stream_cls in list(STREAMS.items()):
         parent = getattr(stream_cls, "parent", "")
         if name in schemas and parent and parent not in schemas:
@@ -55,6 +56,9 @@ def _prune_inaccessible_children(schemas: dict, field_metadata: dict) -> None:
             )
             schemas.pop(name, None)
             field_metadata.pop(name, None)
+            to_remove.append(name)
+
+    return to_remove
 
 
 def discover(client) -> Catalog:
