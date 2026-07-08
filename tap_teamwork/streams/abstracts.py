@@ -16,6 +16,8 @@ from singer import (
     utils,
 )
 
+from tap_teamwork.exceptions import teamworkForbiddenError
+
 LOGGER = get_logger()
 
 
@@ -167,6 +169,32 @@ class BaseStream(ABC):
         """Return the starting timestamp from config, or fallback epoch."""
         cfg = getattr(self.client, "config", {}) or {}
         return cfg.get("start_date", "1970-01-01T00:00:00Z")
+
+    def check_access(self) -> bool:
+        """
+        Verify that the API credentials have read access to this stream.
+        Returns True if accessible, False if a 403 Forbidden error is raised.
+        Child streams always return True (access is governed by the parent check).
+        """
+        if self.parent:
+            return True
+
+        url = self.get_url_endpoint()
+
+        try:
+            self.client.get(
+                endpoint=url,
+                params=self.params,
+                headers=self.headers.copy(),
+            )
+            return True
+        except teamworkForbiddenError as exc:
+            LOGGER.warning(
+                "Unauthorized Stream: %s, excluding from catalog. HTTP-Error-Message:'%s'",
+                self.tap_stream_id,
+                str(exc),
+            )
+            return False
 
 
 class IncrementalStream(BaseStream):
