@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tap-teamwork",
-    version="0.2.0",
+    version="0.3.0",
     description="Singer.io tap for extracting data from Teamwork API",
     author="Stitch",
     url="http://singer.io",

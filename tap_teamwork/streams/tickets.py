@@ -1,6 +1,6 @@
 from typing import Dict, List, Optional
 from singer import get_logger
-from tap_teamwork.streams.abstracts import ParentBaseStream
+from tap_teamwork.streams.abstracts import ParentBaseStream, BaseStream
 
 LOGGER = get_logger()
 
@@ -15,7 +15,7 @@ class Tickets(ParentBaseStream):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.child_to_sync: List[IncrementalStream] = []
+        self.child_to_sync: List[BaseStream] = []
 
     def get_url_params(self, context: Optional[Dict] = None, next_page_token: Optional[str] = None) -> Dict:
         params = super().get_url_params(context, next_page_token)
