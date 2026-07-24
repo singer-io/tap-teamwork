@@ -78,8 +78,8 @@ class teamworkBaseTest(BaseCase):
             },
             "ticket_details": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"tickets_updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
@@ -120,23 +120,23 @@ class teamworkBaseTest(BaseCase):
             },
             "pages": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"spaces_updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
             
             "collaborators": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"spaces_updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
             "company_details": {
                 cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"companies_updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
