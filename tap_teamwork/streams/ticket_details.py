@@ -9,8 +9,8 @@ class TicketDetails(FullTableStream):
     tap_stream_id = "ticket_details"
     parent = "tickets"
     key_properties = ["id"]
-    replication_method = "FULL_TABLE"
-    replication_keys: List[str] = []
+    replication_method = "INCREMENTAL"
+    replication_keys: List[str] = ["tickets_updatedAt"]
     data_key = "ticket"
     path = "desk/v1/tickets/{ticketId}.json"
 
@@ -32,6 +32,12 @@ class TicketDetails(FullTableStream):
             raise ValueError("Missing 'ticketId' or 'id' in parent_obj")
 
         return self.client.build_url(f"desk/api/v2/tickets/{ticket_id}.json")
+
+    def modify_object(self, record: Dict[str, Any], parent_record: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Add parent ticket's updatedAt (used as replication key) to each record."""
+        if isinstance(record, dict) and parent_record and isinstance(parent_record, dict):
+            record["tickets_updatedAt"] = parent_record.get("updatedAt")
+        return record
 
     def get_child_context(
         self,

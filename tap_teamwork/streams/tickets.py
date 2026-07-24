@@ -1,10 +1,10 @@
 from typing import Dict, List, Optional
 from singer import get_logger
-from tap_teamwork.streams.abstracts import IncrementalStream
+from tap_teamwork.streams.abstracts import ParentBaseStream
 
 LOGGER = get_logger()
 
-class Tickets(IncrementalStream):
+class Tickets(ParentBaseStream):
     tap_stream_id = "tickets"
     key_properties = ["id"]
     replication_method = "INCREMENTAL"

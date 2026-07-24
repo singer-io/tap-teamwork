@@ -8,6 +8,13 @@
                 "integer"
             ]
         },
+        "spaces_updatedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
         "type": {
             "type": [
                 "null",

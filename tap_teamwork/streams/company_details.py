@@ -12,8 +12,8 @@ class CompanyDetails(BaseStream):
     path = "desk/api/v2/companies/{companyId}.json"
 
     key_properties = ["id"]
-    replication_method = "FULL_TABLE"
-    replication_keys: list = []
+    replication_method = "INCREMENTAL"
+    replication_keys: list = ["companies_updatedAt"]
     data_key = "company"
 
     def get_child_context(
@@ -31,6 +31,10 @@ class CompanyDetails(BaseStream):
         record = payload.get(self.data_key) if isinstance(payload, dict) else None
         if not record:
             return 0
+
+        # Inject parent company's updatedAt as replication key
+        if parent_obj:
+            record["companies_updatedAt"] = parent_obj.get("updatedAt")
 
         with metrics.record_counter(self.tap_stream_id) as counter:
             transformed = transformer.transform(record, self.schema, self.metadata)

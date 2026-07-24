@@ -9,8 +9,8 @@ class Collaborators(FullTableStream):
     tap_stream_id = "collaborators"
     parent = "spaces"
     key_properties = ["id"]
-    replication_method = "FULL_TABLE"
-    replication_keys: List[str] = []
+    replication_method = "INCREMENTAL"
+    replication_keys: List[str] = ["spaces_updatedAt"]
     data_key = "space.collaborators"
 
     def get_url_endpoint(self, parent_obj: Optional[Dict[str, Any]] = None) -> str:
@@ -24,6 +24,12 @@ class Collaborators(FullTableStream):
         LOGGER.info("Fetching collaborators for id=%s", space_id)
 
         return self.client.build_url(f"spaces/api/v1/spaces/{space_id}/collaborators.json")
+
+    def modify_object(self, record: Dict[str, Any], parent_record: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Add parent space's updatedAt (used as replication key) to each record."""
+        if isinstance(record, dict) and parent_record and isinstance(parent_record, dict):
+            record["spaces_updatedAt"] = parent_record.get("updatedAt")
+        return record
 
     def get_child_context(
         self, record: Dict[str, Any], context: Optional[Dict[str, Any]]

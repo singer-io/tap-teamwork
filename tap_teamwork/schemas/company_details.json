@@ -1,6 +1,13 @@
 {
     "type": "object",
     "properties": {
+        "companies_updatedAt": {
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
         "address": {
             "type": [
                 "null",
