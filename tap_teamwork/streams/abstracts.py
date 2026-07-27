@@ -338,15 +338,19 @@ class ParentBaseStream(IncrementalStream):
     """
 
     def get_bookmark(self, state: dict, stream: str, key: Any = None) -> str:
-        """Return min(parent_bookmark, child_1_bookmark, …)."""
+        """Return min(parent_bookmark, child_1_bookmark, …) using datetime comparison."""
         min_bookmark = super().get_bookmark(state, stream) if self.is_selected() else None
+        min_dt = self._parse_utc(min_bookmark) if min_bookmark else None
         bookmark_key = f"{self.tap_stream_id}_{self.replication_keys[0]}"
 
         for child in self.child_to_sync:
             child_bookmark = super().get_bookmark(
                 state, child.tap_stream_id, key=bookmark_key
             )
-            min_bookmark = min(min_bookmark, child_bookmark) if min_bookmark else child_bookmark
+            child_dt = self._parse_utc(child_bookmark) if child_bookmark else None
+            if child_dt and (min_dt is None or child_dt < min_dt):
+                min_dt = child_dt
+                min_bookmark = child_bookmark
 
         return min_bookmark or self.client.config.get("start_date", "1970-01-01T00:00:00Z")
 

@@ -15,7 +15,7 @@ Covers:
 import unittest
 from unittest.mock import MagicMock, patch
 
-from tap_teamwork.streams.abstracts import ParentBaseStream, FullTableStream
+from tap_teamwork.streams.abstracts import ParentBaseStream
 
 
 # ---- Helpers ----

@@ -38,7 +38,7 @@ class CompanyDetails(BaseStream):
 
         with metrics.record_counter(self.tap_stream_id) as counter:
             transformed = transformer.transform(record, self.schema, self.metadata)
-            if transformed:
+            if transformed and self.is_selected():
                 singer.write_record(self.tap_stream_id, transformed)
                 counter.increment()
             return counter.value
