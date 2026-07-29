@@ -4,11 +4,11 @@ INCREMENTAL replication with parent's updatedAt propagation.
 
 Covers:
 - ParentBaseStream.get_bookmark returns min across parent and children
-- ParentBaseStream.write_bookmark propagates to child streams
+- ParentBaseStream.write_bookmark propagates to child streams using each child's replication key
 - Collaborators modify_object injects spaces_updatedAt from parent
-- TicketDetails modify_object injects tickets_updatedAt from parent
-- Pages sync injects spaces_updatedAt from parent
-- CompanyDetails sync injects companies_updatedAt from parent
+- TicketDetails modify_object injects ticketId from parent
+- Pages sync injects spaceId from parent
+- CompanyDetails sync injects companyId from parent
 - Child streams have correct replication_method and replication_keys
 """
 
@@ -98,8 +98,10 @@ class TestParentBaseStreamBookmark(unittest.TestCase):
         state = {
             "bookmarks": {
                 "spaces": {"updatedAt": "2026-06-01T00:00:00Z"},
+                # collaborators uses spaces_updatedAt as its replication key
                 "collaborators": {"spaces_updatedAt": "2026-03-01T00:00:00Z"},
-                "pages": {"spaces_updatedAt": "2026-05-01T00:00:00Z"},
+                # pages uses updatedAt as its replication key
+                "pages": {"updatedAt": "2026-05-01T00:00:00Z"},
             }
         }
         stream, _, _ = self._make_spaces_with_children()
@@ -117,7 +119,7 @@ class TestParentBaseStreamBookmark(unittest.TestCase):
             "bookmarks": {
                 "spaces": {"updatedAt": "2026-02-01T00:00:00Z"},
                 "collaborators": {"spaces_updatedAt": "2026-05-01T00:00:00Z"},
-                "pages": {"spaces_updatedAt": "2026-06-01T00:00:00Z"},
+                "pages": {"updatedAt": "2026-06-01T00:00:00Z"},
             }
         }
         stream, _, _ = self._make_spaces_with_children()
@@ -126,16 +128,18 @@ class TestParentBaseStreamBookmark(unittest.TestCase):
         self.assertEqual(bookmark, "2026-02-01T00:00:00Z")
 
     def test_write_bookmark_propagates_to_children(self):
-        """Children's bookmarks must be stored under '{parent}_updatedAt'."""
+        """Children's bookmarks are stored under each child's own replication key."""
         state = {"bookmarks": {}}
         stream, _, _ = self._make_spaces_with_children()
         stream.write_bookmark(state, "spaces", key="updatedAt", value="2026-07-01T00:00:00Z")
+        # collaborators uses spaces_updatedAt as its replication key
         self.assertEqual(
             state["bookmarks"]["collaborators"]["spaces_updatedAt"],
             "2026-07-01T00:00:00.000000Z"
         )
+        # pages uses updatedAt as its replication key
         self.assertEqual(
-            state["bookmarks"]["pages"]["spaces_updatedAt"],
+            state["bookmarks"]["pages"]["updatedAt"],
             "2026-07-01T00:00:00.000000Z"
         )
 
@@ -143,8 +147,9 @@ class TestParentBaseStreamBookmark(unittest.TestCase):
         state = {"bookmarks": {}}
         stream, _ = self._make_tickets_with_children()
         stream.write_bookmark(state, "tickets", key="updatedAt", value="2026-07-15T00:00:00Z")
+        # ticket_details uses updatedAt as its replication key
         self.assertEqual(
-            state["bookmarks"]["ticket_details"]["tickets_updatedAt"],
+            state["bookmarks"]["ticket_details"]["updatedAt"],
             "2026-07-15T00:00:00.000000Z"
         )
 
@@ -152,8 +157,9 @@ class TestParentBaseStreamBookmark(unittest.TestCase):
         state = {"bookmarks": {}}
         stream, _ = self._make_companies_with_children()
         stream.write_bookmark(state, "companies", key="updatedAt", value="2026-07-20T00:00:00Z")
+        # company_details uses updatedAt as its replication key
         self.assertEqual(
-            state["bookmarks"]["company_details"]["companies_updatedAt"],
+            state["bookmarks"]["company_details"]["updatedAt"],
             "2026-07-20T00:00:00.000000Z"
         )
 
@@ -199,7 +205,7 @@ class TestCollaboratorsStream(unittest.TestCase):
 
 
 class TestPagesStream(unittest.TestCase):
-    """Tests for Pages stream — INCREMENTAL with spaces_updatedAt from parent."""
+    """Tests for Pages stream — INCREMENTAL using own updatedAt, with spaceId injected."""
 
     def _make_stream(self):
         from tap_teamwork.streams.pages import Pages
@@ -210,14 +216,18 @@ class TestPagesStream(unittest.TestCase):
         stream = self._make_stream()
         self.assertEqual(stream.replication_method, "INCREMENTAL")
 
-    def test_pages_replication_key_is_spaces_updatedAt(self):
+    def test_pages_replication_key_is_updatedAt(self):
         stream = self._make_stream()
-        self.assertEqual(stream.replication_keys, ["spaces_updatedAt"])
+        self.assertEqual(stream.replication_keys, ["updatedAt"])
+
+    def test_pages_key_properties_include_spaceId(self):
+        stream = self._make_stream()
+        self.assertIn("spaceId", stream.key_properties)
 
     @patch("singer.write_record")
     @patch("singer.metrics.record_counter")
-    def test_sync_injects_spaces_updatedAt(self, mock_counter, mock_write_record):
-        """Pages sync should inject parent's updatedAt into each page record."""
+    def test_sync_injects_spaceId(self, mock_counter, mock_write_record):
+        """Pages sync should inject parent space id into each page record."""
         from tap_teamwork.streams.pages import Pages
 
         mock_counter_inst = MagicMock()
@@ -242,13 +252,12 @@ class TestPagesStream(unittest.TestCase):
             parent_obj = {"id": 42, "updatedAt": "2026-06-01T00:00:00Z"}
             stream.sync(state={}, transformer=transformer, parent_obj=parent_obj)
 
-        # Check that transform was called with record containing spaces_updatedAt
         call_args = transformer.transform.call_args[0][0]
-        self.assertEqual(call_args["spaces_updatedAt"], "2026-06-01T00:00:00Z")
+        self.assertEqual(call_args["spaceId"], 42)
 
 
 class TestTicketDetailsStream(unittest.TestCase):
-    """Tests for TicketDetails stream — INCREMENTAL with tickets_updatedAt from parent."""
+    """Tests for TicketDetails stream — INCREMENTAL using own updatedAt, with ticketId injected."""
 
     def _make_stream(self):
         from tap_teamwork.streams.ticket_details import TicketDetails
@@ -259,26 +268,33 @@ class TestTicketDetailsStream(unittest.TestCase):
         stream = self._make_stream()
         self.assertEqual(stream.replication_method, "INCREMENTAL")
 
-    def test_ticket_details_replication_key_is_tickets_updatedAt(self):
+    def test_ticket_details_replication_key_is_updatedAt(self):
         stream = self._make_stream()
-        self.assertEqual(stream.replication_keys, ["tickets_updatedAt"])
+        self.assertEqual(stream.replication_keys, ["updatedAt"])
 
-    def test_modify_object_sets_tickets_updatedAt_from_parent(self):
+    def test_modify_object_injects_ticketId_from_parent(self):
         stream = self._make_stream()
         parent = {"id": 55, "updatedAt": "2026-05-10T08:00:00Z"}
-        record = {"id": 1, "subject": "Test ticket"}
+        record = {"id": 55, "subject": "Test ticket"}
         result = stream.modify_object(record, parent)
-        self.assertEqual(result["tickets_updatedAt"], "2026-05-10T08:00:00Z")
+        self.assertEqual(result["ticketId"], 55)
+
+    def test_modify_object_uses_ticketId_key_from_parent_when_available(self):
+        stream = self._make_stream()
+        parent = {"ticketId": 77, "id": 55, "updatedAt": "2026-05-10T08:00:00Z"}
+        record = {"id": 55, "subject": "Test ticket"}
+        result = stream.modify_object(record, parent)
+        self.assertEqual(result["ticketId"], 77)
 
     def test_modify_object_no_parent_returns_record_unchanged(self):
         stream = self._make_stream()
         record = {"id": 1, "subject": "Test ticket"}
         result = stream.modify_object(record, None)
-        self.assertNotIn("tickets_updatedAt", result)
+        self.assertNotIn("ticketId", result)
 
 
 class TestCompanyDetailsStream(unittest.TestCase):
-    """Tests for CompanyDetails stream — INCREMENTAL with companies_updatedAt from parent."""
+    """Tests for CompanyDetails stream — INCREMENTAL using own updatedAt, with companyId injected."""
 
     def _make_stream(self):
         from tap_teamwork.streams.company_details import CompanyDetails
@@ -289,14 +305,14 @@ class TestCompanyDetailsStream(unittest.TestCase):
         stream = self._make_stream()
         self.assertEqual(stream.replication_method, "INCREMENTAL")
 
-    def test_company_details_replication_key_is_companies_updatedAt(self):
+    def test_company_details_replication_key_is_updatedAt(self):
         stream = self._make_stream()
-        self.assertEqual(stream.replication_keys, ["companies_updatedAt"])
+        self.assertEqual(stream.replication_keys, ["updatedAt"])
 
     @patch("tap_teamwork.streams.company_details.singer.write_record")
     @patch("tap_teamwork.streams.company_details.metrics.record_counter")
-    def test_sync_injects_companies_updatedAt(self, mock_counter, mock_write_record):
-        """CompanyDetails sync should inject parent's updatedAt into the record."""
+    def test_sync_injects_companyId(self, mock_counter, mock_write_record):
+        """CompanyDetails sync should inject the parent company id into the record."""
         from tap_teamwork.streams.company_details import CompanyDetails
 
         mock_counter_inst = MagicMock()
@@ -306,7 +322,7 @@ class TestCompanyDetailsStream(unittest.TestCase):
         mock_counter.return_value = mock_counter_inst
 
         client = make_mock_client()
-        client.get.return_value = {"company": {"id": 10, "name": "Acme"}}
+        client.get.return_value = {"company": {"id": 10, "name": "Acme", "updatedAt": "2026-07-20T12:00:00Z"}}
         stream = CompanyDetails(client=client, catalog=make_mock_catalog_entry())
         stream.schema = {"type": "object", "properties": {}}
         stream.metadata = {}
@@ -317,9 +333,8 @@ class TestCompanyDetailsStream(unittest.TestCase):
         parent_obj = {"id": 10, "updatedAt": "2026-07-20T12:00:00Z"}
         stream.sync(state={}, transformer=transformer, parent_obj=parent_obj)
 
-        # Verify the record passed to transform includes companies_updatedAt
         call_args = transformer.transform.call_args[0][0]
-        self.assertEqual(call_args["companies_updatedAt"], "2026-07-20T12:00:00Z")
+        self.assertEqual(call_args["companyId"], 10)
 
 
 if __name__ == "__main__":

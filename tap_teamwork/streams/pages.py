@@ -8,9 +8,9 @@ LOGGER = get_logger()
 class Pages(FullTableStream):
     tap_stream_id = "pages"
     parent = "spaces"
-    key_properties = ["id"]
+    key_properties = ["id", "spaceId"]
     replication_method = "INCREMENTAL"
-    replication_keys: List[str] = ["spaces_updatedAt"]
+    replication_keys: List[str] = ["updatedAt"]
     data_key = "page"
 
     def _collect_page_ids(self, node: Dict[str, Any]) -> List[int]:
@@ -61,9 +61,8 @@ class Pages(FullTableStream):
                 if not record:
                     continue
 
-                # Inject parent space's updatedAt as replication key
-                if parent_obj:
-                    record["spaces_updatedAt"] = parent_obj.get("updatedAt")
+                # Inject parent space id if not present in response
+                record.setdefault("spaceId", space_id)
 
                 transformed = transformer.transform(
                     record, self.schema, self.metadata

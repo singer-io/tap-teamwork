@@ -341,11 +341,13 @@ class ParentBaseStream(IncrementalStream):
         """Return min(parent_bookmark, child_1_bookmark, …) using datetime comparison."""
         min_bookmark = super().get_bookmark(state, stream) if self.is_selected() else None
         min_dt = self._parse_utc(min_bookmark) if min_bookmark else None
-        bookmark_key = f"{self.tap_stream_id}_{self.replication_keys[0]}"
 
         for child in self.child_to_sync:
+            child_rk = child.replication_keys[0] if child.replication_keys else None
+            if not child_rk:
+                continue
             child_bookmark = super().get_bookmark(
-                state, child.tap_stream_id, key=bookmark_key
+                state, child.tap_stream_id, key=child_rk
             )
             child_dt = self._parse_utc(child_bookmark) if child_bookmark else None
             if child_dt and (min_dt is None or child_dt < min_dt):
@@ -361,10 +363,12 @@ class ParentBaseStream(IncrementalStream):
         if self.is_selected():
             super().write_bookmark(state, stream, key=key, value=value)
 
-        bookmark_key = f"{self.tap_stream_id}_{self.replication_keys[0]}"
         for child in self.child_to_sync:
+            child_rk = child.replication_keys[0] if child.replication_keys else None
+            if not child_rk:
+                continue
             super().write_bookmark(
-                state, child.tap_stream_id, key=bookmark_key, value=value
+                state, child.tap_stream_id, key=child_rk, value=value
             )
 
         return state

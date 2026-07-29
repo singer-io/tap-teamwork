@@ -1,12 +1,11 @@
 {
     "type": "object",
     "properties": {
-        "spaces_updatedAt": {
+        "spaceId": {
             "type": [
                 "null",
-                "string"
-            ],
-            "format": "date-time"
+                "integer"
+            ]
         },
         "LinkedInstallation": {
             "type": [

@@ -8,6 +8,12 @@
                 "integer"
             ]
         },
+        "spaceId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
         "spaces_updatedAt": {
             "type": [
                 "null",

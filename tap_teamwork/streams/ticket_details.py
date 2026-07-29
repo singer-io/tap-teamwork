@@ -8,9 +8,9 @@ LOGGER = get_logger()
 class TicketDetails(FullTableStream):
     tap_stream_id = "ticket_details"
     parent = "tickets"
-    key_properties = ["id"]
+    key_properties = ["id", "ticketId"]
     replication_method = "INCREMENTAL"
-    replication_keys: List[str] = ["tickets_updatedAt"]
+    replication_keys: List[str] = ["updatedAt"]
     data_key = "ticket"
     path = "desk/v1/tickets/{ticketId}.json"
 
@@ -34,9 +34,10 @@ class TicketDetails(FullTableStream):
         return self.client.build_url(f"desk/api/v2/tickets/{ticket_id}.json")
 
     def modify_object(self, record: Dict[str, Any], parent_record: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """Add parent ticket's updatedAt (used as replication key) to each record."""
+        """Add parent ticket id to each record if not already present."""
         if isinstance(record, dict) and parent_record and isinstance(parent_record, dict):
-            record["tickets_updatedAt"] = parent_record.get("updatedAt")
+            ticket_id = parent_record.get("ticketId") or parent_record.get("id")
+            record.setdefault("ticketId", ticket_id)
         return record
 
     def get_child_context(
