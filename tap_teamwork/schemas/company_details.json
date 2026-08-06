@@ -1,6 +1,12 @@
 {
     "type": "object",
     "properties": {
+        "companyId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
         "address": {
             "type": [
                 "null",

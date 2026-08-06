@@ -1,6 +1,12 @@
 {
     "type": "object",
     "properties": {
+        "ticketId": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
         "id": {
             "type": [
                 "null",

@@ -1,12 +1,12 @@
 from typing import List, Optional, Dict
-from tap_teamwork.streams.abstracts import IncrementalStream, BaseStream
+from tap_teamwork.streams.abstracts import ParentBaseStream, BaseStream
 from singer import get_logger
 from datetime import datetime, timezone
 
 LOGGER = get_logger()
 
 
-class Companies(IncrementalStream):
+class Companies(ParentBaseStream):
     tap_stream_id = "companies"
     path = "desk/api/v2/companies.json"
     data_key = "companies"
