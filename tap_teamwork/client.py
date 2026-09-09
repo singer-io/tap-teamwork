@@ -181,7 +181,7 @@ class Client:
                 timeout=self.request_timeout,
             )
         except Exception as exc:  # pylint: disable=broad-except
-            LOGGER.exception("Failed GET request to %s: %s", endpoint or path, exc)
+            LOGGER.error("Failed GET request to %s: %s", endpoint or path, exc)
             raise
 
     def post(  # pylint: disable=too-many-arguments,too-many-positional-arguments
@@ -206,7 +206,7 @@ class Client:
                 timeout=self.request_timeout,
             )
         except Exception as exc:  # pylint: disable=broad-except
-            LOGGER.exception("Failed POST request to %s: %s", endpoint or path, exc)
+            LOGGER.error("Failed POST request to %s: %s", endpoint or path, exc)
             raise
 
     @backoff.on_exception(
@@ -234,5 +234,5 @@ class Client:
                 raise_for_error(response)
                 return response.json()
         except Exception as exc:  # pylint: disable=broad-except
-            LOGGER.exception("%s request to %s failed: %s", method, endpoint, exc)
+            LOGGER.error("%s request to %s failed: %s", method, endpoint, exc)
             raise
