@@ -11,9 +11,9 @@ class CompanyDetails(BaseStream):
     parent = "companies"
     path = "desk/api/v2/companies/{companyId}.json"
 
-    key_properties = ["id"]
-    replication_method = "FULL_TABLE"
-    replication_keys: list = []
+    key_properties = ["id", "companyId"]
+    replication_method = "INCREMENTAL"
+    replication_keys: list = ["updatedAt"]
     data_key = "company"
 
     def get_child_context(
@@ -32,9 +32,13 @@ class CompanyDetails(BaseStream):
         if not record:
             return 0
 
+        # Inject parent company id if not present in response
+        if parent_obj:
+            record.setdefault("companyId", company_id)
+
         with metrics.record_counter(self.tap_stream_id) as counter:
             transformed = transformer.transform(record, self.schema, self.metadata)
-            if transformed:
+            if transformed and self.is_selected():
                 singer.write_record(self.tap_stream_id, transformed)
                 counter.increment()
             return counter.value

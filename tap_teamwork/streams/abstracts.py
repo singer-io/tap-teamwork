@@ -330,6 +330,50 @@ class IncrementalStream(BaseStream):
         return written
 
 
+class ParentBaseStream(IncrementalStream):
+    """Base class for incremental streams that own the bookmark of their child streams.
+
+    Ensures the parent re-fetches from the oldest bookmark across itself and all
+    children, and propagates its bookmark value to every child on each write.
+    """
+
+    def get_bookmark(self, state: dict, stream: str, key: Any = None) -> str:
+        """Return min(parent_bookmark, child_1_bookmark, …) using datetime comparison."""
+        min_bookmark = super().get_bookmark(state, stream) if self.is_selected() else None
+        min_dt = self._parse_utc(min_bookmark) if min_bookmark else None
+
+        for child in self.child_to_sync:
+            child_rk = child.replication_keys[0] if child.replication_keys else None
+            if not child_rk:
+                continue
+            child_bookmark = super().get_bookmark(
+                state, child.tap_stream_id, key=child_rk
+            )
+            child_dt = self._parse_utc(child_bookmark) if child_bookmark else None
+            if child_dt and (min_dt is None or child_dt < min_dt):
+                min_dt = child_dt
+                min_bookmark = child_bookmark
+
+        return min_bookmark or self.client.config.get("start_date", "1970-01-01T00:00:00Z")
+
+    def write_bookmark(
+        self, state: dict, stream: str, key: Any = None, value: Any = None
+    ) -> Dict:
+        """Advance parent bookmark and write the same value to all child streams."""
+        if self.is_selected():
+            super().write_bookmark(state, stream, key=key, value=value)
+
+        for child in self.child_to_sync:
+            child_rk = child.replication_keys[0] if child.replication_keys else None
+            if not child_rk:
+                continue
+            super().write_bookmark(
+                state, child.tap_stream_id, key=child_rk, value=value
+            )
+
+        return state
+
+
 class FullTableStream(BaseStream):
     """Base class for full-table sync streams."""
 
@@ -347,6 +391,7 @@ class FullTableStream(BaseStream):
         written = 0
         with metrics.record_counter(self.tap_stream_id) as counter:
             for record in self.get_records():
+                record = self.modify_object(record, parent_obj)
                 transformed_record = transformer.transform(
                     record, self.schema, self.metadata
                 )
