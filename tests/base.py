@@ -18,6 +18,7 @@ class teamworkBaseTest(BaseCase):
     in tap-tester tests. Shared tap-specific methods (as needed).
     """    
     start_date = "2019-01-01T00:00:00Z"
+    IS_FORBIDDEN_STREAM = "is-forbidden-stream"
 
     @staticmethod
     def tap_name():
@@ -76,9 +77,9 @@ class teamworkBaseTest(BaseCase):
                 cls.API_LIMIT: 100
             },
             "ticket_details": {
-                cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.PRIMARY_KEYS: { "id", "ticketId" },
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
@@ -118,24 +119,24 @@ class teamworkBaseTest(BaseCase):
                 cls.API_LIMIT: 100
             },
             "pages": {
-                cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.PRIMARY_KEYS: { "id", "spaceId" },
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
             
             "collaborators": {
-                cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.PRIMARY_KEYS: { "id", "spaceId" },
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"spaces_updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
             "company_details": {
-                cls.PRIMARY_KEYS: { "id" },
-                cls.REPLICATION_METHOD: cls.FULL_TABLE,
-                cls.REPLICATION_KEYS: set(),
+                cls.PRIMARY_KEYS: { "id", "companyId" },
+                cls.REPLICATION_METHOD: cls.INCREMENTAL,
+                cls.REPLICATION_KEYS: {"updatedAt"},
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             },
@@ -174,6 +175,14 @@ class teamworkBaseTest(BaseCase):
                 cls.OBEYS_START_DATE: False,
                 cls.API_LIMIT: 100
             }
+        }
+
+    def expected_stream_names(self):
+        """The expected stream names and exclude forbidden streams."""
+        return {
+            stream_name
+            for stream_name, metadata in self.expected_metadata().items()
+            if not metadata.get(self.IS_FORBIDDEN_STREAM, False)
         }
 
     @staticmethod

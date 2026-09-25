@@ -1,12 +1,12 @@
 from typing import List, Optional, Dict
 from datetime import datetime, timezone
-from tap_teamwork.streams.abstracts import IncrementalStream, BaseStream
+from tap_teamwork.streams.abstracts import ParentBaseStream, BaseStream
 from singer import get_logger
 
 LOGGER = get_logger()
 
 
-class Spaces(IncrementalStream):
+class Spaces(ParentBaseStream):
     tap_stream_id = "spaces"
     path = "spaces/api/v1/spaces.json"
     data_key = "spaces"
